@@ -73,26 +73,26 @@ public class PathXMiniGame extends MiniGame {
     // PATHXPANEL
     private PathXPanel gamePanel;
 
-    private Insets marginlessInsets;
-
-    // THE TOOLBAR WILL BE AT THE ABOVE THE WORKSPACE
-    // TO PROVIDE FOR NAVIGATION BETWEEN THEM
-    private JPanel northToolbar;
-    private JButton gameButton;
-    private JButton statsButton;
-    private JButton helpButton;
-    private JButton exitButton;
-
-    // THE GAME STATS PANEL WILL DISPLAY GAME STATS
-    private JScrollPane statsScrollPane;
-    private JEditorPane statsPane;
-
-    // THE HELP PANEL WILL EXPLAIN HOW TO PLAY THE
-    // GAME. THIS WILL BE PRESENTED USING AN HTML PAGE
-    private JPanel helpPanel;
-    private JScrollPane helpScrollPane;
-    private JEditorPane helpPane;
-    private JButton homeButton;
+//    private Insets marginlessInsets;
+//
+//    // THE TOOLBAR WILL BE AT THE ABOVE THE WORKSPACE
+//    // TO PROVIDE FOR NAVIGATION BETWEEN THEM
+//    private JPanel northToolbar;
+//    private JButton gameButton;
+//    private JButton statsButton;
+//    private JButton helpButton;
+//    private JButton exitButton;
+//
+//    // THE GAME STATS PANEL WILL DISPLAY GAME STATS
+//    private JScrollPane statsScrollPane;
+//    private JEditorPane statsPane;
+//
+//    // THE HELP PANEL WILL EXPLAIN HOW TO PLAY THE
+//    // GAME. THIS WILL BE PRESENTED USING AN HTML PAGE
+//    private JPanel helpPanel;
+//    private JScrollPane helpScrollPane;
+//    private JEditorPane helpPane;
+//    private JButton homeButton;
 
     //STORES ALL THE LEVELS
     protected ArrayList<PathXLevelNode> levelList;
@@ -408,8 +408,9 @@ public class PathXMiniGame extends MiniGame {
         audio.stop(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString());
         audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
 
-        JOptionPane.showMessageDialog(null, "<<Insert Level Description>>");
-
+        JOptionPane.showMessageDialog(null, "Info About Level 1");
+        //JOptionPane.showMessageDialog(null, "pathX Info Dialog", "<Info About Level 1>", JOptionPane.CLOSED_OPTION);
+        //JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "pathX Info Dialog", JOptionPane.CLOSED_OPTION);
     }
 
     /**
@@ -1446,26 +1447,26 @@ public class PathXMiniGame extends MiniGame {
      *
      * @return A constructed button initialized and added to the toolbar.
      */
-    private JButton initToolbarButton(JPanel toolbar, PathXPropertyType prop) {
-        // GET THE NAME OF THE IMAGE, WE DO THIS BECAUSE THE
-        // IMAGES WILL BE NAMED DIFFERENT THINGS FOR DIFFERENT LANGUAGES
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String imageName = props.getProperty(prop);
-
-        // LOAD THE IMAGE
-        Image image = loadImage(imageName);
-        ImageIcon imageIcon = new ImageIcon(image);
-
-        // MAKE THE BUTTON
-        JButton button = new JButton(imageIcon);
-        button.setMargin(marginlessInsets);
-
-        // PUT IT IN THE TOOLBAR
-        toolbar.add(button);
-
-        // AND SEND BACK THE BUTTON
-        return button;
-    }
+//    private JButton initToolbarButton(JPanel toolbar, PathXPropertyType prop) {
+//        // GET THE NAME OF THE IMAGE, WE DO THIS BECAUSE THE
+//        // IMAGES WILL BE NAMED DIFFERENT THINGS FOR DIFFERENT LANGUAGES
+//        PropertiesManager props = PropertiesManager.getPropertiesManager();
+//        String imageName = props.getProperty(prop);
+//
+//        // LOAD THE IMAGE
+//        Image image = loadImage(imageName);
+//        ImageIcon imageIcon = new ImageIcon(image);
+//
+//        // MAKE THE BUTTON
+//        JButton button = new JButton(imageIcon);
+//        button.setMargin(marginlessInsets);
+//
+//        // PUT IT IN THE TOOLBAR
+//        toolbar.add(button);
+//
+//        // AND SEND BACK THE BUTTON
+//        return button;
+//    }
 
     /**
      * Invoked when a new game is started, it resets all relevant game data and

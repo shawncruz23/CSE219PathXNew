@@ -322,6 +322,7 @@ public class PathXPanel extends JPanel {
      */
     public void renderMapScreen(Graphics g) {
         
+        System.out.println("HELLO");
         // WE'LL USE AND REUSE THESE FOR LOADING STUFF
         BufferedImage img;
 
