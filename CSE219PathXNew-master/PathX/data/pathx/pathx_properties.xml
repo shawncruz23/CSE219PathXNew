@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    The properties in this file setup a Harry Potter flavor of this game called
+    The pathX. Note that by swapping out all these settings we could easily
+    change the flavor. hey
+-->
+<properties>
+    <property_list>
+        <!-- ALL THE IMAGES TO BE USED AS BACKGROUNDS FOR DIFFERENT SCREENS-->
+        <property name="IMAGE_BACKGROUND_GAME"              value="./pathx/BackgroundLevelSelect.png"></property>
+        <property name="IMAGE_BACKGROUND_LEVEL_SELECT"      value="./pathx/BackgroundLevelSelect.png"></property>
+        <property name="IMAGE_BACKGROUND_HOME"              value="./pathx/BackgroundHome.gif"></property>
+        <property name="IMAGE_BACKGROUND_SETTINGS"          value="./pathx/BackgroundSettings.png"></property>
+        <property name="IMAGE_BACKGROUND_HELP"              value="./pathx/BackgroundLevelSelect.png"></property>
+        
+        <property name="IMAGE_BACKGROUND_HELP_DESCRIPTION"  value="./pathx/ImageHelpDescription.png"></property>
+       
+     	<property name="IMAGE_BACKGROUND_MAP"              value="./pathx/ImageLevelSelectMap.gif"></property>
+        
+        <!-- X BUTTON -->
+        <property name="IMAGE_EXIT_HOME_SCREEN"             value="./pathx/ButtonX.png"></property>
+        <property name="IMAGE_EXIT_HOME_SCREEN_MOUSE_OVER"  value="./pathx/ButtonXMouseOver.png"></property>
+         <!-- HOME BUTTON -->
+        <property name="IMAGE_GO_TO_HOME_SCREEN"             value="./pathx/ButtonHome.png"></property>
+        <property name="IMAGE_GO_TO_HOME_SCREEN_MOUSE_OVER"  value="./pathx/ButtonHomeMouseOver.png"></property>
+        <!-- ARROW BUTTONS -->
+        <property name="IMAGE_UP_ARROW"                     value="./pathx/ButtonArrowUp.png"></property>
+        <property name="IMAGE_DOWN_ARROW"                   value="./pathx/ButtonArrowDown.png"></property>
+        <property name="IMAGE_LEFT_ARROW"                   value="./pathx/ButtonArrowLeft.png"></property>
+        <property name="IMAGE_RIGHT_ARROW"                  value="./pathx/ButtonArrowRight.png"></property>
+         <!-- LEVEL SELECT BUTTON STATES -->
+        <property name="IMAGE_LEVEL_SELECT_GREEN"           value="./pathx/LevelSelectButtonFinished.png"></property>
+        <property name="IMAGE_LEVEL_SELECT_RED"             value="./pathx/LevelSelectButtonUnfinished.png"></property>
+        <property name="IMAGE_LEVEL_SELECT_WHITE"           value="./pathx/LevelSelectButtonLocked.png"></property>
+        
+        <!--CHECKED/UNCHECKED BOX-->
+        <property name="IMAGE_CHECKED_BOX"             value="./pathx/SettingsCheckedBox.png"></property>
+        <property name="IMAGE_UNCHECKED_BOX"           value="./pathx/SettingsUncheckedBox.png"></property>
+        
+        <!--SCROLL BUTTON/BAR
+        <property name="IMAGE_SCROLL_BOX"             value="./pathx/"></property>
+        <property name="IMAGE_CHECKED_BAR"             value="./pathx/"></property>
+        -->
+        
+         <!--WINDOW ICON-->
+        <property name="IMAGE_WINDOW_ICON"                  value="./pathx/WindowIcon.png"></property>
+          
+        
+        <!--<property name="IMAGE_BUTTON_NEW"                   value="./pathx/ButtonNewGame.png"></property>
+        <property name="IMAGE_BUTTON_NEW_MOUSE_OVER"        value="./pathx/ButtonNewGameMouseOver.png"></property>
+        
+         <property name="IMAGE_BUTTON_BACK"                   value="./pathx/ButtonBack.png"></property>
+        <property name="IMAGE_BUTTON_BACK_MOUSE_OVER"        value="./pathx/ButtonBackMouseOver.png"></property>
+        
+        
+        <property name="IMAGE_BUTTON_STATS"                 value="./pathx/ButtonStats.png"></property>
+        <property name="IMAGE_BUTTON_STATS_MOUSE_OVER"      value="./pathx/ButtonStatsMouseOver.png"></property>
+        <property name="IMAGE_BUTTON_TEMP_TILE"             value="./pathx/ButtonTempTile.png"></property>
+        <property name="IMAGE_BUTTON_TEMP_TILE_MOUSE_OVER"  value="./pathx/ButtonTempTileMouseOver.png"></property>
+        
+        <property name="IMAGE_BUTTON_UNDO"             		 value="./pathx/ButtonUndo.png"></property>
+        <property name="IMAGE_BUTTON_UNDO_MOUSE_OVER" 		 value="./pathx/ButtonUndoMouseOver.png"></property>
+        
+        <property name="IMAGE_CURSOR_WAND"                  value="./pathx/CursorWand.png"></property>
+        <property name="IMAGE_DECOR_TIME"                   value="./pathx/DecorTime.png"></property>
+        <property name="IMAGE_DECOR_MISCASTS"               value="./pathx/DecorMiscasts.png"></property>
+        <property name="IMAGE_DIALOG_STATS"                 value="./pathx/DialogStats.png"></property>
+        <property name="IMAGE_DIALOG_WIN"                   value="./pathx/DialogWin.png"></property>
+        <property name="IMAGE_SPRITE_SHEET_CHARACTER_TILES" value="./pathx/SpriteSheetCharacterTiles.png"></property>
+        <property name="IMAGE_TILE_BACKGROUND"              value="./pathx/TileBackground.png"></property>
+        <property name="IMAGE_TILE_BACKGROUND_SELECTED"     value="./pathx/TileBackgroundSelected.png"></property>
+        <property name="IMAGE_TILE_BACKGROUND_MOUSE_OVER"   value="./pathx/TileBackgroundMouseOver.png"></property>
+       
+        -->
+
+        <!-- ALL THE TEXT TO BE DISPLAYED -->
+        <property name="TEXT_ERROR_LOADING_AUDIO"               value="Error Loading an Audio File"></property>
+        <property name="TEXT_ERROR_LOADING_LEVEL"               value="Error Loading a Level File"></property>
+        <property name="TEXT_ERROR_LOADING_RECORD"              value="Error Loading the Player Record"></property>
+        <property name="TEXT_ERROR_LOADING_XML_FILE"            value="Error Loading an XML File"></property>
+        <property name="TEXT_ERROR_SAVING_RECORD"               value="Error Saving the Player Record"></property>
+       
+        <property name="TEXT_PROMPT_EXIT"                       value="Are you sure you wish to exit?"></property>
+        <property name="TEXT_TITLE_BAR_GAME"                    value="pathX"></property>
+        <property name="TEXT_TITLE_BAR_ERROR"                   value="An error has occurred"></property>                
+        
+        <!-- AUDIO FILES -->
+        <property name="AUDIO_CUE_BAD_MOVE"                 value="./pathx/BadMove.wav"></property>
+        <property name="AUDIO_CUE_CHEAT"                    value="./pathx/Cheat.wav"></property>
+        <property name="AUDIO_CUE_DESELECT_TILE"            value="./pathx/DeselectTile.wav"></property>
+        <property name="AUDIO_CUE_GOOD_MOVE"                value="./pathx/GoodMove.wav"></property>
+        <property name="AUDIO_CUE_SELECT_TILE"              value="./pathx/SelectTile.wav"></property>
+        <property name="AUDIO_CUE_UNDO"                     value="./pathx/Undo.wav"></property>
+        <property name="AUDIO_CUE_WIN"                      value="./pathx/Win.mid"></property>
+        <property name="SONG_CUE_LEVEL_SCREEN"              value="./pathx/CCLevelSelectSong.mid"></property>        
+        <property name="SONG_CUE_MENU_SCREEN"               value="./pathx/GoTMenuSong.mid"></property>
+        <property name="SONG_CUE_GAME_SCREEN"               value="./pathx/KornGameplay.mid"></property>
+     
+    </property_list>
+    
+    <!-- PLAYABLE LEVELS CREATED WITH THE LEVEL EDITOR 
+   
+        <property_options name="LEVEL_OPTIONS">
+            <option>./pathx/BubbleSortCoil.sort</option>
+             <option>./pathx/SelectionSortU.sort</option>
+            <option>./pathx/SelectionSortSine.sort</option> 
+            <option>./pathx/BubbleSortO.sort</option>
+             
+             
+        </property_options>
+        -->
+        
+         <property_options_list>
+        
+        
+          <property_options name="HOME_SCREEN_IMAGE_OPTIONS">
+            <option>./pathx/ButtonPlay.png</option>
+             <option>./pathx/ButtonReset.png</option>
+            <option>./pathx/ButtonSettings.png</option>
+            <option>./pathx/ButtonHelp.png</option> 
+        </property_options>
+        
+        <property_options name="HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS">
+            <option>./pathx/ButtonPlayMouseOver.png</option>
+             <option>./pathx/ButtonResetMouseOver.png</option>
+            <option>./pathx/ButtonSettingsMouseOver.png</option>
+            <option>./pathx/ButtonHelpMouseOver.png</option>
+        </property_options>
+        
+        <!--SPECIALS IMAGES TO BE LOADED-->
+         <property_options name="SPECIALS_IMAGE_OPTIONS_R1">
+            <option>./pathx/A11_SpecialGreenLight.png</option>
+             <option>./pathx/A11_SpecialGreenLight.png</option>
+            <option>./pathx/A13_SpecialFlatTire.png</option>
+            <option>./pathx/A14_SpecialGasCan.png</option>
+        </property_options>
+        <property_options name="SPECIALS_IMAGE_OPTIONS_R2">
+            <option>./pathx/A21_SpecialPlusSign.png</option>
+             <option>./pathx/A22_SpecialMinusSign</option>
+            <option>./pathx/A23_SpecialUpArrow.png</option>
+            <option>./pathx/A24_SpecialStopSign.png</option>
+        </property_options>
+        <property_options name="SPECIALS_IMAGE_OPTIONS_R3">
+            <option>./pathx/A31_SpecialRedX.png</option>
+             <option>./pathx/A32_SpecialGreenCheck.png</option>
+            <option>./pathx/A33_SpecialPinkCloud.png</option>
+            <option>./pathx/A34_SpecialConcSquares.png</option>
+        </property_options>
+        <property_options name="SPECIALS_IMAGE_OPTIONS_R4">
+            <option>./pathx/A41_SpecialDollarSign.png</option>
+             <option>./pathx/A42_SpecialBGCircle.png</option>
+            <option>./pathx/A43_SpecialPaperAirplane.png</option>
+            <option>./pathx/A44_SpecialGreenShield.png</option>
+        </property_options>
+        
+         </property_options_list>
+        
+       <!-- <property_options name="LEVEL_IMAGE_OPTIONS">
+            <option>./pathx/ImageGameMap.png</option>               
+        </property_options>
+        
+         </property_options_list> -->
+         
+         
+        <!--
+        <property_options name="LEVEL_MOUSE_OVER_IMAGE_OPTIONS">
+            <option>./pathx/ButtonBubbleSortCoilMouseOver.png</option>
+            <option>./pathx/ButtonSelectionSortSineMouseOver.png</option>
+            <option>./pathx/ButtonSelectionSortUMouseOver.png</option>
+            <option>./pathx/ButtonBubbleSortOMouseOver.png</option>
+            
+             
+        </property_options>
+        -->
+   
+</properties>

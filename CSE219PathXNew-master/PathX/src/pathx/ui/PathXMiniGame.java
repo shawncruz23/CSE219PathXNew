@@ -242,7 +242,10 @@ public class PathXMiniGame extends MiniGame {
         return testScreenState.equals(currentScreenState);
     }
 
-
+    // VIEWPORT UPDATE METHODS
+    // - initViewport
+    // - scroll
+    // - moveViewport
     // SERVICE METHODS
     // - displayStats
     // - savePlayerRecord
