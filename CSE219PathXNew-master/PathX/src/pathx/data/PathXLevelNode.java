@@ -18,8 +18,15 @@ public class PathXLevelNode {
     protected String levelState;
     protected String leveliD;
     protected int levelNumber;
-    protected int xCoordinate, yCoordinate;
+    protected double xCoordinate, yCoordinate;
     protected BufferedImage img;
+    
+    /**
+     * 0 is WHITE
+     * 1 is RED
+     * 2 is GREEN
+     */
+    protected int levelKey;
 
     /**
      * CONDITIONS: locked = 0: if locked (WHITE STATE) locked = 1: if unlocked,
@@ -40,9 +47,11 @@ public class PathXLevelNode {
     /**
      * This constructor creates a new PathXLevelNode
      */
-    public PathXLevelNode(int levelReward, int levelNumber,
+    public PathXLevelNode(int levelKey, int levelReward, int levelNumber,
             int xCoordinate, int yCoordinate, String leveliD, String levelState/*, BufferedImage img*/) {
        
+        this.levelKey = levelKey;
+        
         this.levelReward = levelReward;
         this.levelNumber = levelNumber;
         
@@ -58,6 +67,10 @@ public class PathXLevelNode {
     }
 
     //MUTATOR METHODS
+    public void setLevelKey(int newKey) {
+         levelKey = newKey;
+    }
+    
    public void setLockState(int newLockState) {
        locked = newLockState;
        if (locked == 0) {
@@ -73,11 +86,11 @@ public class PathXLevelNode {
          this.img = img;
     }
 
-    public void setXCoordinate(int newX) {
+    public void setXCoordinate(double newX) {
          xCoordinate = newX;
     }
 
-    public void setYCoordinate(int newY) {
+    public void setYCoordinate(double newY) {
          yCoordinate = newY;
     }
 
@@ -101,6 +114,10 @@ public class PathXLevelNode {
     
 
     //ACCESSOR METHODS
+    public int getLevelKey() {
+        return levelKey;
+    }
+    
     public int getLockState() {
         return locked;
     }
@@ -109,11 +126,11 @@ public class PathXLevelNode {
          return img;
     }
 
-    public int getXCoordinate() {
+    public double getXCoordinate() {
         return xCoordinate;
     }
 
-    public int getYCoordinate() {
+    public double getYCoordinate() {
         return yCoordinate;
     }
 

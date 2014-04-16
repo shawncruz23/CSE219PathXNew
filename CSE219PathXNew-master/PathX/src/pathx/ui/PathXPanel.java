@@ -315,6 +315,8 @@ public class PathXPanel extends JPanel {
 //    public static int xButtonLevel20 = 436;
 //    public static int yButtonLevel20 = 975;
 
+    public static int control = 0;
+    public static int counter = 0;
      /**
      * Renders the Map and Level Select Buttons
      *
@@ -322,14 +324,21 @@ public class PathXPanel extends JPanel {
      */
     public void renderMapScreen(Graphics g) {
         
-        System.out.println("HELLO");
+        //System.out.println("HELLO");
         // WE'LL USE AND REUSE THESE FOR LOADING STUFF
-        BufferedImage img;
+        BufferedImage img, buttonImg;
 
+        if(control == 0) {
         ((PathXMiniGame)game).updateLevelSelectButtons();
+        control++;
+        }
+        
+        ArrayList<PathXLevelNode> levelList = ((PathXMiniGame)game).getLevelList();
+        
+        //System.out.println("COUNTER: " + counter++);
         
        //ArrayList<PathXLevelNode> levelList = ((PathXMiniGame)game).getLevelList();
-        
+   
        //BufferedImage img2 = levelList.get(0).
        
         // GET THE MAP IMAGE PATH
@@ -339,15 +348,99 @@ public class PathXPanel extends JPanel {
        
         img = game.loadImage(imgPath + mapImage);
        
-        //PUT IT INTO A MINIATURE FRAME ON THE LARGER SCREEN
+        //PUT IT INTO A MINIATURE FRAME ON THE LARGER GAME SCREEN
         g.drawImage(img,
-                dx1, dy1,
-                dx2, dy2,
+                DESTINATION_X1, DESTINATION_Y1,
+                DESTINATION_X2, DESTINATION_Y2,
                 (int) sx1, (int) sy1,
                 (int) sx2, (int) sy2,
                 null);//POSITION IN LEFT HAND CORNER
+        //((PathXMiniGame)game).updateButtons();
         
-       
+       // if(((PathXMiniGame)game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+            for(int i = 0; i < levelList.size(); i++) {
+//         System.out.println( "node(" + i + "): " + "(" 
+//                 + levelList.get(i).getXCoordinate() +  "," + levelList.get(i).getYCoordinate() + ")");
+//                
+                if (levelList.get(i).getLevelKey() == 0) {
+                    levelList.get(i).setLevelState(PathXCarState.WHITE_STATE.toString());
+                } else if (levelList.get(i).getLevelKey() == 1) {
+                     levelList.get(i).setLevelState(PathXCarState.RED_STATE.toString());
+                } else if (levelList.get(i).getLevelKey() == 2) {
+                     levelList.get(i).setLevelState(PathXCarState.GREEN_STATE.toString());
+                }
+                //levelList.get(i).setLevelState(PathXCarState.WHITE_STATE.toString());
+                buttonImg =  game.getGUIButtons().get(levelList.get(i).getLeveliD()).getSpriteType().getStateImage(levelList.get(i).getLevelState());
+                if((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
+                     && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 435)) {
+                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setX((float)levelList.get(i).getXCoordinate());
+                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setY((float)levelList.get(i).getYCoordinate());
+                g.drawImage(buttonImg, (int) levelList.get(i).getXCoordinate() 
+                        ,(int) levelList.get(i).getYCoordinate() ,null);
+                
+                 if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
+                      game.getGUIButtons().get(levelList.get(i).getLeveliD()).setX((float)levelList.get(i).getXCoordinate());
+                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setY((float)levelList.get(i).getYCoordinate());
+                        game.getGUIButtons().get(levelList.get(i).getLeveliD()).setActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent ae) {
+                                System.out.println("YOU SELECTED THE RED BUTTON!");
+                                ((PathXMiniGame)game).getEventHandler().respondToGameplayScreen();
+                            }
+                        });
+                    }
+                }
+                else {
+                    levelList.get(i).setLevelState(PathXCarState.INVISIBLE_STATE.toString());
+                      buttonImg =  game.getGUIButtons().get(levelList.get(i).getLeveliD()).getSpriteType().getStateImage(levelList.get(i).getLevelState());
+                if((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
+                     && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 435)) { 
+                g.drawImage(buttonImg, (int) levelList.get(i).getXCoordinate() 
+                        ,(int) levelList.get(i).getYCoordinate() ,null);
+                }
+            }
+                 game.getGUIButtons().get(levelList.get(i).getLeveliD()).setX((float)levelList.get(i).getXCoordinate());
+                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setY((float)levelList.get(i).getYCoordinate());
+            }
+       // }
+        
+//        if (((PathXMiniGame)game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+//            for (int i = 0; i < levelList.size(); i++) {
+//                //System.out.println("Node(" +i+ "):" + "(" + );
+//                game.getGUIButtons().get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
+//                game.getGUIButtons().get(levelList.get(i).getLeveliD()).setEnabled(false);
+//
+//                if ((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
+//                        && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 435)) {
+//                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
+//                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setEnabled(true);
+//
+//                    if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
+//
+//                        game.getGUIButtons().get(levelList.get(i).getLeveliD()).setActionListener(new ActionListener() {
+//                            public void actionPerformed(ActionEvent ae) {
+//                                System.out.println("YOU SELECTED THE RED BUTTON!");
+//                                ((PathXMiniGame)game).getEventHandler().respondToGameplayScreen();
+//                            }
+//                        });
+//                    }
+//                // s = new Sprite(sT, xButtonLevel1, yButtonLevel1, 0, 0, PathXCarState.VISIBLE_STATE.toString());
+//                    //game.getGUIButtons().put(LEVEL_SELECT_BUTTON_TYPE, s);
+//                } else {
+//                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setState(PathXCarState.INVISIBLE_STATE.toString());
+//                    game.getGUIButtons().get(levelList.get(i).getLeveliD()).setEnabled(false);
+//
+//                }
+//
+//            }
+//        }
+        
+
+//             for(int i = 0; i < levelList.size(); i++) {
+//           buttonImg =  game.getGUIButtons().get(levelList.get(i).getLeveliD()).getSpriteType().getStateImage(levelList.get(i).getLevelState());
+//             g.drawImage(buttonImg, (int) levelList.get(i).getXCoordinate()  ,
+//                (int) levelList.get(i).getYCoordinate() ,
+//                null);//POSITION IN LEFT HAND CORNER
+//        }
     }
 
 

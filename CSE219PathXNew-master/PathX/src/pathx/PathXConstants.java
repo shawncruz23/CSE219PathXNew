@@ -28,9 +28,20 @@ public class PathXConstants {
     // THESE ARE THE TYPES OF CONTROLS, WE USE THESE CONSTANTS BECAUSE WE'LL
     // STORE THEM BY TYPE, SO THESE WILL PROVIDE A MEANS OF IDENTIFYING THEM
     
+    //POSSIBLE HOME SCREEN BUTTON OPTIONS
+    public static final String PLAY_BUTTON_OPTION = "Play";
+    public static final String RESET_BUTTON_OPTION = "Reset";
+    public static final String SETTINGS_BUTTON_OPTION = "Settings";
+    public static final String HELP_BUTTON_OPTION = "Help";
+    
+    //POSSIBLE DIRECTIONAL BUTTONS A USER MAY PRESS
+    public static final String UP_BUTTON_DIRECTION = "Up";
+    public static final String DOWN_BUTTON_DIRECTION = "Down";
+    public static final String LEFT_BUTTON_DIRECTION = "Left";
+    public static final String RIGHT_BUTTON_DIRECTION = "Right";
+    
     // EACH SCREEN HAS ITS OWN BACKGROUND TYPE
     public static final String BACKGROUND_TYPE = "BACKGROUND_TYPE";
-
     
     // THIS REPRESENTS THE BUTTONS ON THE MENU SCREEN FOR LEVEL SELECTION
     public static final String HOME_MENU_BUTTON_TYPE = "HOME_MENU_BUTTON_TYPE";
@@ -120,13 +131,22 @@ public class PathXConstants {
     //(dx1,dy1): pair of coord. for destination box
     public static final int DESTINATION_X2 = 630;
     public static final int DESTINATION_Y2 = 450;
-    //(sx1,sy1): pair of coord. for amount of source image to shown
-    public static final int SOURCE_X1 = 0;
-    public static final int SOURCE_Y1 = 0;
-    //(sx2,sy2): pair of coord. for amount of source image to shown
-    public static final int SOURCE_X2 = 620;
-    public static final int SOURCE_Y2 = 440;
- 
+    
+//    //(sx1,sy1): pair of coord. for amount of source image to shown
+//    public static final int SOURCE_X1 = 0;
+//    public static final int SOURCE_Y1 = 0;
+//    //(sx2,sy2): pair of coord. for amount of source image to shown
+//    public static final int SOURCE_X2 = 620;
+//    public static final int SOURCE_Y2 = 440;
+    
+    //FOR BUTTON AND MAP SCROLLING CONTROLLED BY THE ARROW KEYS
+    /*<--MAX VALUE FOR SCROLLING UP RELATIVE TO SOURCE IMAGE-->*/
+    public final static int SOURCE_Y1_MAX_COORD = 0;
+    public final static int SOURCE_Y2_MAX_COORD = 440;
+     /*<--MAX VALUE FOR SCROLLING UP RELATIVE TO SOURCE IMAGE-->*/
+    public final static double SOURCE_Y_SCROLL_UP = 21.99999999999999;
+    /*<--VALUE FOR SCROLLING UP RELATIVE TO LEVEL BUTTONS-->*/
+    public final static double LEVEL_BUTTONS_Y_SCROLL_UP = 20;
     
         
     // FOR TILE RENDERING

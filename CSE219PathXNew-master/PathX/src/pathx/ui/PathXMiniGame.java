@@ -94,6 +94,10 @@ public class PathXMiniGame extends MiniGame {
 //    private JEditorPane helpPane;
 //    private JButton homeButton;
 
+    //CHECK BOX CONTROLS
+    public static boolean checkedMusic = false;
+    public static boolean checkedSound = false;
+    
     //STORES ALL THE LEVELS
     protected ArrayList<PathXLevelNode> levelList;
 
@@ -294,33 +298,33 @@ public class PathXMiniGame extends MiniGame {
         
         
       //  if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
-            for (int i = 0; i < levelList.size(); i++) {
-
-                guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
-                guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
-
-                if ((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
-                        && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 450)) {
-                    guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
-                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(true);
-
-                    if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
-
-                        guiButtons.get(levelList.get(i).getLeveliD()).setActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent ae) {
-                                System.out.println("YOU SELECTED THE RED BUTTON!");
-                                eventHandler.respondToGameplayScreen();
-                            }
-                        });
-                    }
-                // s = new Sprite(sT, xButtonLevel1, yButtonLevel1, 0, 0, PathXCarState.VISIBLE_STATE.toString());
-                    //game.getGUIButtons().put(LEVEL_SELECT_BUTTON_TYPE, s);
-                } else {
-                    guiButtons.get(levelList.get(i).getLeveliD()).setState(PathXCarState.INVISIBLE_STATE.toString());
-                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
-
-                }
-            }
+//            for (int i = 0; i < levelList.size(); i++) {
+//
+//                guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
+//                guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
+//
+//                if ((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
+//                        && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 450)) {
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(true);
+//
+//                    if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
+//
+//                        guiButtons.get(levelList.get(i).getLeveliD()).setActionListener(new ActionListener() {
+//                            public void actionPerformed(ActionEvent ae) {
+//                                System.out.println("YOU SELECTED THE RED BUTTON!");
+//                                eventHandler.respondToGameplayScreen();
+//                            }
+//                        });
+//                    }
+//                // s = new Sprite(sT, xButtonLevel1, yButtonLevel1, 0, 0, PathXCarState.VISIBLE_STATE.toString());
+//                    //game.getGUIButtons().put(LEVEL_SELECT_BUTTON_TYPE, s);
+//                } else {
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setState(PathXCarState.INVISIBLE_STATE.toString());
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
+//
+//                }
+//            }
         //}
 
         //ENABLE ARROWS
@@ -391,7 +395,7 @@ public class PathXMiniGame extends MiniGame {
                 String buttonType = "_SELECT_BUTTON_TYPE";
                 String concatenation = level + levelNumber + buttonType;
                 guiButtons.get(concatenation).setState(PathXCarState.INVISIBLE_STATE.toString());
-                guiButtons.get(concatenation).setEnabled(false);
+                guiButtons.get(concatenation).setEnabled(true);
             }
 //       
         }
@@ -869,7 +873,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel1, yButtonLevel1, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_1_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel1, yButtonLevel1, LEVEL_1_SELECT_BUTTON_TYPE, PathXCarState.RED_STATE.toString()));
+        levelList.add(new PathXLevelNode(1, 0, 0, xButtonLevel1, yButtonLevel1, LEVEL_1_SELECT_BUTTON_TYPE, PathXCarState.RED_STATE.toString()));
         /*<------LEVEL 2------>*/
         //RED STATE
         String level2SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -887,7 +891,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel2, yButtonLevel2, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_2_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel2, yButtonLevel2, LEVEL_2_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel2, yButtonLevel2, LEVEL_2_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 3------>*/
         //RED STATE
         String level3SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -905,7 +909,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel3, yButtonLevel3, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_3_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel3, yButtonLevel3, LEVEL_3_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel3, yButtonLevel3, LEVEL_3_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 4------>*/
         //RED STATE
         String level4SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -923,7 +927,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel4, yButtonLevel4, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_4_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel4, yButtonLevel4, LEVEL_4_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel4, yButtonLevel4, LEVEL_4_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 5------>*/
         //RED STATE
         String level5SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -941,7 +945,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel5, yButtonLevel5, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_5_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel5, yButtonLevel5, LEVEL_5_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel5, yButtonLevel5, LEVEL_5_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 6------>*/
         //RED STATE
         String level6SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -959,7 +963,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel6, yButtonLevel6, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_6_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel6, yButtonLevel6, LEVEL_6_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel6, yButtonLevel6, LEVEL_6_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 7------>*/
         //RED STATE
         String level7SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -977,7 +981,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel7, yButtonLevel7, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_7_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel7, yButtonLevel7, LEVEL_7_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel7, yButtonLevel7, LEVEL_7_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 8------>*/
         //RED STATE
         String level8SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -995,7 +999,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel8, yButtonLevel8, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_8_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel8, yButtonLevel8, LEVEL_8_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel8, yButtonLevel8, LEVEL_8_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 9------>*/
         //RED STATE
         String level9SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1013,7 +1017,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel9, yButtonLevel9, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_9_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel9, yButtonLevel9, LEVEL_9_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel9, yButtonLevel9, LEVEL_9_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 10------>*/
         //RED STATE
         String level10SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1031,7 +1035,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel10, yButtonLevel10, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_10_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel10, yButtonLevel10, LEVEL_10_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel10, yButtonLevel10, LEVEL_10_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 11------>*/
         //RED STATE
         String level11SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1049,7 +1053,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel11, yButtonLevel11, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_11_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel11, yButtonLevel11, LEVEL_11_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel11, yButtonLevel11, LEVEL_11_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 12------>*/
         //RED STATE
         String level12SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1067,7 +1071,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel12, yButtonLevel12, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_12_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel12, yButtonLevel12, LEVEL_12_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel12, yButtonLevel12, LEVEL_12_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 13------>*/
         //RED STATE
         String level13SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1085,7 +1089,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel13, yButtonLevel13, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_13_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel13, yButtonLevel13, LEVEL_13_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel13, yButtonLevel13, LEVEL_13_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 14------>*/
         //RED STATE
         String level14SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1103,7 +1107,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel14, yButtonLevel14, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_14_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel14, yButtonLevel14, LEVEL_14_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel14, yButtonLevel14, LEVEL_14_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 15------>*/
         //RED STATE
         String level15SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1121,7 +1125,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel15, yButtonLevel15, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         getGUIButtons().put(LEVEL_15_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel15, yButtonLevel15, LEVEL_15_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel15, yButtonLevel15, LEVEL_15_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 16------>*/
         //RED STATE
         String level16SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1139,7 +1143,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel16, yButtonLevel16, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_16_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel16, yButtonLevel16, LEVEL_16_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel16, yButtonLevel16, LEVEL_16_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 17------>*/
         //RED STATE
         String level17SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1157,7 +1161,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel17, yButtonLevel17, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_17_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel17, yButtonLevel17, LEVEL_17_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel17, yButtonLevel17, LEVEL_17_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 18------>*/
         //RED STATE
         String level18SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1175,7 +1179,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel18, yButtonLevel18, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_18_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel18, yButtonLevel18, LEVEL_18_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel18, yButtonLevel18, LEVEL_18_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 19------>*/
         //RED STATE
         String level19SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1193,7 +1197,7 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel19, yButtonLevel19, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_19_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel19, yButtonLevel19, LEVEL_19_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel19, yButtonLevel19, LEVEL_19_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<------LEVEL 20------>*/
         //RED STATE
         String level20SelectButtonRed = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_RED);
@@ -1211,39 +1215,39 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, xButtonLevel20, yButtonLevel20, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEVEL_20_SELECT_BUTTON_TYPE, s);
 
-        levelList.add(new PathXLevelNode(0, 0, xButtonLevel20, yButtonLevel20, LEVEL_20_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
+        levelList.add(new PathXLevelNode(0, 0, 0, xButtonLevel20, yButtonLevel20, LEVEL_20_SELECT_BUTTON_TYPE, PathXCarState.WHITE_STATE.toString()));
         /*<-------------------------------Level Select Buttons: END-------------------------------------->*/
 
-        if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
-            for (int i = 0; i < levelList.size(); i++) {
-
-                guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
-                guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
-
-                if ((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
-                        && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 435)) {
-                    guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
-                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(true);
-
-                    if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
-
-                        guiButtons.get(levelList.get(i).getLeveliD()).setActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent ae) {
-                                System.out.println("YOU SELECTED THE RED BUTTON!");
-                                eventHandler.respondToGameplayScreen();
-                            }
-                        });
-                    }
-                // s = new Sprite(sT, xButtonLevel1, yButtonLevel1, 0, 0, PathXCarState.VISIBLE_STATE.toString());
-                    //game.getGUIButtons().put(LEVEL_SELECT_BUTTON_TYPE, s);
-                } else {
-                    guiButtons.get(levelList.get(i).getLeveliD()).setState(PathXCarState.INVISIBLE_STATE.toString());
-                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
-
-                }
-
-            }
-        }
+//        if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+//            for (int i = 0; i < levelList.size(); i++) {
+//
+//                guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
+//                guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
+//
+//                if ((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
+//                        && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 435)) {
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setState(levelList.get(i).getLevelState());
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(true);
+//
+//                    if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
+//
+//                        guiButtons.get(levelList.get(i).getLeveliD()).setActionListener(new ActionListener() {
+//                            public void actionPerformed(ActionEvent ae) {
+//                                System.out.println("YOU SELECTED THE RED BUTTON!");
+//                                eventHandler.respondToGameplayScreen();
+//                            }
+//                        });
+//                    }
+//                // s = new Sprite(sT, xButtonLevel1, yButtonLevel1, 0, 0, PathXCarState.VISIBLE_STATE.toString());
+//                    //game.getGUIButtons().put(LEVEL_SELECT_BUTTON_TYPE, s);
+//                } else {
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setState(PathXCarState.INVISIBLE_STATE.toString());
+//                    guiButtons.get(levelList.get(i).getLeveliD()).setEnabled(false);
+//
+//                }
+//
+//            }
+//        }
     }
     
 //    public void updateButtons() {
@@ -1311,6 +1315,10 @@ public class PathXMiniGame extends MiniGame {
 //        
 //    }
 
+ public void moveLevelSelectButtons() {
+     
+ }   
+    
     /**
      * Initializes the game event handlers for things like game gui buttons.
      */
@@ -1540,29 +1548,37 @@ public class PathXMiniGame extends MiniGame {
              }*/
         }
     }
+    
+    public PathXEventHandler getEventHandler() {
+        return eventHandler;
+    }
+    
+     public PathXPanel getPanel() {
+        return gamePanel;
+    }
 
     public void scrollToTheNorth() {
         System.out.println("Scrolling Up");
-        eventHandler.adjustScrollScreen("Up");
+        eventHandler.adjustScrollScreen(UP_BUTTON_DIRECTION);
     }
 
     public void scrollToTheSouth() {
         System.out.println("Scrolling Down");
-        eventHandler.adjustScrollScreen("Down");
+        eventHandler.adjustScrollScreen(DOWN_BUTTON_DIRECTION);
     }
 
     public void scrollToTheEast() {
         System.out.println("Scrolling Right");
-        eventHandler.adjustScrollScreen("Right");
+        eventHandler.adjustScrollScreen(RIGHT_BUTTON_DIRECTION);
     }
 
     public void scrollToTheWest() {
         System.out.println("Scrolling Left");
-        eventHandler.adjustScrollScreen("Left");
+        eventHandler.adjustScrollScreen(LEFT_BUTTON_DIRECTION);
     }
 
-    public static boolean checkedMusic = false;
-    public static boolean checkedSound = false;
+//    public static boolean checkedMusic = false;
+//    public static boolean checkedSound = false;
 
     public void toggleCheckBox(String boxType) {
         //IF THE BOX HAS NOT BEEN CHECK
