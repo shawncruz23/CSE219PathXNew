@@ -93,11 +93,10 @@ public class PathXMiniGame extends MiniGame {
 //    private JScrollPane helpScrollPane;
 //    private JEditorPane helpPane;
 //    private JButton homeButton;
-
     //CHECK BOX CONTROLS
     public static boolean checkedMusic = false;
     public static boolean checkedSound = false;
-    
+
     //STORES ALL THE LEVELS
     protected ArrayList<PathXLevelNode> levelList;
 
@@ -224,7 +223,7 @@ public class PathXMiniGame extends MiniGame {
     public PathXFileManager getFileManager() {
         return fileManager;
     }
-    
+
     /**
      * Accessor method for getting the game's level list.
      *
@@ -281,12 +280,12 @@ public class PathXMiniGame extends MiniGame {
 
         PropertiesManager props = PropertiesManager.getPropertiesManager();
 
-         ArrayList<String> homeScreens = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
+        ArrayList<String> homeScreens = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
         for (String homeScreen : homeScreens) {
             guiButtons.get(homeScreen).setState(PathXCarState.INVISIBLE_STATE.toString());
             guiButtons.get(homeScreen).setEnabled(false);
         }
-        
+
         if (isCurrentScreenState(GAME_SCREEN_STATE)) {
             //disable all game screen controls
             audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
@@ -294,9 +293,7 @@ public class PathXMiniGame extends MiniGame {
 
         // CHANGE THE BACKGROUND
         guiDecor.get(BACKGROUND_TYPE).setState(LEVEL_SELECT_SCREEN_STATE);
-        
-        
-        
+
       //  if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
 //            for (int i = 0; i < levelList.size(); i++) {
 //
@@ -326,7 +323,6 @@ public class PathXMiniGame extends MiniGame {
 //                }
 //            }
         //}
-
         //ENABLE ARROWS
         guiButtons.get(RIGHT_ARROW_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(RIGHT_ARROW_BUTTON_TYPE).setEnabled(true);
@@ -337,14 +333,11 @@ public class PathXMiniGame extends MiniGame {
         guiButtons.get(LEFT_ARROW_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(LEFT_ARROW_BUTTON_TYPE).setEnabled(true);
 
-            
         //ENABLE HOME BUTTON
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setEnabled(true);
 
         //PropertiesManager props = PropertiesManager.getPropertiesManager();
-       
-
         // ACTIVATE THE TOOLBAR AND ITS CONTROLS
         //guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         // guiButtons.get(NEW_GAME_BUTTON_TYPE).setEnabled(true);
@@ -448,7 +441,7 @@ public class PathXMiniGame extends MiniGame {
                 String buttonType = "_SELECT_BUTTON_TYPE";
                 String concatenation = level + levelNumber + buttonType;
                 guiButtons.get(concatenation).setState(PathXCarState.INVISIBLE_STATE.toString());
-                guiButtons.get(concatenation).setEnabled(false);
+                guiButtons.get(concatenation).setEnabled(true);
             }
         }
 
@@ -533,12 +526,22 @@ public class PathXMiniGame extends MiniGame {
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setEnabled(true);
 
         //ENABLE SOUND CHECKBOX
-        guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(true);
+        if (checkedSound) {
+            guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+            guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(true);
+        } else {
+            guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+            guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(true);
+        }
 
         //ENABLE MUSIC CHECKBOX
-        guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(true);
+        if (checkedMusic) {
+            guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+            guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(true);
+        } else {
+            guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+            guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(true);
+        }
 
         //DISABLE HOME SCREEN BUTTONS
         PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -628,8 +631,8 @@ public class PathXMiniGame extends MiniGame {
     }
 
     /**
-     * Initializes the game controls, like the home screen buttons, used by the game
-     * application. Note that this includes the game backgrounds as well
+     * Initializes the game controls, like the home screen buttons, used by the
+     * game application. Note that this includes the game backgrounds as well
      */
     @Override
     public void initGUIControls() {
@@ -788,7 +791,6 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, DOWN_BUTTON_X/*x coordinates*/, DOWN_BUTTON_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(DOWN_ARROW_BUTTON_TYPE, s);
 
-        
         //PUT IN THE LEFT ARROW BUTTON
         String leftArrowButton = props.getProperty(PathXPropertyType.IMAGE_LEFT_ARROW);
         sT = new SpriteType(LEFT_ARROW_BUTTON_TYPE);
@@ -797,7 +799,7 @@ public class PathXMiniGame extends MiniGame {
         sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEFT_BUTTON_X/*x coordinates*/, LEFT_BUTTON_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(LEFT_ARROW_BUTTON_TYPE, s);
-        
+
         //PUT IN THE RIGHT ARROW BUTTON
         String rightArrowButton = props.getProperty(PathXPropertyType.IMAGE_RIGHT_ARROW);
         sT = new SpriteType(RIGHT_ARROW_BUTTON_TYPE);
@@ -806,7 +808,6 @@ public class PathXMiniGame extends MiniGame {
         sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, RIGHT_BUTTON_X/*x coordinates*/, RIGHT_BUTTON_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(RIGHT_ARROW_BUTTON_TYPE, s);
-
 
         //PUT IN THE HELP DESCRIPTION
         String helpGameDescription = props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_HELP_DESCRIPTION);
@@ -840,11 +841,11 @@ public class PathXMiniGame extends MiniGame {
         sT.addState(PathXCarState.SELECTED_STATE.toString(), img);
         s = new Sprite(sT, MUSIC_CHECK_BOX_X/*x coordinates*/, MUSIC_CHECK_BOX_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(MUSIC_CHECK_BOX_TYPE, s);
-        
+
     }
-    
+
     public void updateLevelSelectButtons() {
-        
+
         // WE'LL USE AND REUSE THESE FOR LOADING STUFF
         BufferedImage img;
         float x, y;
@@ -854,7 +855,7 @@ public class PathXMiniGame extends MiniGame {
         // FIRST PUT THE ICON IN THE WINDOW
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
-        
+
           //System.out.println("Punk Bitch");
         /*<------LEVEL 1------>*/
         //RED STATE
@@ -1249,7 +1250,7 @@ public class PathXMiniGame extends MiniGame {
 //            }
 //        }
     }
-    
+
 //    public void updateButtons() {
 //       
 //            levelList.get(0).setXCoordinate(xButtonLevel1);
@@ -1314,11 +1315,10 @@ public class PathXMiniGame extends MiniGame {
 //            
 //        
 //    }
+    public void moveLevelSelectButtons() {
 
- public void moveLevelSelectButtons() {
-     
- }   
-    
+    }
+
     /**
      * Initializes the game event handlers for things like game gui buttons.
      */
@@ -1439,6 +1439,7 @@ public class PathXMiniGame extends MiniGame {
         //    });
         // KEY LISTENER - LET'S US PROVIDE CUSTOM RESPONSES
         this.setKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent ke) {
                 eventHandler.respondToKeyPress(ke.getKeyCode());
             }
@@ -1475,7 +1476,6 @@ public class PathXMiniGame extends MiniGame {
 //        // AND SEND BACK THE BUTTON
 //        return button;
 //    }
-
     /**
      * Invoked when a new game is started, it resets all relevant game data and
      * gui control states.
@@ -1548,12 +1548,12 @@ public class PathXMiniGame extends MiniGame {
              }*/
         }
     }
-    
+
     public PathXEventHandler getEventHandler() {
         return eventHandler;
     }
-    
-     public PathXPanel getPanel() {
+
+    public PathXPanel getPanel() {
         return gamePanel;
     }
 
@@ -1579,7 +1579,6 @@ public class PathXMiniGame extends MiniGame {
 
 //    public static boolean checkedMusic = false;
 //    public static boolean checkedSound = false;
-
     public void toggleCheckBox(String boxType) {
         //IF THE BOX HAS NOT BEEN CHECK
         System.out.println("MADE IT TO CHECK BOX");
@@ -1590,7 +1589,7 @@ public class PathXMiniGame extends MiniGame {
                 guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(true);
                 checkedSound = false;
             } else {
-                 System.out.println("PERFORMED CHECK");
+                System.out.println("PERFORMED CHECK");
                 guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
                 guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(true);
                 checkedSound = true;
@@ -1607,7 +1606,5 @@ public class PathXMiniGame extends MiniGame {
             }
         }
     }
-
-    
 
 }

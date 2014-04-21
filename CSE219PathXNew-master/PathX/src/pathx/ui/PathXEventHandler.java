@@ -69,6 +69,7 @@ public class PathXEventHandler {
      * Called when the user clicks on an arrow/directional button.
      * Adjusts the coordinates for level buttons and the map source
      * coordinates.
+     * @param direction direction in which the user desires to venture
      */
     public void adjustScrollScreen(String direction) {
 
@@ -83,7 +84,7 @@ public class PathXEventHandler {
                     sy2 -= SOURCE_Y_SCROLL_UP;
                     
                     for(int i = 0; i < levelNodeList.size(); i++) {
-                      double incrementY = levelNodeList.get(i).getYCoordinate()+LEVEL_BUTTONS_Y_SCROLL_UP;
+                      double incrementY = levelNodeList.get(i).getYCoordinate() + LEVEL_BUTTONS_Y_SCROLL_UP;
                       levelNodeList.get(i).setYCoordinate(incrementY);  
                     }
                     //System.out.println("levelList size: " + levelNodeList.size());
@@ -118,10 +119,10 @@ public class PathXEventHandler {
                 }
                 break;
             case DOWN_BUTTON_DIRECTION: //min(sy1,sy2)
-                if ((sy1 < 1073) && (sy2 < 1470)) {
+                if ((sy1 < SOURCE_Y1_MIN_COORD) && (sy2 < SOURCE_Y2_MIN_COORD)) {
                     //FOR MAP
-                    sy1 += 21.99999999999997;
-                    sy2 += 21.99999999999997;
+                    sy1 += SOURCE_Y_SCROLL_DOWN;
+                    sy2 += SOURCE_Y_SCROLL_DOWN;
                     
                     for(int i = 0; i < levelNodeList.size(); i++) {
                       double incrementY = levelNodeList.get(i).getYCoordinate()-20;
@@ -152,7 +153,7 @@ public class PathXEventHandler {
                 }
                 break;
             case RIGHT_BUTTON_DIRECTION: //max(sx1,sx2)
-                if ((sx1 < 48) && (sx2 < 678)) {
+                if ((sx1 < 40) && (sx2 < 670)) {
                     //FOR MAP
                     sx1 += 20;
                     sx2 += 20;
@@ -296,6 +297,7 @@ public class PathXEventHandler {
 
     /**
      * Called when the user clicks a button to select a level.
+     * @param gameMenuType
      */
     public void respondToSelectGameMenuRequest(String gameMenuType) {
         // WE ONLY LET THIS HAPPEN IF THE MENU SCREEN IS VISIBLE
@@ -338,6 +340,7 @@ public class PathXEventHandler {
 
     /**
      * Called when the user presses a key on the keyboard.
+     * @param keyCode
      */
     public void respondToKeyPress(int keyCode) {
         //PathXDataModel data = (PathXDataModel) game.getDataModel();

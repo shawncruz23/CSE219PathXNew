@@ -140,11 +140,14 @@ public class PathXConstants {
 //    public static final int SOURCE_Y2 = 440;
     
     //FOR BUTTON AND MAP SCROLLING CONTROLLED BY THE ARROW KEYS
-    /*<--MAX VALUE FOR SCROLLING UP RELATIVE TO SOURCE IMAGE-->*/
+    /*<--MAX/MIN VALUE FOR SCROLLING UP RELATIVE TO SOURCE IMAGE-->*/
     public final static int SOURCE_Y1_MAX_COORD = 0;
     public final static int SOURCE_Y2_MAX_COORD = 440;
-     /*<--MAX VALUE FOR SCROLLING UP RELATIVE TO SOURCE IMAGE-->*/
+    public final static int SOURCE_Y1_MIN_COORD = 1073;
+    public final static int SOURCE_Y2_MIN_COORD = 1470;
+     /*<--MAX VALUE FOR SCROLLING UP/DOWN/LEFT/RIGHT RELATIVE TO SOURCE IMAGE-->*/
     public final static double SOURCE_Y_SCROLL_UP = 21.99999999999999;
+    public final static double SOURCE_Y_SCROLL_DOWN = 21.99999999999997;
     /*<--VALUE FOR SCROLLING UP RELATIVE TO LEVEL BUTTONS-->*/
     public final static double LEVEL_BUTTONS_Y_SCROLL_UP = 20;
     
