@@ -6,15 +6,21 @@
 package pathx.ui;
 
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import pathx.PathX;
 import static pathx.PathXConstants.*;
 //import static pathx.PathXConstants.VIEWPORT_INC;
+import pathx.data.Connection;
+import pathx.data.Level;
 import pathx.data.PathXDataModel;
 import pathx.data.PathXLevelNode;
 import pathx.file.PathXFileManager;
+import pathx.file.PathX_XML_Level_IO;
+import pathx.game.PathXGameGraphManager;
 import static pathx.ui.PathXMiniGame.*;
+import static pathx.ui.PathXPanel.*;
 //import sorting_hat.data.SortingHatDataModel;
 //import sorting_hat.file.SortingHatFileManager;
 
@@ -26,12 +32,18 @@ public class PathXEventHandler {
 
     // THE SORTING HAT GAME, IT PROVIDES ACCESS TO EVERYTHING
     private PathXMiniGame game;
+    
+    //PATHX XML LEVEL IO
+    private PathX_XML_Level_IO filetoLoad;
+    
+    private PathXGameGraphManager gameGraph;
 
     /**
      * Constructor, it just keeps the game for when the events happen.
      */
     public PathXEventHandler(PathXMiniGame initGame) {
         game = initGame;
+        gameGraph = new PathXGameGraphManager();
     }
 
     /**
@@ -53,8 +65,26 @@ public class PathXEventHandler {
     /**
      * Called when the user clicks on an unlocked/completed level button.
      */
-    public void respondToGameplayScreen() {
-        game.switchToGameplayScreen();
+    public void respondToGameplayScreen(String level) {
+        System.out.println("level name: " + level );
+         if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+            File schemaFile = new File(PROPERTIES_SCHEMA_LEVEL_FILE_NAME);
+            filetoLoad = new PathX_XML_Level_IO(schemaFile);
+            Level aLevel = filetoLoad.loadLevel(level);
+            //ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
+            //for(int i = 0; i < pathToHome.size(); i++) {
+            //    System.out.println(pathToHome.get(i).toString());
+           // }
+            System.out.println("MONEY: " + aLevel.getMoney());
+            System.out.println("NUM POLICE: " + aLevel.getNumPolice());
+            System.out.println("NUM BANDITS: " + aLevel.getNumBandits());
+            System.out.println("NUM ZOMBIES: " + aLevel.getNumZombies());
+            System.out.println("Starting Location Image: " + aLevel.getStartingLocationImageFileName());
+                //System.out.println("succesful");
+            //}
+            //else System.out.println("unsuccesful");
+        game.switchToGameplayScreen(aLevel);
+        }
     }
 
      /**
@@ -63,6 +93,53 @@ public class PathXEventHandler {
     public void respondToHomeRequest() {
         System.out.println("Responding to go home");
         game.switchToHomeScreen();
+    }
+    
+     /**
+     * Called when the user clicks on an arrow/directional button.
+     * Adjusts the coordinates for GAME map source
+     * coordinates.
+     * @param direction direction in which the user desires to venture
+     */
+    public void adjustGameScrollScreen(String direction) {
+        
+        switch (direction) {
+            case UP_BUTTON_DIRECTION: //max(sy1,sy2) bounds
+                if ((sourceY1 > SOURCE_Y1_MAX_COORD) && (sourceY2 > SOURCE_Y2_MAX_COORD)) {
+                    //FOR MAP
+                    sourceY1 -= SOURCE_Y_SCROLL_UP;
+                    sourceY2 -= SOURCE_Y_SCROLL_UP;
+                    System.out.println("sourceY1: " + sourceY1 +" > "
+                            + "SOURCE_Y1_MAX_COORD: " + SOURCE_Y1_MAX_COORD);
+                     System.out.println("sourceY2: " + sourceY2 +" > "
+                            + "SOURCE_Y2_MAX_COORD: " + SOURCE_Y2_MAX_COORD);
+                }
+                break;
+            case DOWN_BUTTON_DIRECTION: //min(sy1,sy2)
+                if ((sourceY1 < 158/*SOURCE_Y1_MIN_COORD*/) && (sourceY2 < 593/*SOURCE_Y2_MIN_COORD*/)) {
+                    //FOR MAP
+                    sourceY1 += SOURCE_Y_SCROLL_DOWN;
+                    sourceY2 += SOURCE_Y_SCROLL_DOWN;
+
+                }
+                break;
+            case RIGHT_BUTTON_DIRECTION: //max(sx1,sx2)
+                if ((sourceX1 < 350/*40*/) && (sourceX2 < 1250/*670*/)) {
+                    //FOR MAP
+                    sourceX1 += 20;
+                    sourceX2 += 20;
+
+                }
+                break;
+            case LEFT_BUTTON_DIRECTION: //min(sx1,sx2)
+                if ((sourceX1 > 0) && (sourceX2 > 620)) {
+                    //FOR MAP
+                    sourceX1 -= 20;
+                    sourceX2 -= 20;
+                 
+                }
+                break;
+        }
     }
 
      /**
@@ -348,28 +425,32 @@ public class PathXEventHandler {
         //SCROLL UP
         if (keyCode == KeyEvent.VK_UP) {
 
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) ||
+                   game.isCurrentScreenState(GAME_SCREEN_STATE)) {
                 System.out.println("Up button key pressed");
                 game.scrollToTheNorth();
             }
         } else //SCROLL DOWN
         if (keyCode == KeyEvent.VK_DOWN) {
 
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) ||
+                    game.isCurrentScreenState(GAME_SCREEN_STATE)) {
                 System.out.println("Down button key pressed");
                 game.scrollToTheSouth();
             }
         } else //SCROLL LEFT
         if (keyCode == KeyEvent.VK_LEFT) {
 
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)||
+                    game.isCurrentScreenState(GAME_SCREEN_STATE)) {
                 System.out.println("Left button key pressed");
                 game.scrollToTheWest();
             }
         } else //SCROLL RIGHT
         if (keyCode == KeyEvent.VK_RIGHT) {
 
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)||
+                    game.isCurrentScreenState(GAME_SCREEN_STATE)) {
                 System.out.println("Right button key pressed");
                 game.scrollToTheEast();
             }

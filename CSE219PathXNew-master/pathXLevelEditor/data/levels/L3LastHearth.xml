@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<level image="L3LastHearth.png" name="L3LastHearth">
+     <intersections>
+          <intersection id="0" open="true" x="106" y="293"/>
+          <intersection id="0" open="true" x="966" y="280"/>
+          <intersection id="0" open="true" x="379" y="54"/>
+          <intersection id="0" open="false" x="376" y="261"/>
+          <intersection id="0" open="true" x="377" y="497"/>
+          <intersection id="0" open="true" x="722" y="54"/>
+          <intersection id="0" open="true" x="723" y="264"/>
+          <intersection id="0" open="true" x="724" y="495"/>
+     </intersections>
+     <roads>
+          <road int_id1="0" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="0" int_id2="2" one_way="false" speed_limit="30"/>
+          <road int_id1="2" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="2" int_id2="5" one_way="false" speed_limit="30"/>
+          <road int_id1="5" int_id2="6" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="7" int_id2="1" one_way="false" speed_limit="30"/>
+          <road int_id1="5" int_id2="1" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="6" one_way="false" speed_limit="30"/>
+          <road int_id1="5" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="5" one_way="false" speed_limit="100"/>
+     </roads>
+     <start_intersection id="0" image="LocationStart.png"/>
+     <destination_intersection id="1" image="LocationDestination.png"/>
+     <money amount="100"/>
+     <police num="1"/>
+     <bandits num="1"/>
+     <zombies num="1"/>
+</level>
