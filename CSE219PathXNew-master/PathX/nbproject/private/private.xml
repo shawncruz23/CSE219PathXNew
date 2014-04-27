@@ -5,10 +5,9 @@
         <group>
             <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/file/PathX_XML_Level_IO.java</file>
             <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/data/Road.java</file>
-            <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/file/PathXFiles.java</file>
             <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/ui/PathXEventHandler.java</file>
             <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/ui/PathXPanel.java</file>
-            <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/data/Level.java</file>
+            <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/data/Intersection.java</file>
             <file>file:/Users/ShawnCruz/Documents/CSE219PathX/CSE219PathXNew-master/PathX/src/pathx/game/PathXGameGraphManager.java</file>
         </group>
     </open-files>

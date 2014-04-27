@@ -45,6 +45,9 @@ public class PathX_XML_Level_IO {
     
     // THIS IS THE SCHEMA WE'LL USE
     private File levelSchema;
+    
+    private ArrayList<Road> roadList;
+    private ArrayList<Intersection> intersectionList;
 
     /**
      * Constructor for making our importer/exporter. Note that it
@@ -58,6 +61,9 @@ public class PathX_XML_Level_IO {
         
         // WE'LL USE THE SCHEMA FILE TO VALIDATE THE XML FILES
         levelSchema = initLevelSchema;
+        
+        roadList = new ArrayList<>();
+        intersectionList = new ArrayList<>();
     }
     
     public static ArrayList<Level> levelList = new ArrayList<>();
@@ -70,6 +76,14 @@ public class PathX_XML_Level_IO {
 
     public Level getLevel() {
         return level;
+    }
+    
+    public ArrayList<Road> getRoadList() {
+        return roadList;
+    }
+    
+    public ArrayList<Intersection> getIntersectionList() {
+        return intersectionList;
     }
     
     private String getLevelXMLHelper(int levelNumber) {
@@ -280,6 +294,8 @@ public class PathX_XML_Level_IO {
             Intersection newIntersection = new Intersection(x, y);
             newIntersection.open = Boolean.parseBoolean(openText);
             intersections.add(newIntersection);
+            //intersections.get(i).
+            intersectionList.add(newIntersection);
         }
     }
 
@@ -313,7 +329,14 @@ public class PathX_XML_Level_IO {
             newRoad.setNode2(intersections.get(int_id2));
             newRoad.setOneWay(oneWay);
             newRoad.setSpeedLimit(speedLimit);
+            
+            newRoad.setiD(intersections.get(int_id1), intersections.get(int_id2));
+            intersections.get(int_id1).addRoadID(newRoad.getiD());
+            intersections.get(int_id2).addRoadID(newRoad.getiD());
+            
             roads.add(newRoad);
+            
+            roadList.add(newRoad);
         }
     }
     

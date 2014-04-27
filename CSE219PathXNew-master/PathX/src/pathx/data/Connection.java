@@ -185,6 +185,6 @@ public class Connection implements Comparable, Comparator {
     @Override
     public String toString()
     {
-        return intersection1Id + roadId + intersection2Id;
+        return intersection1Id + " " + roadId + " " +  intersection2Id;
     }
 }

@@ -292,12 +292,12 @@ public class PathXPanel extends JPanel {
 
         // NOW DRAW THE LINE BEING ADDED, IF THERE IS ONE
         if (true) {
-            Intersection startRoadIntersection = currentLevel.getStartingLocation();
-            recyclableLine.x1 = startRoadIntersection.x - sourceX1;
-            recyclableLine.y1 = startRoadIntersection.y - sourceY1;
-            //recyclableLine.x2 = model.getLastMouseX()-sourceX2;
-            //recyclableLine.y2 = model.getLastMouseY()-sourceY2;
-            g2.draw(recyclableLine);
+//            Intersection startRoadIntersection = currentLevel.getStartingLocation();
+//            recyclableLine.x1 = startRoadIntersection.x - sourceX1;
+//            recyclableLine.y1 = startRoadIntersection.y - sourceY1;
+//            //recyclableLine.x2 = model.getLastMouseX()-sourceX2;
+//            //recyclableLine.y2 = model.getLastMouseY()-sourceY2;
+//            g2.draw(recyclableLine);
         }
 
         // AND RENDER THE SELECTED ONE, IF THERE IS ONE

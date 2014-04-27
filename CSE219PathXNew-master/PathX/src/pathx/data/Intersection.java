@@ -63,6 +63,11 @@ public class Intersection {
     public ArrayList<String> getRoadIDs() {
         return roadIDs;
     }
+    
+    public void addRoadID(String idToAdd)
+    {
+        roadIDs.add(idToAdd);
+    }
 
     // MUTATOR METHODS
     public void setX(int x) {

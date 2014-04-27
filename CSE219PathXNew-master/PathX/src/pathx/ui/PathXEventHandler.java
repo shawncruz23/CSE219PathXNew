@@ -13,9 +13,11 @@ import pathx.PathX;
 import static pathx.PathXConstants.*;
 //import static pathx.PathXConstants.VIEWPORT_INC;
 import pathx.data.Connection;
+import pathx.data.Intersection;
 import pathx.data.Level;
 import pathx.data.PathXDataModel;
 import pathx.data.PathXLevelNode;
+import pathx.data.Road;
 import pathx.file.PathXFileManager;
 import pathx.file.PathX_XML_Level_IO;
 import pathx.game.PathXGameGraphManager;
@@ -61,6 +63,10 @@ public class PathXEventHandler {
         }
         // }
     }
+    
+    public PathXGameGraphManager getGameGraph() {
+        return gameGraph;
+    }
 
     /**
      * Called when the user clicks on an unlocked/completed level button.
@@ -71,10 +77,20 @@ public class PathXEventHandler {
             File schemaFile = new File(PROPERTIES_SCHEMA_LEVEL_FILE_NAME);
             filetoLoad = new PathX_XML_Level_IO(schemaFile);
             Level aLevel = filetoLoad.loadLevel(level);
-            //ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
-            //for(int i = 0; i < pathToHome.size(); i++) {
-            //    System.out.println(pathToHome.get(i).toString());
-           // }
+            //if()
+            ArrayList<Intersection> intersectionList = filetoLoad.getIntersectionList();
+            ArrayList<Road> roadList = filetoLoad.getRoadList();
+            for(int i = 0; i < intersectionList.size(); i++) {
+                  gameGraph.addIntersections(intersectionList.get(i));
+            }
+             for(int i = 0; i < roadList.size(); i++) {
+                  gameGraph.addRoad(roadList.get(i));
+            }
+          
+            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
+            for(int i = 0; i < pathToHome.size(); i++) {
+                System.out.println(pathToHome.get(i).toString() + "\n");
+            }
             System.out.println("MONEY: " + aLevel.getMoney());
             System.out.println("NUM POLICE: " + aLevel.getNumPolice());
             System.out.println("NUM BANDITS: " + aLevel.getNumBandits());
