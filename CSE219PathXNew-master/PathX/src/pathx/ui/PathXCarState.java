@@ -33,5 +33,11 @@ public enum PathXCarState {
     MOUSE_OVER_STATE,
     GREEN_STATE,
     RED_STATE,
-    WHITE_STATE
+    WHITE_STATE,
+    
+    NOTHING_SELECTED,
+    INTERSECTION_SELECTED,
+    PLAYER_DRAGGED,
+    ROAD_SELECTED,
+    
 }

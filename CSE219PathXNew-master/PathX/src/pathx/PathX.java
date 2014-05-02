@@ -171,5 +171,8 @@ public class PathX {
        //LEVEL BACKGROUND IMAGES
        IMAGE_BACKGROUND_LEVEL_1,
        
+       //PLAYER CAR IMAGE
+       IMAGE_PLAYER_CAR,
+       
     }
 }

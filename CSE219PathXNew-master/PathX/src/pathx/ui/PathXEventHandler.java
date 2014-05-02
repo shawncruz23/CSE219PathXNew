@@ -6,9 +6,16 @@
 package pathx.ui;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import pathx.PathX;
 import static pathx.PathXConstants.*;
 //import static pathx.PathXConstants.VIEWPORT_INC;
@@ -30,7 +37,7 @@ import static pathx.ui.PathXPanel.*;
  *
  * @author Richard McKenna & Shawn Cruz
  */
-public class PathXEventHandler {
+public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
     // THE SORTING HAT GAME, IT PROVIDES ACCESS TO EVERYTHING
     private PathXMiniGame game;
@@ -39,6 +46,8 @@ public class PathXEventHandler {
     private PathX_XML_Level_IO filetoLoad;
     
     private PathXGameGraphManager gameGraph;
+    
+    private PathXDataModel model;
 
     /**
      * Constructor, it just keeps the game for when the events happen.
@@ -46,6 +55,7 @@ public class PathXEventHandler {
     public PathXEventHandler(PathXMiniGame initGame) {
         game = initGame;
         gameGraph = new PathXGameGraphManager();
+        model = game.getDataModel();
     }
 
     /**
@@ -74,6 +84,9 @@ public class PathXEventHandler {
     public void respondToGameplayScreen(String level) {
         System.out.println("level name: " + level );
          if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+             
+            model.beginGame();
+             
             File schemaFile = new File(PROPERTIES_SCHEMA_LEVEL_FILE_NAME);
             filetoLoad = new PathX_XML_Level_IO(schemaFile);
             Level aLevel = filetoLoad.loadLevel(level);
@@ -86,11 +99,70 @@ public class PathXEventHandler {
              for(int i = 0; i < roadList.size(); i++) {
                   gameGraph.addRoad(roadList.get(i));
             }
+             
+            
+             
+//             System.out.println("LOCATION (1): " + "(x: " + aLevel.getIntersections().get(0).x
+//                     + ", y: " + aLevel.getIntersections().get(0).y + ")\n");
+//             System.out.println("LOCATION (2): " + "(x: " + aLevel.getIntersections().get(1).x
+//                     + ", y: " + aLevel.getIntersections().get(1).y + ")\n");
+//             System.out.println("LOCATION (3): " + "(x: " + aLevel.getIntersections().get(2).x
+//                     + ", y: " + aLevel.getIntersections().get(2).y + ")\n");
+//             System.out.println("LOCATION (4): " + "(x: " + aLevel.getIntersections().get(3).x
+//                     + ", y: " + aLevel.getIntersections().get(3).y + ")\n");
+//             System.out.println("LOCATION (5): " + "(x: " + aLevel.getIntersections().get(4).x
+//                     + ", y: " + aLevel.getIntersections().get(4).y + ")\n");
+//             System.out.println("LOCATION (6): " + "(x: " + aLevel.getIntersections().get(5).x
+//                     + ", y: " + aLevel.getIntersections().get(5).y + ")\n");
+//             System.out.println("LOCATION (7): " + "(x: " + aLevel.getIntersections().get(6).x
+//                     + ", y: " + aLevel.getIntersections().get(6).y + ")\n");
+//             System.out.println("LOCATION (8): " + "(x: " + aLevel.getIntersections().get(7).x
+//                     + ", y: " + aLevel.getIntersections().get(7).y + ")\n");
+//             System.out.println("LOCATION (9): " + "(x: " + aLevel.getIntersections().get(8).x
+//                     + ", y: " + aLevel.getIntersections().get(8).y + ")\n");
+//             System.out.println("LOCATION (10): " + "(x: " + aLevel.getIntersections().get(9).x
+//                     + ", y: " + aLevel.getIntersections().get(9).y + ")\n");
+//                        
+//             
+//             for(int i = 0; i < aLevel.getRoads().size(); i++) 
+//             System.out.println("WEIGHT: " + aLevel.getRoads().get(i).getRoadweight() +
+//                      " Between: intersection1: " + aLevel.getRoads().get(i).getNode1().toString() + " and intersection2: " + aLevel.getRoads().get(i).getNode2().toString() );
+//                 
           
             ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
-            for(int i = 0; i < pathToHome.size(); i++) {
-                System.out.println(pathToHome.get(i).toString() + "\n");
-            }
+         
+             //ArrayList<Connection> pathToHome = gameGraph.someMethod(aLevel.getStartingLocation(), aLevel.getDestination());
+             
+            System.out.println("PATH TO HOME:\n START: ");
+             for (int i = 0; i < pathToHome.size(); i++) {
+                 //System.out.println(pathToHome.get(i).toString() + "\n");
+                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
+                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
+                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
+                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
+                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
+             }
+             System.out.println("END");
+             
+             System.out.println("\n printArrayListGamePaths: ALL POSSIBLE PATHS START");
+              gameGraph.printArrayListGamePaths();
+              System.out.println("ALL POSSIBLE PATHS END\n");
+              
+              System.out.println("\n printAllGamePaths : ALL POSSIBLE PATHS START");
+             gameGraph.printAllGamePaths();
+              System.out.println("ALL POSSIBLE PATHS END\n");
+              
+            // System.out.println("TEST LOCATION: " + "(x: " + aLevel.getIntersections().get(9).x +
+              //       ", y: " + aLevel.getIntersections().get(9).y + ")");
+             
+//            ArrayList<Connection> neighbours = gameGraph.getAllNeighbors(aLevel.getIntersections().get(9).getiD());
+//            System.out.println("Neighbors: ");
+//            for(int i = 0; i < neighbours.size(); i++)
+//                 System.out.println("(X: " + gameGraph.getIntersection(neighbours.get(i).getIntersection1Id()).x
+//                 + " Y: " + gameGraph.getIntersection(neighbours.get(i).getIntersection1Id()).y + ")"+
+//                         ", (X: " + gameGraph.getIntersection(neighbours.get(i).getIntersection2Id()).x
+//                 + " Y: " + gameGraph.getIntersection(neighbours.get(i).getIntersection2Id()).y +")\n");
+                
             System.out.println("MONEY: " + aLevel.getMoney());
             System.out.println("NUM POLICE: " + aLevel.getNumPolice());
             System.out.println("NUM BANDITS: " + aLevel.getNumBandits());
@@ -118,42 +190,42 @@ public class PathXEventHandler {
      * @param direction direction in which the user desires to venture
      */
     public void adjustGameScrollScreen(String direction) {
-        
+
         switch (direction) {
             case UP_BUTTON_DIRECTION: //max(sy1,sy2) bounds
-                if ((sourceY1 > SOURCE_Y1_MAX_COORD) && (sourceY2 > SOURCE_Y2_MAX_COORD)) {
+                if ((sourceY1 > SOURCE_Y1_MAX_COORD - 30) && (sourceY2 > SOURCE_Y2_MAX_COORD - 30)) {
                     //FOR MAP
-                    sourceY1 -= SOURCE_Y_SCROLL_UP;
-                    sourceY2 -= SOURCE_Y_SCROLL_UP;
-                    System.out.println("sourceY1: " + sourceY1 +" > "
-                            + "SOURCE_Y1_MAX_COORD: " + SOURCE_Y1_MAX_COORD);
-                     System.out.println("sourceY2: " + sourceY2 +" > "
-                            + "SOURCE_Y2_MAX_COORD: " + SOURCE_Y2_MAX_COORD);
+                    sourceY1 -= 20;//SOURCE_Y_SCROLL_UP;
+                    sourceY2 -= 20;//SOURCE_Y_SCROLL_UP;
+//                    System.out.println("sourceY1: " + sourceY1 +" > "
+//                            + "SOURCE_Y1_MAX_COORD: " + SOURCE_Y1_MAX_COORD);
+//                     System.out.println("sourceY2: " + sourceY2 +" > "
+//                            + "SOURCE_Y2_MAX_COORD: " + SOURCE_Y2_MAX_COORD);
                 }
                 break;
             case DOWN_BUTTON_DIRECTION: //min(sy1,sy2)
-                if ((sourceY1 < 158/*SOURCE_Y1_MIN_COORD*/) && (sourceY2 < 593/*SOURCE_Y2_MIN_COORD*/)) {
+                if ((sourceY1 < 158/*SOURCE_Y1_MIN_COORD*/) && (sourceY2 < 593 + 100/*SOURCE_Y2_MIN_COORD*/)) {
                     //FOR MAP
-                    sourceY1 += SOURCE_Y_SCROLL_DOWN;
-                    sourceY2 += SOURCE_Y_SCROLL_DOWN;
+                    sourceY1 += 20;//SOURCE_Y_SCROLL_DOWN;
+                    sourceY2 += 20;//SOURCE_Y_SCROLL_DOWN;
 
                 }
                 break;
             case RIGHT_BUTTON_DIRECTION: //max(sx1,sx2)
-                if ((sourceX1 < 350/*40*/) && (sourceX2 < 1250/*670*/)) {
+                //if ((sourceX1 < 350/*40*/) && (sourceX2 < 1250/*670*/)) {
                     //FOR MAP
                     sourceX1 += 20;
                     sourceX2 += 20;
 
-                }
+                //}
                 break;
             case LEFT_BUTTON_DIRECTION: //min(sx1,sx2)
-                if ((sourceX1 > 0) && (sourceX2 > 620)) {
+                //if ((sourceX1 > 0) && (sourceX2 > 620)) {
                     //FOR MAP
                     sourceX1 -= 20;
                     sourceX2 -= 20;
                  
-                }
+                //}
                 break;
         }
     }
@@ -470,7 +542,16 @@ public class PathXEventHandler {
                 System.out.println("Right button key pressed");
                 game.scrollToTheEast();
             }
+        } else //SCROLL CAR
+        if (keyCode == KeyEvent.VK_R) {
+
+            if (game.isCurrentScreenState(GAME_SCREEN_STATE)) {
+                System.out.println("CAR MOVING!!");
+                //PathXPanel temp = (PathXPanel)game.getPanel();
+                playerX++;
+            } 
         }
+   
     }
 
     /**
@@ -478,5 +559,159 @@ public class PathXEventHandler {
      */
     public void respondToCheckRequest(String boxType) {
         game.toggleCheckBox(boxType);
+    }
+
+     /**
+     * Responds to when the user presses the mouse button on the canvas,
+     * it may respond in a few different ways depending on what the 
+     * current edit mode is.
+     */
+    @Override
+    public void mousePressed(MouseEvent me)
+    {
+         //model = (PathXDataModel)game.getDataModel();
+        
+        // MAKE SURE THE CANVAS HAS FOCUS SO THAT IT
+        // WILL PROCESS THE PROPER KEY PRESSES
+        ((JPanel)me.getSource()).requestFocusInWindow();
+        
+        System.out.println("REACHED mousePressed");
+        
+        // THESE ARE CANVAS COORDINATES
+        int canvasX = me.getX();
+        int canvasY = me.getY();
+        
+        // IF WE ARE IN ADDING INTERSECTION EDIT MODE
+        //if (model.isAddingIntersection())
+        {
+            // TRY ADDING AN INTERSECTION
+          //  model.addIntersectionAtCanvasLocation(canvasX, canvasY);
+        }
+        // IF WE ARE IN ONE OF THESE MODES WE MAY WANT TO SELECT
+        // ANOTHER INTERSECTION ROAD
+        //else
+        if (model.isNothingSelected()
+                || model.isIntersectionSelected()
+                || model.isRoadSelected())
+        {
+            // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
+            Intersection i = model.findIntersectionAtCanvasLocation(canvasX, canvasY);
+            if (i != null)
+            {
+                // MAKE THIS THE SELECTED INTERSECTION
+                model.setSelectedIntersection(i);
+                model.switchState(PathXCarState.PLAYER_DRAGGED);
+                return;
+            }                      
+            
+            // IF NO INTERSECTION WAS SELECTED THEN CHECK TO SEE IF 
+            // THE USER IS SELECTING A ROAD
+            Road r = model.selectRoadAtCanvasLocation(canvasX, canvasY);
+            if (r != null)
+            {
+                // MAKE THIS THE SELECTED ROAD
+                model.setSelectedRoad(r);
+                model.switchState(PathXCarState.ROAD_SELECTED);
+                return;
+            }
+
+            // OTHERWISE DESELECT EVERYTHING
+            model.unselectEverything();            
+        }
+       
+    }
+//    
+//    /**
+//     * This method is called when the user releases the mouse button
+//     * over the canvas. This will end intersection dragging if that is
+//     * currently happening.
+//     */
+//    @Override
+//    public void mouseReleased(MouseEvent me)
+//    {
+//        // IF WE ARE CURRENTLY DRAGGING AN INTERSECTION
+//        PathXCarState editMode = model.getEditMode();
+//        if (editMode == PXLE_EditMode.INTERSECTION_DRAGGED)
+//        {
+//            // RELEASE IT, BUT KEEP IT AS THE SELECTED ITEM
+//            model.switchEditMode(PXLE_EditMode.INTERSECTION_SELECTED);
+//        }
+//    }
+
+    /**
+     * This method will be used to respond to right-button mouse clicks
+     * on intersections so that we can toggle them open or closed.
+     */
+    @Override
+    public void mouseClicked(MouseEvent me)
+    {
+        
+        // RIGHT MOUSE BUTTON IS TO TOGGLE OPEN/CLOSE INTERSECTION
+        if (me.getButton() == MouseEvent.BUTTON3)
+        {
+            // SEE IF WE CLICKED ON AN INTERSECTION
+            Intersection i = model.findIntersectionAtCanvasLocation(me.getX(), me.getY());
+            if (i != null)
+            {
+                // TOGGLE THE INTERSECTION
+                i.toggleOpen();
+                model.switchState(PathXCarState.NOTHING_SELECTED);
+            }            
+        }
+    }
+//
+//    /**
+//     * This method is called every time the user moves the mouse. We
+//     * use this to keep track of where the mouse is at all times on
+//     * the canvas, which helps us render the road being added after
+//     * the user has selected the first intersection.
+//     */
+//    @Override
+//    public void mouseMoved(MouseEvent me)
+//    {
+//        // UPDATE THE POSITION
+//        model.setLastMousePosition(me.getX(), me.getY());
+//    }
+//    
+//    /**
+//     * This function is called when we drag the mouse across the canvas with
+//     * the mouse button pressed. We use this to drag items intersections
+//     * across the canvas.
+//     */
+//    @Override
+//    public void mouseDragged(MouseEvent me)
+//    {
+//        // WE ONLY CARE IF WE ARE IN INTERSECTION DRAGGED MODE
+//        PXLE_EditMode editMode = model.getEditMode();
+//        if (editMode == PXLE_EditMode.INTERSECTION_DRAGGED)
+//        {
+//            // DRAG IT
+//            model.moveSelectedIntersection(me.getX(), me.getY());
+//        }    
+//    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -45,7 +45,7 @@ public class PathXConstants {
     public static final String LEVEL_1_XML = "L1CrastersKeep.xml";
     public static final String LEVEL_2_XML = "L2CastleBlack.xml";
     public static final String LEVEL_3_XML = "L3LastHearth.xml";
-    public static final String LEVEL_4_XML = "L4CastleBlack.xml";
+    public static final String LEVEL_4_XML = "L4DeepwoodMotte.xml";
     public static final String LEVEL_5_XML = "L5CrastersKeep.xml";
     public static final String LEVEL_6_XML = "L6CastleBlack.xml";
     public static final String LEVEL_7_XML = "L7CrastersKeep.xml";

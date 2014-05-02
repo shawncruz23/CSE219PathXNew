@@ -8,6 +8,7 @@ package pathx.data;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.geom.Line2D;
 import pathx.ui.PathXCar;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class PathXDataModel extends MiniGameDataModel {
     //PXLE_EditMode editMode;
 
     // DATA FOR RENDERING
-    Viewport viewport;
+    pathx.data.Viewport viewport;
 
     // WE ONLY NEED TO TURN THIS ON ONCE
     boolean levelBeingEdited;
@@ -114,8 +115,12 @@ public class PathXDataModel extends MiniGameDataModel {
     private ArrayList<CarMotionTransaction> properTransactionOrder;
     private int transactionCounter;
   //  private boolean isUndo;
+    
+    private PathXCarState editMode;
   
-
+    private int mousePressX;
+    private int mousePressY;
+    
  
     /**
      * Constructor for initializing this data model, it will create the data
@@ -138,6 +143,10 @@ public class PathXDataModel extends MiniGameDataModel {
         selectedCar = null;
         selectedCarIndex = -1;
         tempCar = null;
+        
+        editMode = PathXCarState.NOTHING_SELECTED;
+        
+        viewport = new Viewport();
     }
 
     // ACCESSOR METHODS
@@ -198,7 +207,7 @@ public class PathXDataModel extends MiniGameDataModel {
     public void initLevel (String levelName) {
       
         // UPDATE THE VIEWPORT IF WE ARE SCROLLING (WHICH WE'RE NOT)
-        //viewport.updateViewportBoundaries();
+        viewport.updateViewportBoundaries();
 
         // INITIALIZE THE PLAYER RECORD IF NECESSARY
         PathXRecord playerRecord = ((PathXMiniGame) miniGame).getPlayerRecord();
@@ -207,7 +216,72 @@ public class PathXDataModel extends MiniGameDataModel {
            // playerRecord.addLevel(levelName, initSortingAlgorithm.name);
         }
     }
+    
+    
+    public Viewport getVport() {
+        return viewport;
+    }
 
+//    public int getMousePressX() {
+//        return mousePressX;
+//    }
+//    
+//     public int getMousePressY() {
+//        return mousePressY;
+//    }
+    
+      /**
+     * Searches the level graph and finds and returns the intersection
+     * that overlaps (canvasX, canvasY).
+     */
+    public Intersection findIntersectionAtCanvasLocation(int canvasX, int canvasY)
+    {
+        // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
+        for (Intersection i : level.intersections)
+        {
+            double distance = calculateDistanceBetweenPoints(i.x, i.y, canvasX + viewport.x, canvasY + viewport.y);
+            if (distance < INTERSECTION_RADIUS)
+            {
+                // MAKE THIS THE SELECTED INTERSECTION
+                return i;
+            }
+        }
+        return null;
+    }
+    
+    // MUTATOR METHODS
+
+    public void switchState(PathXCarState newMode) {
+        
+        editMode = newMode;
+        
+        miniGame.getCanvas().repaint();
+        
+    }
+    
+//    public void setView(PXLE_View initView)
+//    {   view = initView;    }    
+    public void setLevelBeingEdited(boolean initLevelBeingEdited)
+    {   levelBeingEdited = initLevelBeingEdited;    }
+    public void setLastMousePosition(int initX, int initY)
+    {
+        lastMouseX = initX;
+        lastMouseY = initY;
+       
+    }    
+    public void setSelectedIntersection(Intersection i)
+    {
+        selectedIntersection = i;
+        selectedRoad = null;
+        
+    }    
+    public void setSelectedRoad(Road r)
+    {
+        selectedRoad = r;
+        selectedIntersection = null;
+        
+    }
+    
     /**
      * This method loads the tiles, creating an individual sprite for each. Note
      * that tiles may be of various types, which is important during the tile
@@ -270,77 +344,78 @@ public class PathXDataModel extends MiniGameDataModel {
         return bi;
     }
 
-//    /**
-//     * Used to calculate the x-axis pixel location in the game grid for a tile
-//     * placed at column with stack position z.
-//     *
-//     * @param column The column in the grid the tile is located.
-//     *
-//     * @return The x-axis pixel location of the tile
-//     */
-//    public int calculateGridTileX(int column) {
-//        return viewport.getViewportMarginLeft() + (column * TILE_WIDTH) - viewport.getViewportX();
-//    }
-//
-//    /**
-//     * Used to calculate the y-axis pixel location in the game grid for a tile
-//     * placed at row.
-//     *
-//     * @param row The row in the grid the tile is located.
-//     *
-//     * @return The y-axis pixel location of the tile
-//     */
-//    public int calculateGridTileY(int row) {
-//        return viewport.getViewportMarginTop() + (row * TILE_HEIGHT) - viewport.getViewportY();
-//    }
-//
-//    /**
-//     * Used to calculate the grid column for the x-axis pixel location.
-//     *
-//     * @param x The x-axis pixel location for the request.
-//     *
-//     * @return The column that corresponds to the x-axis location x.
-//     */
-//    public int calculateGridCellColumn(int x)
-//    {
-//        // ADJUST FOR THE MARGIN
-//        x -= viewport.getViewportMarginLeft();
-//
-//        // ADJUST FOR THE VIEWPORT
-//        x = x + viewport.getViewportX();
-//
-//        if (x < 0)
-//        {
-//            return -1;
-//        }
-//
-//        // AND NOW GET THE COLUMN
-//        return x / TILE_WIDTH;
-//    }
-//
-//    /**
-//     * Used to calculate the grid row for the y-axis pixel location.
-//     *
-//     * @param y The y-axis pixel location for the request.
-//     *
-//     * @return The row that corresponds to the y-axis location y.
-//     */
-//    public int calculateGridCellRow(int y)
-//    {
-//        // ADJUST FOR THE MARGIN
-//        y -= viewport.getViewportMarginTop();
-//
-//        // ADJUST FOR THE VIEWPORT
-//        y = y + viewport.getViewportY();
-//
-//        if (y < 0)
-//        {
-//            return -1;
-//        }
-//
-//        // AND NOW GET THE ROW
-//        return y / TILE_HEIGHT;
-//    }
+    
+    /**
+     * Used to calculate the x-axis pixel location in the game grid for a tile
+     * placed at column with stack position z.
+     *
+     * @param column The column in the grid the tile is located.
+     *
+     * @return The x-axis pixel location of the tile
+     */
+    public int calculateGridTileX(int column) {
+        return viewport.getViewportMarginLeft() + (column * TILE_WIDTH) - viewport.getViewportX();
+    }
+
+    /**
+     * Used to calculate the y-axis pixel location in the game grid for a tile
+     * placed at row.
+     *
+     * @param row The row in the grid the tile is located.
+     *
+     * @return The y-axis pixel location of the tile
+     */
+    public int calculateGridTileY(int row) {
+        return viewport.getViewportMarginTop() + (row * TILE_HEIGHT) - viewport.getViewportY();
+    }
+
+    /**
+     * Used to calculate the grid column for the x-axis pixel location.
+     *
+     * @param x The x-axis pixel location for the request.
+     *
+     * @return The column that corresponds to the x-axis location x.
+     */
+    public int calculateGridCellColumn(int x)
+    {
+        // ADJUST FOR THE MARGIN
+        //x -= 60;
+
+        // ADJUST FOR THE VIEWPORT
+        //x = (int) (x + PathXPanel.sourceX1);
+
+        if (x < 0)
+        {
+            return -1;
+        }
+
+        // AND NOW GET THE COLUMN
+        return x;// / INTERSECTION_RADIUS;
+    }
+
+    /**
+     * Used to calculate the grid row for the y-axis pixel location.
+     *
+     * @param y The y-axis pixel location for the request.
+     *
+     * @return The row that corresponds to the y-axis location y.
+     */
+    public int calculateGridCellRow(int y)
+    {
+        // ADJUST FOR THE MARGIN
+        //y -= viewport.getViewportMarginTop();
+
+        // ADJUST FOR THE VIEWPORT
+         //y = (int) (y + PathXPanel.sourceY1);
+
+        if (y < 0)
+        {
+            return -1;
+        }
+
+        // AND NOW GET THE ROW
+        return y;// / INTERSECTION_RADIUS;
+    }
 
     // TIME TEXT METHODS
     // - timeToText
@@ -655,10 +730,14 @@ public class PathXDataModel extends MiniGameDataModel {
     @Override
     public void checkMousePressOnSprites(MiniGame game, int x, int y)
     {
+ 
         // FIGURE OUT THE CELL IN THE GRID
-        //int col = calculateGridCellColumn(x);
-       // int row = calculateGridCellRow(y);
+        int col = calculateGridCellColumn(x);
+        int row = calculateGridCellRow(y);
 
+        System.out.println("REACHED checkMousePressOnSprites: " +
+                "\nX: " + col + "\nY: " + row);
+        
         // DISABLE THE STATS DIALOG IF IT IS OPEN
       //  if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(PathXCarState.VISIBLE_STATE.toString()))
         {
@@ -673,28 +752,28 @@ public class PathXDataModel extends MiniGameDataModel {
         //if (index < 0)
         {
             // DESELECT A TILE IF ONE IS SELECTED
-            if (selectedCar != null)
-            {
-                selectedCar.setState(PathXCarState.VISIBLE_STATE.toString());
-                selectedCar = null;
-                selectedCarIndex = -1;
-                miniGame.getAudio().play(PathXPropertyType.AUDIO_CUE_DESELECT_TILE.toString(), false);
-            }
+//            if (selectedCar != null)
+//            {
+//                selectedCar.setState(PathXCarState.VISIBLE_STATE.toString());
+//                selectedCar = null;
+//                selectedCarIndex = -1;
+//                miniGame.getAudio().play(PathXPropertyType.AUDIO_CUE_DESELECT_TILE.toString(), false);
+//            }
         }
         // IT'S IN THE GRID
        // else
         {
             // SELECT THE TILE IF NONE IS SELECTED
-            if (selectedCar == null)
-            {
-         //       selectedCar = tilesToSort.get(index);
-                selectedCar.setState(PathXCarState.SELECTED_STATE.toString());
-          //      selectedCarIndex = index;
-                miniGame.getAudio().play(PathXPropertyType.AUDIO_CUE_SELECT_TILE.toString(), false);
-            }
-            // A TILE WAS ALREADY SELECTED, SO THIS MUST HAVE BEEN THE SECOND TILE
-            // SELECTED, SO SWAP THEM
-            else
+//            if (selectedCar == null)
+//            {
+//         //       selectedCar = tilesToSort.get(index);
+//                selectedCar.setState(PathXCarState.SELECTED_STATE.toString());
+//          //      selectedCarIndex = index;
+//                miniGame.getAudio().play(PathXPropertyType.AUDIO_CUE_SELECT_TILE.toString(), false);
+//            }
+//            // A TILE WAS ALREADY SELECTED, SO THIS MUST HAVE BEEN THE SECOND TILE
+//            // SELECTED, SO SWAP THEM
+//            else
             {
         //        processSwap(index, selectedCarIndex);
             }
@@ -892,4 +971,88 @@ public class PathXDataModel extends MiniGameDataModel {
     public void updateDestinationImage(String destImageName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+      /**
+     * Unselects any intersection or road that might be selected.
+     */
+    public void unselectEverything()
+    {
+        selectedIntersection = null;
+        selectedRoad = null;
+        startRoadIntersection = null;
+        miniGame.getCanvas().repaint();
+    }
+
+    /**
+     * Searches to see if there is a road at (canvasX, canvasY), and if
+     * there is, it selects and returns it.
+     */
+    public Road selectRoadAtCanvasLocation(int canvasX, int canvasY)
+    {
+        Iterator<Road> it = level.roads.iterator();
+        Line2D.Double tempLine = new Line2D.Double();
+        while (it.hasNext())
+        {
+            Road r = it.next();
+            tempLine.x1 = r.node1.x;
+            tempLine.y1 = r.node1.y;
+            tempLine.x2 = r.node2.x;
+            tempLine.y2 = r.node2.y;
+            double distance = tempLine.ptSegDist(canvasX+viewport.x, canvasY+viewport.y);
+            
+            // IS IT CLOSE ENOUGH?
+            if (distance <= INT_STROKE)
+            {
+                // SELECT IT
+                this.selectedRoad = r;
+                //mode = PathXCarState.SELECTED_STATE;
+                return selectedRoad;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks to see if (canvasX, canvasY) is free (i.e. there isn't
+     * already an intersection there, and if not, adds one.
+     */
+//    public void addIntersectionAtCanvasLocation(int canvasX, int canvasY)
+//    {
+//        // FIRST MAKE SURE THE ENTIRE INTERSECTION IS INSIDE THE LEVEL
+//        if ((canvasX - INTERSECTION_RADIUS) < 0) return;
+//        if ((canvasY - INTERSECTION_RADIUS) < 0) return;
+//        if ((canvasX + INTERSECTION_RADIUS) > viewport.levelWidth) return;
+//        if ((canvasY + INTERSECTION_RADIUS) > viewport.levelHeight) return;
+//        
+//        // AND ONLY ADD THE INTERSECTION IF IT DOESN'T OVERLAP WITH
+//        // AN EXISTING INTERSECTION
+//        for(Intersection i : level.intersections)
+//        {
+//            double distance = calculateDistanceBetweenPoints(i.x-viewport.x, i.y-viewport.y, canvasX, canvasY);
+//            if (distance < INTERSECTION_RADIUS)
+//                return;
+//        }          
+//        
+//        // LET'S ADD A NEW INTERSECTION
+//        int intX = canvasX + viewport.x;
+//        int intY = canvasY + viewport.y;
+//        Intersection newInt = new Intersection(intX, intY);
+//        level.intersections.add(newInt);
+//        miniGame.getCanvas().repaint();
+//    }
+    
+     /**
+     * Calculates and returns the distance between two points.
+     */
+    public double calculateDistanceBetweenPoints(int x1, int y1, int x2, int y2)
+    {
+        double diffXSquared = Math.pow(x1 - x2, 2);
+        double diffYSquared = Math.pow(y1 - y2, 2);
+        return Math.sqrt(diffXSquared + diffYSquared);
+    }
+    
+     public boolean isNothingSelected()      { return editMode == PathXCarState.NOTHING_SELECTED; }
+    public boolean isIntersectionSelected() { return editMode == PathXCarState.INTERSECTION_SELECTED; }
+    public boolean isIntersectionDragged()  { return editMode == PathXCarState.PLAYER_DRAGGED; }
+    public boolean isRoadSelected()         { return editMode == PathXCarState.ROAD_SELECTED; }
 }

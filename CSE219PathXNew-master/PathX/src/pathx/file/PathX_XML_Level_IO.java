@@ -231,18 +231,18 @@ public class PathX_XML_Level_IO {
             int numZombies = Integer.parseInt(zombiesText);
             levelLoaded.setNumZombies(numZombies);    
             
-            System.out.println("Background Filename: " + levelLoaded.getBackgroundImageFileName());
-            System.out.println("Destination Filename: " + levelLoaded.getDestinationImageFileName());
-            System.out.println("Level Name: " + levelLoaded.getLevelName());
-            System.out.println("Starting Location Filename: " + levelLoaded.getStartingLocationImageFileName());
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
+//            System.out.println("Background Filename: " + levelLoaded.getBackgroundImageFileName());
+//            System.out.println("Destination Filename: " + levelLoaded.getDestinationImageFileName());
+//            System.out.println("Level Name: " + levelLoaded.getLevelName());
+//            System.out.println("Starting Location Filename: " + levelLoaded.getStartingLocationImageFileName());
+//            System.out.println("");
+//            System.out.println("");
+//            System.out.println("");
+//            System.out.println("");
+//            System.out.println("");
+//            System.out.println("");
+//            System.out.println("");
+//            System.out.println("");
             
             //Level aLevel = new Level();
 //            level.setDestination(destId);

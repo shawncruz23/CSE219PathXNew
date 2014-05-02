@@ -292,7 +292,11 @@ public class PathXMiniGame extends MiniGame {
         }
 
         if (isCurrentScreenState(GAME_SCREEN_STATE)) {
-            //disable all game screen controls
+            //disable/reset all game screen controls
+            PathXPanel.sourceX1 = 0;
+            PathXPanel.sourceY1 = 0;
+            PathXPanel.sourceX2 = 620;
+            PathXPanel.sourceY2 = 440;
             audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
         }
 
@@ -415,6 +419,8 @@ public class PathXMiniGame extends MiniGame {
             }
 //       
         }
+        
+        
 
         //ENABLE HOME BUTTON
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
@@ -506,7 +512,7 @@ public class PathXMiniGame extends MiniGame {
         currentScreenState = HOME_SCREEN_STATE;
 
         // AND UPDATE THE DATA GAME STATE
-        //data.setGameState(MiniGameState.NOT_STARTED);
+        data.setGameState(MiniGameState.NOT_STARTED);
         // PLAY THE WELCOME SCREEN SONG
         audio.play(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString(), true);
         audio.stop(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString());
@@ -652,6 +658,11 @@ public class PathXMiniGame extends MiniGame {
         //INIT LEVEL LIST ARRAYLIST
         levelList = new ArrayList<>(20);
 
+    }
+    
+    @Override
+    public PathXDataModel getDataModel() {
+        return (PathXDataModel) data;
     }
 
     /**

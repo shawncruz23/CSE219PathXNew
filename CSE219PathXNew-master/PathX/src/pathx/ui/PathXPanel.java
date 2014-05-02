@@ -76,6 +76,7 @@ public class PathXPanel extends JPanel {
 
     // WE'LL RECYCLE THESE DURING RENDERING
     Ellipse2D.Double recyclableCircle;
+    Ellipse2D.Double playerCircle;
     Line2D.Double recyclableLine;
     HashMap<Integer, BasicStroke> recyclableStrokes;
     int triangleXPoints[] = {-ONE_WAY_TRIANGLE_WIDTH / 2, -ONE_WAY_TRIANGLE_WIDTH / 2, ONE_WAY_TRIANGLE_WIDTH / 2};
@@ -119,6 +120,8 @@ public class PathXPanel extends JPanel {
             recyclableStrokes.put(i, new BasicStroke(i * 2));
         }
 
+        playerCircle = new Ellipse2D.Double(0, 0, INTERSECTION_RADIUS * 2, INTERSECTION_RADIUS * 2);
+        
         // MAKING THE TRIANGLE FOR ONE WAY STREETS IS A LITTLE MORE INVOLVED
         recyclableTriangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD,
                 triangleXPoints.length);
@@ -183,6 +186,7 @@ public class PathXPanel extends JPanel {
             super.paintComponent(g);
 
             // RENDER THE BACKGROUND, WHICHEVER SCREEN WE'RE ON
+            if(!((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE))
             renderBackground(g);
 
             if (((PathXMiniGame) game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
@@ -193,14 +197,23 @@ public class PathXPanel extends JPanel {
                 
                 currentLevel = ((PathXMiniGame) game).getCurrentLevel();    
                
-                // RENDER THE BACKGROUND IMAGE
+//                // RENDER THE BACKGROUND IMAGE
+//                renderLevelBackground(g);
+                
+                 
+                
+                 // RENDER THE BACKGROUND IMAGE
                 renderLevelBackground(g);
-
+                
                 // RENDER THE ROADS
                 renderRoads(g2);
 
                 // RENDER THE INTERSECTIONS
                 renderIntersection(g2);
+                
+                renderPlayerCar(g2);
+                
+                renderBackground(g);
 
                 // RENDER THE INTERSECTIONS
                 //renderIntersections(g2);
@@ -245,9 +258,16 @@ public class PathXPanel extends JPanel {
 
     public static double sourceX1 = 0;
     public static double sourceY1 = 0;
-    public static double sourceX2 = 620;
-    public static double sourceY2 = 440;
+    public static double sourceX2 = 812;
+    public static double sourceY2 = 406;
+    
+    public static int destinationX1 = 107;
+    public static int destinationY1 = 46;
+    public static int destinationX2 = 633;
+    public static int destinationY2 = 452;
 
+    public static BufferedImage img;
+    
     // HELPER METHOD FOR RENDERING THE LEVEL BACKGROUND
     private void renderLevelBackground(Graphics g) {
 //        Image backgroundImage = data.getBackgroundImage();
@@ -255,7 +275,7 @@ public class PathXPanel extends JPanel {
 //                viewport.x, viewport.y, viewport.x + viewport.width,
 //                viewport.y + viewport.height, null);
 
-        BufferedImage img;
+        
 
         // GET THE MAP IMAGE PATH
         //PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -265,15 +285,30 @@ public class PathXPanel extends JPanel {
         updateBackgroundImage(levelMapImage);
         
         img = game.loadImage(LEVELS_PATH + levelMapImage);
-        //System.out.println("Level Image path: " + LEVELS_PATH + leve1MapImage);
+        
+        
+        int originalX1 = img.getMinX();
+        int originalY1 = img.getMinY();
+        int originalX2 = img.getWidth();
+        int originalY2 = img.getHeight();
+//        System.out.println("originalX1: " + originalX1 +
+//        "\noriginalY1: " + originalY1 +
+//        "\noriginalX2: " + originalX2 +    
+//        "\noriginalY2: " + originalY2);
 
         //PUT IT INTO A MINIATURE FRAME ON THE LARGER GAME SCREEN
         g.drawImage(img,
-                DESTINATION_X1, DESTINATION_Y1 - 50,
-                DESTINATION_X2, DESTINATION_Y2,
-                (int) sourceX1, (int) sourceY1,
-                (int) sourceX2, (int) sourceY2,
+                /*DESTINATION_X1*/destinationX1, /*DESTINATION_Y1*/destinationY1,
+                /*DESTINATION_X2*/destinationX2, /*DESTINATION_Y2*/destinationY2,
+                (int) (sourceX1), (int) (sourceY1),
+                (int) (sourceX2), (int) (sourceY2),
                 null);
+        //g.drawImage(img, (int)sourceX1, (int)sourceY1, null);
+        //g.drawImage(img, (int)sourceX1, (int)sourceY1, originalX2, originalY2, null);
+//        System.out.println("sourceX1: " + sourceX1 + "\nsourceY1: " + sourceY1
+//        + "\nsourceX2: " + sourceX2 + "\nsourceY2: " + sourceY2);
+//        System.out.println("sourceX1: " + sourceX1 + "\nsourceY1: " + sourceY1
+//        + "\nsourceX2: " + sourceX2 + "\nsourceY2: " + sourceY2);
     }
 
     // HELPER METHOD FOR RENDERING THE LEVEL ROADS
@@ -324,10 +359,10 @@ public class PathXPanel extends JPanel {
         g2.setStroke(recyclableStrokes.get(strokeId));
 
         // LOAD ALL THE DATA INTO THE RECYCLABLE LINE
-        recyclableLine.x1 = road.getNode1().x - sourceX1;
-        recyclableLine.y1 = road.getNode1().y - sourceY1 ;
-        recyclableLine.x2 = road.getNode2().x - sourceX1;
-        recyclableLine.y2 = road.getNode2().y - sourceY1;
+        recyclableLine.x1 = road.getNode1().x - sourceX1 + destinationX1;
+        recyclableLine.y1 = road.getNode1().y - sourceY1 + destinationY1;
+        recyclableLine.x2 = road.getNode2().x - sourceX1 + destinationX1;
+        recyclableLine.y2 = road.getNode2().y - sourceY1 + destinationY1;
 
         // AND DRAW IT
         g2.draw(recyclableLine);
@@ -396,8 +431,8 @@ public class PathXPanel extends JPanel {
                 }
                
                 
-                recyclableCircle.x = intersection.x - sourceX1 - INTERSECTION_RADIUS;
-                recyclableCircle.y = intersection.y - sourceY1 - INTERSECTION_RADIUS;
+                recyclableCircle.x = intersection.x - sourceX1 - INTERSECTION_RADIUS + destinationX1;
+                recyclableCircle.y = intersection.y - sourceY1 - INTERSECTION_RADIUS + destinationY1;
                 
 //                if ((recyclableCircle.x > DESTINATION_X1 && recyclableCircle.x < DESTINATION_X2)
 //                        && (recyclableCircle.y > DESTINATION_Y1 && recyclableCircle.y < DESTINATION_Y2)) {
@@ -417,8 +452,8 @@ public class PathXPanel extends JPanel {
             }
         }
 
-        System.out.println("starting location: " + currentLevel.getStartingLocationImageFileName());
-        System.out.println("ending location: " + currentLevel.getDestinationImageFileName());
+//        System.out.println("starting location: " + currentLevel.getStartingLocationImageFileName());
+//        System.out.println("ending location: " + currentLevel.getDestinationImageFileName());
 
         // AND NOW RENDER THE START AND DESTINATION LOCATIONS
         Image startImage = game.loadImage(LEVELS_PATH + currentLevel.getStartingLocationImageFileName());
@@ -444,10 +479,40 @@ public class PathXPanel extends JPanel {
         // ONLY RENDER IF INSIDE THE VIEWPORT
 //        if (x1 > DESTINATION_X1  && y1 > DESTINATION_Y1  && x2 < DESTINATION_X2  && y2 < DESTINATION_Y2 /*change to check boundaries*/)
         {
-            g2.drawImage(img, (int)(x1 - sourceX1), (int)(y1 - sourceY1), null);
+            g2.drawImage(img, (int)(x1 - sourceX1 + destinationX1), (int)(y1 - sourceY1 + destinationY1), null);
         }
     }
 
+    //public static int counter = 0;
+    public static double playerX = 0;
+    public static double playerY = 0;
+    
+    public void renderPlayerCar(Graphics2D g2) {
+        
+        g2.setColor(Color.BLUE);
+        
+        //if(counter == 0) {
+        playerCircle.x = currentLevel.getStartingLocation().x - sourceX1 - INTERSECTION_RADIUS + 50 + playerX + destinationX1;
+        playerCircle.y = currentLevel.getStartingLocation().y - sourceY1 - INTERSECTION_RADIUS + 0 + playerY + destinationY1;
+        //counter++;
+        //}
+        
+        g2.fill(playerCircle);
+
+        // AND NOW THE OUTLINE
+       
+        g2.setColor(INT_OUTLINE_COLOR);
+        
+        Stroke s = recyclableStrokes.get(INT_STROKE);
+        g2.setStroke(s);
+        g2.draw(playerCircle);
+       
+    }
+    
+    public void movePlayerCar(int x, int y) {
+        playerCircle.x += x; 
+        playerCircle.y += y;
+    }
     /**
      * Updates the background image.
      */

@@ -19,7 +19,7 @@ public class Level {
     String startingLocationImageFileName;
 
     // COMPLETE LIST OF INTERSECTIONS SORTED LEFT TO RIGHT
-    ArrayList<Intersection> intersections;
+    public ArrayList<Intersection> intersections;
 
     // COMPLETE LIST OF ROADS SORTED BY STARTING INTERSECTION LOCATION LEFT TO RIGHT
     ArrayList<Road> roads;
