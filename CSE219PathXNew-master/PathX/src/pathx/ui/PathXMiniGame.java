@@ -295,8 +295,8 @@ public class PathXMiniGame extends MiniGame {
             //disable/reset all game screen controls
             PathXPanel.sourceX1 = 0;
             PathXPanel.sourceY1 = 0;
-            PathXPanel.sourceX2 = 620;
-            PathXPanel.sourceY2 = 440;
+            PathXPanel.sourceX2 = 812;
+            PathXPanel.sourceY2 = 406;
             audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
         }
 

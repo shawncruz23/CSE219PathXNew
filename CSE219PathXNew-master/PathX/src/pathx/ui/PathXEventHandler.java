@@ -129,28 +129,28 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                      " Between: intersection1: " + aLevel.getRoads().get(i).getNode1().toString() + " and intersection2: " + aLevel.getRoads().get(i).getNode2().toString() );
 //                 
           
-            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
-         
-             //ArrayList<Connection> pathToHome = gameGraph.someMethod(aLevel.getStartingLocation(), aLevel.getDestination());
-             
-            System.out.println("PATH TO HOME:\n START: ");
-             for (int i = 0; i < pathToHome.size(); i++) {
-                 //System.out.println(pathToHome.get(i).toString() + "\n");
-                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
-                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
-                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
-                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
-                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
-             }
-             System.out.println("END");
-             
-             System.out.println("\n printArrayListGamePaths: ALL POSSIBLE PATHS START");
-              gameGraph.printArrayListGamePaths();
-              System.out.println("ALL POSSIBLE PATHS END\n");
-              
-              System.out.println("\n printAllGamePaths : ALL POSSIBLE PATHS START");
-             gameGraph.printAllGamePaths();
-              System.out.println("ALL POSSIBLE PATHS END\n");
+//            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
+//         
+//             //ArrayList<Connection> pathToHome = gameGraph.someMethod(aLevel.getStartingLocation(), aLevel.getDestination());
+//             
+//            System.out.println("PATH TO HOME:\n START: ");
+//             for (int i = 0; i < pathToHome.size(); i++) {
+//                 //System.out.println(pathToHome.get(i).toString() + "\n");
+//                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
+//                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
+//                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
+//                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
+//                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
+//             }
+//             System.out.println("END");
+//             
+//             System.out.println("\n printArrayListGamePaths: ALL POSSIBLE PATHS START");
+//              gameGraph.printArrayListGamePaths();
+//              System.out.println("ALL POSSIBLE PATHS END\n");
+//              
+//              System.out.println("\n printAllGamePaths : ALL POSSIBLE PATHS START");
+//             gameGraph.printAllGamePaths();
+//              System.out.println("ALL POSSIBLE PATHS END\n");
               
             // System.out.println("TEST LOCATION: " + "(x: " + aLevel.getIntersections().get(9).x +
               //       ", y: " + aLevel.getIntersections().get(9).y + ")");
@@ -193,39 +193,48 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
         switch (direction) {
             case UP_BUTTON_DIRECTION: //max(sy1,sy2) bounds
-                if ((sourceY1 > SOURCE_Y1_MAX_COORD - 30) && (sourceY2 > SOURCE_Y2_MAX_COORD - 30)) {
+                if ((sourceY1 < 40) && (sourceY2 < 446)) {
                     //FOR MAP
-                    sourceY1 -= 20;//SOURCE_Y_SCROLL_UP;
-                    sourceY2 -= 20;//SOURCE_Y_SCROLL_UP;
+                    sourceY1 += 20;//SOURCE_Y_SCROLL_UP;
+                    sourceY2 += 20;//SOURCE_Y_SCROLL_UP;
 //                    System.out.println("sourceY1: " + sourceY1 +" > "
-//                            + "SOURCE_Y1_MAX_COORD: " + SOURCE_Y1_MAX_COORD);
+//                            + "SOURCE_Y1_MAX_COORD: " + (SOURCE_Y1_MAX_COORD-30));
 //                     System.out.println("sourceY2: " + sourceY2 +" > "
-//                            + "SOURCE_Y2_MAX_COORD: " + SOURCE_Y2_MAX_COORD);
+//                            + "SOURCE_Y2_MAX_COORD: " + (SOURCE_Y2_MAX_COORD-30));
                 }
                 break;
             case DOWN_BUTTON_DIRECTION: //min(sy1,sy2)
-                if ((sourceY1 < 158/*SOURCE_Y1_MIN_COORD*/) && (sourceY2 < 593 + 100/*SOURCE_Y2_MIN_COORD*/)) {
+                if ((sourceY1 > -140/*SOURCE_Y1_MIN_COORD*/) && (sourceY2 > 266/*SOURCE_Y2_MIN_COORD*/)) {
                     //FOR MAP
-                    sourceY1 += 20;//SOURCE_Y_SCROLL_DOWN;
-                    sourceY2 += 20;//SOURCE_Y_SCROLL_DOWN;
-
+                    sourceY1 -= 20;//SOURCE_Y_SCROLL_DOWN;
+                    sourceY2 -= 20;//SOURCE_Y_SCROLL_DOWN;
+//                    System.out.println("sourceY1: " + sourceY1 + " > "
+//                            + "SOURCE_Y1_MIN_COORD: " + -140);
+//                    System.out.println("sourceY2: " + sourceY2 + " > "
+//                            + "SOURCE_Y2_MIN_COORD: " + 266);
                 }
                 break;
             case RIGHT_BUTTON_DIRECTION: //max(sx1,sx2)
-                //if ((sourceX1 < 350/*40*/) && (sourceX2 < 1250/*670*/)) {
-                    //FOR MAP
-                    sourceX1 += 20;
-                    sourceX2 += 20;
-
-                //}
-                break;
-            case LEFT_BUTTON_DIRECTION: //min(sx1,sx2)
-                //if ((sourceX1 > 0) && (sourceX2 > 620)) {
+               if ((sourceX1 > -560/*40*/) && (sourceX2 > 252/*670*/)) {
                     //FOR MAP
                     sourceX1 -= 20;
                     sourceX2 -= 20;
-                 
-                //}
+//                   System.out.println("sourceX1: " + sourceX1 + " > "
+//                           + "SOURCE_X1_MAX_COORD: " + -560);
+//                   System.out.println("sourceX2: " + sourceX2 + " > "
+//                           + "SOURCE_X2_MAX_COORD: " + 252);
+                }
+                break;
+            case LEFT_BUTTON_DIRECTION: //min(sx1,sx2)
+                if ((sourceX1 < 100) && (sourceX2 < 912)) {
+                    //FOR MAP
+                    sourceX1 += 20;
+                    sourceX2 += 20;
+//                    System.out.println("sourceX1: " + sourceX1 + " < "
+//                            + "SOURCE_X1_MIN_COORD: " + 100);
+//                    System.out.println("sourceX2: " + sourceX2 + " < "
+//                            + "SOURCE_X2_MIN_COORD: " + 912);
+                }
                 break;
         }
     }

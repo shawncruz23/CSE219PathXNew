@@ -262,9 +262,9 @@ public class PathXPanel extends JPanel {
     public static double sourceY2 = 406;
     
     public static int destinationX1 = 107;
-    public static int destinationY1 = 46;
-    public static int destinationX2 = 633;
-    public static int destinationY2 = 452;
+    public static int destinationY1 = 0;
+    public static int destinationX2 = 640;
+    public static int destinationY2 = 480;
 
     public static BufferedImage img;
     
@@ -282,7 +282,7 @@ public class PathXPanel extends JPanel {
         //String imgPath = props.getProperty(LEVELS_PATH);
         String levelMapImage = currentLevel.getBackgroundImageFileName();
 
-        updateBackgroundImage(levelMapImage);
+        //updateBackgroundImage(levelMapImage);
         
         img = game.loadImage(LEVELS_PATH + levelMapImage);
         
@@ -297,14 +297,15 @@ public class PathXPanel extends JPanel {
 //        "\noriginalY2: " + originalY2);
 
         //PUT IT INTO A MINIATURE FRAME ON THE LARGER GAME SCREEN
-        g.drawImage(img,
-                /*DESTINATION_X1*/destinationX1, /*DESTINATION_Y1*/destinationY1,
-                /*DESTINATION_X2*/destinationX2, /*DESTINATION_Y2*/destinationY2,
-                (int) (sourceX1), (int) (sourceY1),
-                (int) (sourceX2), (int) (sourceY2),
-                null);
+//        g.drawImage(img,
+//                /*DESTINATION_X1*/destinationX1, /*DESTINATION_Y1*/destinationY1,
+//                /*DESTINATION_X2*/destinationX2, /*DESTINATION_Y2*/destinationY2,
+//                (int) (sourceX1), (int) (sourceY1),
+//                (int) (sourceX2), (int) (sourceY2),
+//                null);
         //g.drawImage(img, (int)sourceX1, (int)sourceY1, null);
-        //g.drawImage(img, (int)sourceX1, (int)sourceY1, originalX2, originalY2, null);
+         g.drawImage(img, (int) (originalX1 + sourceX1), (int)(originalY1 + sourceY1), (int)(originalX2), (int)(originalY2), null);
+         //g.draw
 //        System.out.println("sourceX1: " + sourceX1 + "\nsourceY1: " + sourceY1
 //        + "\nsourceX2: " + sourceX2 + "\nsourceY2: " + sourceY2);
 //        System.out.println("sourceX1: " + sourceX1 + "\nsourceY1: " + sourceY1
@@ -359,10 +360,10 @@ public class PathXPanel extends JPanel {
         g2.setStroke(recyclableStrokes.get(strokeId));
 
         // LOAD ALL THE DATA INTO THE RECYCLABLE LINE
-        recyclableLine.x1 = road.getNode1().x - sourceX1 + destinationX1;
-        recyclableLine.y1 = road.getNode1().y - sourceY1 + destinationY1;
-        recyclableLine.x2 = road.getNode2().x - sourceX1 + destinationX1;
-        recyclableLine.y2 = road.getNode2().y - sourceY1 + destinationY1;
+        recyclableLine.x1 = road.getNode1().x + sourceX1 + destinationX1 - 20;
+        recyclableLine.y1 = road.getNode1().y + sourceY1 + destinationY1 - 0;
+        recyclableLine.x2 = road.getNode2().x + sourceX1 + destinationX1 - 20;
+        recyclableLine.y2 = road.getNode2().y + sourceY1 + destinationY1 - 0;
 
         // AND DRAW IT
         g2.draw(recyclableLine);
@@ -431,8 +432,8 @@ public class PathXPanel extends JPanel {
                 }
                
                 
-                recyclableCircle.x = intersection.x - sourceX1 - INTERSECTION_RADIUS + destinationX1;
-                recyclableCircle.y = intersection.y - sourceY1 - INTERSECTION_RADIUS + destinationY1;
+                recyclableCircle.x = intersection.x + sourceX1 - INTERSECTION_RADIUS + destinationX1 - 20;
+                recyclableCircle.y = intersection.y + sourceY1 - INTERSECTION_RADIUS + destinationY1;
                 
 //                if ((recyclableCircle.x > DESTINATION_X1 && recyclableCircle.x < DESTINATION_X2)
 //                        && (recyclableCircle.y > DESTINATION_Y1 && recyclableCircle.y < DESTINATION_Y2)) {
@@ -479,7 +480,7 @@ public class PathXPanel extends JPanel {
         // ONLY RENDER IF INSIDE THE VIEWPORT
 //        if (x1 > DESTINATION_X1  && y1 > DESTINATION_Y1  && x2 < DESTINATION_X2  && y2 < DESTINATION_Y2 /*change to check boundaries*/)
         {
-            g2.drawImage(img, (int)(x1 - sourceX1 + destinationX1), (int)(y1 - sourceY1 + destinationY1), null);
+            g2.drawImage(img, (int)(x1 + sourceX1 + destinationX1 - 20), (int)(y1 + sourceY1 + destinationY1), null);
         }
     }
 
@@ -492,8 +493,8 @@ public class PathXPanel extends JPanel {
         g2.setColor(Color.BLUE);
         
         //if(counter == 0) {
-        playerCircle.x = currentLevel.getStartingLocation().x - sourceX1 - INTERSECTION_RADIUS + 50 + playerX + destinationX1;
-        playerCircle.y = currentLevel.getStartingLocation().y - sourceY1 - INTERSECTION_RADIUS + 0 + playerY + destinationY1;
+        playerCircle.x = currentLevel.getStartingLocation().x + sourceX1 - INTERSECTION_RADIUS + 50 + playerX + destinationX1 ;
+        playerCircle.y = currentLevel.getStartingLocation().y + sourceY1 - INTERSECTION_RADIUS + 0 + playerY + destinationY1 ;
         //counter++;
         //}
         
