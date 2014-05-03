@@ -41,6 +41,7 @@ import static pathx.PathX.PathXPropertyType.IMAGE_BACKGROUND_HELP;
 import static pathx.PathX.PathXPropertyType.IMAGE_GO_TO_HOME_SCREEN;
 import pathx.PathXConstants;
 import static pathx.PathXConstants.*;
+import pathx.car.PoliceCar;
 import pathx.data.Level;
 import pathx.data.PathXDataModel;
 import pathx.data.PathXLevelNode;
@@ -389,6 +390,10 @@ public class PathXMiniGame extends MiniGame {
 
         currentLevel = aLevel;
         
+         // THEN THE TILES STACKED TO THE TOP LEFT
+        ((PathXDataModel) data).initEnemyCars(currentLevel.getNumPolice(), currentLevel.getNumZombies(), currentLevel.getNumBandits());
+        
+        //((PathXDataModel) data).playPoliceAnimation();
          //DISABLE CHECKBOXES
         guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(false);
@@ -397,6 +402,12 @@ public class PathXMiniGame extends MiniGame {
         guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(false);
 
+        Iterator it = ((PathXDataModel)data).getPoliceCarStack().iterator();
+        
+        while(it.hasNext()) {
+            PoliceCar car  = (PoliceCar)it.next();
+            car.setState(PathXCarState.VISIBLE_STATE.toString());
+        }
         
         //DISABLE ARROWS
         if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
@@ -420,7 +431,7 @@ public class PathXMiniGame extends MiniGame {
 //       
         }
         
-        
+        ((PathXDataModel)data).enableCars(true);
 
         //ENABLE HOME BUTTON
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
@@ -877,6 +888,8 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, MUSIC_CHECK_BOX_X/*x coordinates*/, MUSIC_CHECK_BOX_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(MUSIC_CHECK_BOX_TYPE, s);
 
+        // THEN THE TILES STACKED TO THE TOP LEFT
+        //((PathXDataModel) data).initEnemyCars(currentLevel.getNumPolice(), currentLevel.getNumZombies(), currentLevel.getNumBandits());
     }
 
     public void updateLevelSelectButtons() {

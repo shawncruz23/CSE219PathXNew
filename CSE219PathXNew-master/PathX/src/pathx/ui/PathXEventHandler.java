@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -129,19 +130,20 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                      " Between: intersection1: " + aLevel.getRoads().get(i).getNode1().toString() + " and intersection2: " + aLevel.getRoads().get(i).getNode2().toString() );
 //                 
           
-//            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
+            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
 //         
 //             //ArrayList<Connection> pathToHome = gameGraph.someMethod(aLevel.getStartingLocation(), aLevel.getDestination());
 //             
-//            System.out.println("PATH TO HOME:\n START: ");
-//             for (int i = 0; i < pathToHome.size(); i++) {
-//                 //System.out.println(pathToHome.get(i).toString() + "\n");
-//                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
-//                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
-//                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
-//                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
-//                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
-//             }
+            System.out.println("PATH TO HOME:\n START: ");
+             for (int i = 0; i < pathToHome.size(); i++) {
+                 //System.out.println(pathToHome.get(i).toString() + "\n");
+                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
+                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
+                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
+                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
+                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
+             }
+             
 //             System.out.println("END");
 //             
 //             System.out.println("\n printArrayListGamePaths: ALL POSSIBLE PATHS START");
@@ -183,6 +185,48 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         game.switchToHomeScreen();
     }
     
+    public void adjustPlayerPosition(ArrayList<Connection> aPath) {
+        
+        int xDir, yDir;
+        Iterator i = aPath.iterator();
+        while (i.hasNext()) {
+            String iD = ((Connection) i).getIntersection1Id();
+            xDir = gameGraph.getIntersection(iD).x;
+            yDir = gameGraph.getIntersection(iD).y;
+            playerX += xDir;
+            playerY += yDir;
+        }
+    }
+    
+    public void intersectionClickerCheck(int x, int y) {
+        int error = 30;
+        int diffX = x - 80; //- (int)sourceX1;
+        int diffY = y + 10; //- (int)sourceY1;
+        ArrayList<Intersection> node = ((PathXMiniGame) game).getCurrentLevel().getIntersections();
+        for (int i = 0; i < node.size(); i++) {
+//            while(i < 1){
+//                for(int j = 0; j < node.size(); j++)
+//                //System.out.println("Value: " + node.get(j).toString());
+//            }
+//            System.out.println("clickX >= nodeX: " + (((diffX + error) >= node.get(i).x)));
+//            System.out.println("clickX <= nodeX: " + (((diffX - error) <= node.get(i).x)));
+//            System.out.println("clickY >= nodeY: " + (((diffY + error) >= node.get(i).y)));
+//            System.out.println("clickY >= nodeY: " + (((diffY - error) <= node.get(i).y)));
+           // System.out.println("Difference: X: " + (x - node.get(i).x));
+            //System.out.println("Difference: Y: " + (y - node.get(i).y));
+            if (((diffX + error) >= node.get(i).x)
+                    && ((diffX - error) <= node.get(i).x)
+                    && ((diffY + error) >= node.get(i).y)
+                    && ((diffY - error) <= node.get(i).y)) {
+                System.out.println("Coordinates: " + node.get(i).toString());
+                System.out.println("Send to: X: " + x + " Y: " + y);
+                    checker++;
+                 playerX = x;
+                 playerY = y;
+            }
+        }
+    }
+
      /**
      * Called when the user clicks on an arrow/directional button.
      * Adjusts the coordinates for GAME map source

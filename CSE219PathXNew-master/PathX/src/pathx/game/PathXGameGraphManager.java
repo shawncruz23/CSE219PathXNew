@@ -116,154 +116,144 @@ public class PathXGameGraphManager {
      * except this one finds the optimal path. The easiest way to do this is
      * with a breadth first search algorithm.
      */
-//    public ArrayList<Connection> findShortestPathToHome(Intersection intersection1, Intersection intersection2)
-//    {
+    public ArrayList<Connection> findShortestPathToHome(Intersection intersection1, Intersection intersection2) {
 //        Iterator i = intersectionIDs.iterator();
 //        int k = 0;
 //        while (i.hasNext()) {
 //            //i.next();
 //            System.out.println("INTERSECTION(" + (++k) + "): " + intersections.get(i.next()).toString());
 //        }
-//        
-//	// WE'LL MAINTAIN A SHORTEST PATH FROM THE
-//        // STARTING ACTOR TO EACH ACTOR WE ENCOUNTER
-//        TreeMap<String, ArrayList<Connection>> shortestPaths;
-//        shortestPaths = new TreeMap();
-//
-//        // THIS WILL STORE THE PATH WE ARE CURRENTLY
-//        // BUILDING UPON
-//        ArrayList<Connection> currentPath;
-//
-//	// WE ARE USING A BREADTH FIRST SEARCH, AND
-//        // WE'LL ONLY CHECK EACH Actor AND Film ONCE
-//        // WE ARE USING 2 DATA STRUCTURES FOR EACH
-//        // BECAUSE WE WILL USE ONE AS A LIST OF 
-//        // ITEMS TO CHECK IN ORDER, AND ANOTHER
-//        // FOR FAST SEARCHING
-//        ArrayList<Intersection> intersectionsVisited = new ArrayList();
-//        TreeMap<String, Intersection> intersectionsVisitedFast = new TreeMap();
-//        ArrayList<Road> roadsVisited = new ArrayList();
-//        TreeMap<String, Road> roadsVisitedFast = new TreeMap();
-//
-//        // INDEX OF Actors AND Films TO CHECK
-//        int intersectionIndex = 0;
-//        int roadIndex = 0;
-//
-//	// THE SHORTEST PATH FROM THE START ACTOR
-//        // TO THE START ACTOR IS NOTHING, SO WE'll
-//        // START OUT WITH AN EMPTY ArrayList
-//        intersectionsVisited.add(intersection1);
-//        intersectionsVisitedFast.put(intersection1.getiD(), intersection1);
-//        shortestPaths.put(intersection1.getiD(), new ArrayList<>());
-//
-//        //Iterator iterate = intersections.values().iterator();
-//        
-//        //while(iterate.hasNext()) {
-//            
-//	// GO THROUGH ALL THE ACTORS WE HAVE REACHED
-//        // NEVER RE-VISITING AN ACTOR
-//        while (intersectionIndex < intersectionsVisited.size())
-//        {
-//            // FIRST GET ALL THE MOVIES FOR THE
-//            // ACTOR AT THE intersectionIndex
-//            Intersection currentIntersection = intersectionsVisited.get(intersectionIndex);
-//
-//            // MAKE THE SHORTEST PATH FOR THE CURRENT
-//            // ACTOR THE CURRENT PATH, SINCE WE WILL
-//            // BUILD ON IT
-//            currentPath = shortestPaths.get(currentIntersection.getiD());
-//
-//            Iterator<String> itRoadIDs = currentIntersection.getRoadIDs().iterator();
-//            while (itRoadIDs.hasNext())
-//            {
-//                String roadID = itRoadIDs.next();
-//                Road road = roads.get(roadID);
-//                if (!roadsVisitedFast.containsKey(roadID))
-//                {
-//                    roadsVisited.add(road);
-//                    roadsVisitedFast.put(road.getiD(), road);
-//                    
-//                }
-//            }
-//
-//            while (roadIndex < roadsVisited.size())
-//            {
-//		// NOW GO THROUGH THE ROADS AND GET
-//                // ALL THE INTERSECTIONS WHO WERE IN THOSE
-//                // ROADS, DO NOT GET INTERSECTIONS ALREADY
-//                // VISITED
-//                Road currentRoad = roadsVisited.get(roadIndex);
-//                Iterator<String> itIntersectionIDs = currentRoad.getIntersectionIDs().iterator();
-//                while (itIntersectionIDs.hasNext())
-//                {
-//                    String intersectionID = itIntersectionIDs.next();
-//                    Intersection intersectionToTest = intersections.get(intersectionID);
-//                    if (!intersectionsVisitedFast.containsKey(intersectionID))
-//                    {
-//                        intersectionsVisited.add(intersectionToTest);
-//                        intersectionsVisitedFast.put(intersectionID, intersectionToTest);
-//                        ArrayList<Connection> intersectionPath;
-//                        intersectionPath = (ArrayList<Connection>) currentPath.clone();
-//                        Connection c = new Connection(currentIntersection.getiD(),
-//                                currentRoad.getiD(),
-//                                intersectionToTest.getiD());
-//                        
-//                        intersectionPath.add(c);
-//                        shortestPaths.put(intersectionID, intersectionPath);
-//                        
-//                        allGamePaths.put(currentRoad.getiD(),intersectionPath);
-//
-//                        // IF THIS IS KEVIN BACON WE'RE DONE
-//                        if (intersectionID.equals(intersection2.getiD()))
-//                        {
-//                            return intersectionPath;
-//                        }
-//                    }
-//                }
-//                roadIndex++;
-//            }
-//            intersectionIndex++;
-//            }
-//            return new ArrayList();
-//        }
-    //}
-    
-    public ArrayList<Connection> someMethod(Intersection intersection1, Intersection intersection2) {
-        
-         Iterator i = intersectionIDs.iterator();
 
-        ArrayList<Connection> finalPath = new ArrayList<>();
+        // WE'LL MAINTAIN A SHORTEST PATH FROM THE
+        // STARTING ACTOR TO EACH ACTOR WE ENCOUNTER
+        TreeMap<String, ArrayList<Connection>> shortestPaths;
+        shortestPaths = new TreeMap();
 
-        while (i.hasNext()) {
-             intersection1 = (Intersection) intersections.get(i.next());
-            ArrayList<Connection> testNeightbor = getAllNeighbors(intersection1.getiD());
-            
-            for(int g = 0; g < testNeightbor.size(); g++) {
-                ArrayList<Connection> temp = shortestPathHelper(intersections.get(testNeightbor.get(g).getIntersection1Id()), intersection2);
-                for(int z = 0; z < temp.size(); z++)
-                    finalPath.add(temp.get(z));
-            } 
+        // THIS WILL STORE THE PATH WE ARE CURRENTLY
+        // BUILDING UPON
+        ArrayList<Connection> currentPath;
+
+        // WE ARE USING A BREADTH FIRST SEARCH, AND
+        // WE'LL ONLY CHECK EACH Actor AND Film ONCE
+        // WE ARE USING 2 DATA STRUCTURES FOR EACH
+        // BECAUSE WE WILL USE ONE AS A LIST OF 
+        // ITEMS TO CHECK IN ORDER, AND ANOTHER
+        // FOR FAST SEARCHING
+        ArrayList<Intersection> intersectionsVisited = new ArrayList();
+        TreeMap<String, Intersection> intersectionsVisitedFast = new TreeMap();
+        ArrayList<Road> roadsVisited = new ArrayList();
+        TreeMap<String, Road> roadsVisitedFast = new TreeMap();
+
+        // INDEX OF Actors AND Films TO CHECK
+        int intersectionIndex = 0;
+        int roadIndex = 0;
+
+        // THE SHORTEST PATH FROM THE START ACTOR
+        // TO THE START ACTOR IS NOTHING, SO WE'll
+        // START OUT WITH AN EMPTY ArrayList
+        intersectionsVisited.add(intersection1);
+        intersectionsVisitedFast.put(intersection1.getiD(), intersection1);
+        shortestPaths.put(intersection1.getiD(), new ArrayList<>());
+
+        //Iterator iterate = intersections.values().iterator();
+        //while(iterate.hasNext()) {
+        // GO THROUGH ALL THE ACTORS WE HAVE REACHED
+        // NEVER RE-VISITING AN ACTOR
+        while (intersectionIndex < intersectionsVisited.size()) {
+            // FIRST GET ALL THE MOVIES FOR THE
+            // ACTOR AT THE intersectionIndex
+            Intersection currentIntersection = intersectionsVisited.get(intersectionIndex);
+
+            // MAKE THE SHORTEST PATH FOR THE CURRENT
+            // ACTOR THE CURRENT PATH, SINCE WE WILL
+            // BUILD ON IT
+            currentPath = shortestPaths.get(currentIntersection.getiD());
+
+            Iterator<String> itRoadIDs = currentIntersection.getRoadIDs().iterator();
+            while (itRoadIDs.hasNext()) {
+                String roadID = itRoadIDs.next();
+                Road road = roads.get(roadID);
+                if (!roadsVisitedFast.containsKey(roadID)) {
+                    roadsVisited.add(road);
+                    roadsVisitedFast.put(road.getiD(), road);
+
+                }
+            }
+
+            while (roadIndex < roadsVisited.size()) {
+                // NOW GO THROUGH THE ROADS AND GET
+                // ALL THE INTERSECTIONS WHO WERE IN THOSE
+                // ROADS, DO NOT GET INTERSECTIONS ALREADY
+                // VISITED
+                Road currentRoad = roadsVisited.get(roadIndex);
+                Iterator<String> itIntersectionIDs = currentRoad.getIntersectionIDs().iterator();
+                while (itIntersectionIDs.hasNext()) {
+                    String intersectionID = itIntersectionIDs.next();
+                    Intersection intersectionToTest = intersections.get(intersectionID);
+                    if (!intersectionsVisitedFast.containsKey(intersectionID)) {
+                        intersectionsVisited.add(intersectionToTest);
+                        intersectionsVisitedFast.put(intersectionID, intersectionToTest);
+                        ArrayList<Connection> intersectionPath;
+                        intersectionPath = (ArrayList<Connection>) currentPath.clone();
+                        Connection c = new Connection(currentIntersection.getiD(),
+                                currentRoad.getiD(),
+                                intersectionToTest.getiD());
+
+                        intersectionPath.add(c);
+                        shortestPaths.put(intersectionID, intersectionPath);
+
+                        allGamePaths.put(currentRoad.getiD(), intersectionPath);
+
+                        // IF THIS IS KEVIN BACON WE'RE DONE
+                        if (intersectionID.equals(intersection2.getiD())) {
+                            return intersectionPath;
+                        }
+                    }
+                }
+                roadIndex++;
+            }
+            intersectionIndex++;
         }
-        return finalPath;
+        return new ArrayList();
     }
-    
-    public ArrayList<Connection> findShortestPathToHome(Intersection intersection1, Intersection intersection2) {
-        
+
+    public ArrayList<Connection> someMethod(Intersection intersection1, Intersection intersection2) {
+
         Iterator i = intersectionIDs.iterator();
 
         ArrayList<Connection> finalPath = new ArrayList<>();
 
         while (i.hasNext()) {
-         // WE'LL MAINTAIN A SHORTEST PATH FROM THE
+            intersection1 = (Intersection) intersections.get(i.next());
+            ArrayList<Connection> testNeightbor = getAllNeighbors(intersection1.getiD());
+
+            for (int g = 0; g < testNeightbor.size(); g++) {
+                ArrayList<Connection> temp = shortestPathHelper(intersections.get(testNeightbor.get(g).getIntersection1Id()), intersection2);
+                for (int z = 0; z < temp.size(); z++) {
+                    finalPath.add(temp.get(z));
+                }
+            }
+        }
+        return finalPath;
+    }
+
+    public ArrayList<Connection> findAPathToHome(Intersection intersection1, Intersection intersection2) {
+
+        Iterator i = intersectionIDs.iterator();
+
+        ArrayList<Connection> finalPath = new ArrayList<>();
+
+        while (i.hasNext()) {
+            // WE'LL MAINTAIN A SHORTEST PATH FROM THE
             // STARTING ACTOR TO EACH ACTOR WE ENCOUNTER
             TreeMap<String, ArrayList<Connection>> shortestPaths;
             shortestPaths = new TreeMap();
 
-        // THIS WILL STORE THE PATH WE ARE CURRENTLY
+            // THIS WILL STORE THE PATH WE ARE CURRENTLY
             // BUILDING UPON
             ArrayList<Connection> currentPath;
 
-	// WE ARE USING A BREADTH FIRST SEARCH, AND
+            // WE ARE USING A BREADTH FIRST SEARCH, AND
             // WE'LL ONLY CHECK EACH Actor AND Film ONCE
             // WE ARE USING 2 DATA STRUCTURES FOR EACH
             // BECAUSE WE WILL USE ONE AS A LIST OF 
@@ -280,13 +270,14 @@ public class PathXGameGraphManager {
 
             intersection1 = (Intersection) intersections.get(i.next());
             ArrayList<Connection> testNeightbor = getAllNeighbors(intersection1.getiD());
-            
-            for(int g = 0; g < testNeightbor.size(); g++) {
+
+            for (int g = 0; g < testNeightbor.size(); g++) {
                 ArrayList<Connection> temp = shortestPathHelper(intersections.get(testNeightbor.get(g).getIntersection1Id()), intersection2);
-                for(int z = 0; z < temp.size(); z++)
+                for (int z = 0; z < temp.size(); z++) {
                     finalPath.add(temp.get(z));
+                }
             }
-	// THE SHORTEST PATH FROM THE START ACTOR
+            // THE SHORTEST PATH FROM THE START ACTOR
             // TO THE START ACTOR IS NOTHING, SO WE'll
             // START OUT WITH AN EMPTY ArrayList
             intersectionsVisited.add(intersection1);
@@ -294,15 +285,15 @@ public class PathXGameGraphManager {
             shortestPaths.put(intersection1.getiD(), new ArrayList<>());
 
         //Iterator iterate = intersections.values().iterator();
-        //while(i.hasNext()) {
-	// GO THROUGH ALL THE ACTORS WE HAVE REACHED
+            //while(i.hasNext()) {
+            // GO THROUGH ALL THE ACTORS WE HAVE REACHED
             // NEVER RE-VISITING AN ACTOR
             while (intersectionIndex < intersectionsVisited.size()) {
-            // FIRST GET ALL THE MOVIES FOR THE
+                // FIRST GET ALL THE MOVIES FOR THE
                 // ACTOR AT THE intersectionIndex
                 Intersection currentIntersection = intersectionsVisited.get(intersectionIndex);
 
-            // MAKE THE SHORTEST PATH FOR THE CURRENT
+                // MAKE THE SHORTEST PATH FOR THE CURRENT
                 // ACTOR THE CURRENT PATH, SINCE WE WILL
                 // BUILD ON IT
                 currentPath = shortestPaths.get(currentIntersection.getiD());
@@ -319,7 +310,7 @@ public class PathXGameGraphManager {
                 }
 
                 while (roadIndex < roadsVisited.size()) {
-		// NOW GO THROUGH THE ROADS AND GET
+                    // NOW GO THROUGH THE ROADS AND GET
                     // ALL THE INTERSECTIONS WHO WERE IN THOSE
                     // ROADS, DO NOT GET INTERSECTIONS ALREADY
                     // VISITED
@@ -342,7 +333,7 @@ public class PathXGameGraphManager {
                             shortestPaths.put(intersectionID, intersectionPath);
 
                             allGamePaths.put(currentRoad.getiD(), intersectionPath);
-                            
+
                             arrayListGamePath.add(intersectionPath);
                             // IF THIS IS KEVIN BACON WE'RE DONE
                             // if (intersectionID.equals(intersection2.getiD()))
@@ -361,20 +352,20 @@ public class PathXGameGraphManager {
     }
 
     public static int counter = 0;
+
     private ArrayList<Connection> shortestPathHelper(Intersection intersection1, Intersection intersection2) {
-       
 
         ArrayList<Connection> finalPath;
         // WE'LL MAINTAIN A SHORTEST PATH FROM THE
         // STARTING ACTOR TO EACH ACTOR WE ENCOUNTER
         TreeMap<String, ArrayList<Connection>> shortestPaths;
         shortestPaths = new TreeMap();
-        
-        if(counter == 0) {
-        finalPath = new ArrayList<>();
-        ++counter;
+
+        if (counter == 0) {
+            finalPath = new ArrayList<>();
+            ++counter;
         }
-        
+
         // THIS WILL STORE THE PATH WE ARE CURRENTLY
         // BUILDING UPON
         ArrayList<Connection> currentPath;
@@ -452,7 +443,7 @@ public class PathXGameGraphManager {
 
                         // IF THIS IS KEVIN BACON WE'RE DONE
                         //if (intersectionID.equals(intersection2.getiD())) {
-                          //  return intersectionPath;
+                        //  return intersectionPath;
                         //}
                     }
                 }
@@ -462,6 +453,5 @@ public class PathXGameGraphManager {
         }
         return new ArrayList();
     }
-    
-    
+
 }

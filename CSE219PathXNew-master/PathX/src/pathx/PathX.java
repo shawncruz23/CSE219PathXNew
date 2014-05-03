@@ -173,6 +173,9 @@ public class PathX {
        
        //PLAYER CAR IMAGE
        IMAGE_PLAYER_CAR,
+       IMAGE_POLICE_CAR,
+       IMAGE_ZOMBIE_CAR,
+       IMAGE_BANDIT_CAR,
        
     }
 }

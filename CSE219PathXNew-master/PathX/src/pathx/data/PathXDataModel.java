@@ -9,21 +9,25 @@ package pathx.data;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.geom.Line2D;
-import pathx.ui.PathXCar;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import pathx.PathX.PathXPropertyType;
 import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
 import mini_game.SpriteType;
-import properties_manager.PropertiesManager;
+import pathx.PathX.PathXPropertyType;
 import static pathx.PathXConstants.*;
+import pathx.car.BanditCar;
+import pathx.car.Car;
+import pathx.car.PoliceCar;
+import pathx.car.ZombieCar;
+import pathx.ui.PathXCar;
+import pathx.ui.PathXCarState;
 import pathx.ui.PathXMiniGame;
 import pathx.ui.PathXPanel;
-import pathx.ui.PathXCarState;
+import properties_manager.PropertiesManager;
 
 /**
  * This class manages the game data for PathX
@@ -77,6 +81,10 @@ public class PathXDataModel extends MiniGameDataModel {
     // THIS STORES THE CARS ON THE GRID DURING THE GAME
     private ArrayList<PathXCar> tilesToSort;
    
+     // THESE ARE THE TILES STACKED AT THE START OF THE GAME
+    private ArrayList<PoliceCar> policeCarStack;
+    private ArrayList<ZombieCar> zombieCarStack;
+    private ArrayList<BanditCar> banditCarStack;
 
     // THE LEGAL TILES IN ORDER FROM LOW SORT INDEX TO HIGH
    // private ArrayList<SnakeCell> snake;
@@ -121,6 +129,13 @@ public class PathXDataModel extends MiniGameDataModel {
     private int mousePressX;
     private int mousePressY;
     
+    // THESE ARE THE POLICE THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
+    private ArrayList<PoliceCar> movingPolice;
+    // THESE ARE THE ZOMBIES THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
+    private ArrayList<ZombieCar> movingZombies;
+    // THESE ARE THE BANDITS THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
+    private ArrayList<BanditCar> movingBandits;
+    
  
     /**
      * Constructor for initializing this data model, it will create the data
@@ -134,8 +149,14 @@ public class PathXDataModel extends MiniGameDataModel {
         miniGame = initMiniGame;
 
         // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
-        stackCars = new ArrayList();
-        movingCars = new ArrayList();
+        policeCarStack = new ArrayList();
+        movingPolice = new ArrayList();
+        // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
+        zombieCarStack = new ArrayList();
+        movingZombies = new ArrayList();
+        // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
+        banditCarStack = new ArrayList();
+        movingBandits = new ArrayList();
         
        TTT= new String();
 
@@ -157,6 +178,10 @@ public class PathXDataModel extends MiniGameDataModel {
 //public String getAlgorithmName()
     {
      //   return sortingAlgorithm.name;
+    }
+    
+    public ArrayList<PoliceCar> getPoliceCarStack(){
+        return policeCarStack;
     }
 
     public int getGameTileWidth() { 
@@ -282,6 +307,307 @@ public class PathXDataModel extends MiniGameDataModel {
         
     }
     
+    public void initEnemyCars(int numPolice, int numZombies, int numBandits)
+    {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        SpriteType sT;
+
+        // WE'LL RENDER ALL THE TILES ON TOP OF THE BLANK TILE
+        String policeCarFileName = props.getProperty(PathXPropertyType.IMAGE_POLICE_CAR);
+        BufferedImage policeCarImage = miniGame.loadImageWithColorKey(imgPath + policeCarFileName, COLOR_KEY);
+        //((PathXPanelPanel) (miniGame.getCanvas())).setBlankTileImage(blankTileImage);
+
+        // THIS IS A HIGHLIGHTED BLANK TILE FOR WHEN THE PLAYER SELECTS ONE
+        String zombieCarFileName = props.getProperty(PathXPropertyType.IMAGE_ZOMBIE_CAR);
+        BufferedImage zombieCarImage = miniGame.loadImageWithColorKey(imgPath + zombieCarFileName, COLOR_KEY);
+        //((SortingHatPanel) (miniGame.getCanvas())).setBlankTileSelectedImage(blankTileSelectedImage);
+
+        // THIS IS A MOUSE-OVER BLANK TILE
+        String banditCarFileName = props.getProperty(PathXPropertyType.IMAGE_BANDIT_CAR);
+        BufferedImage banditCarImage = miniGame.loadImageWithColorKey(imgPath + banditCarFileName, COLOR_KEY);
+        //((SortingHatPanel) (miniGame.getCanvas())).setBlankTileMouseOverImage(blankTileMouseOverImage);
+
+        // NOW LOAD ALL THE TILES FROM A SPRITE SHEET
+        //String tilesSpriteSheetFile = props.getProperty(SortingHatPropertyType.IMAGE_SPRITE_SHEET_CHARACTER_TILES);
+        //ArrayList<BufferedImage> tileImages = miniGame.loadSpriteSheetImagesWithColorKey(imgPath + tilesSpriteSheetFile,
+         //       68, 14, 5, 18, 5, COLOR_KEY);
+
+        for (int i = 0; i < numPolice; i++)
+        {
+            //BufferedImage img = tileImages.get(i);
+
+            // WE'LL MAKE A NEW SPRITE TYPE FOR EACH GROUP OF SIMILAR LOOKING TILES
+            sT = new SpriteType(POLICE_TYPE_PREFIX + (i + 1));
+            addSpriteType(sT);
+
+            // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
+            //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), policeCarImage);
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), policeCarImage);
+            //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
+            //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
+            PoliceCar newPolice = new PoliceCar(sT, 0, 0, 0, 0, PathXCarState.VISIBLE_STATE.toString(), i + 1);
+
+            // AND ADD IT TO THE STACK
+            policeCarStack.add(newPolice);
+        }
+        
+         for (int i = 0; i < numZombies; i++)
+        {
+            //BufferedImage img = tileImages.get(i);
+
+            // WE'LL MAKE A NEW SPRITE TYPE FOR EACH GROUP OF SIMILAR LOOKING TILES
+            sT = new SpriteType(ZOMBIE_TYPE_PREFIX + (i + 1));
+            addSpriteType(sT);
+
+            // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
+            //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), zombieCarImage);
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), zombieCarImage);
+            //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
+            //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
+            ZombieCar newZombie = new ZombieCar(sT, 0, 0, 0, 0, PathXCarState.VISIBLE_STATE.toString(), i + 1);
+
+            // AND ADD IT TO THE STACK
+            zombieCarStack.add(newZombie);
+        }
+         
+          for (int i = 0; i < numBandits; i++)
+        {
+            //BufferedImage img = tileImages.get(i);
+
+            // WE'LL MAKE A NEW SPRITE TYPE FOR EACH GROUP OF SIMILAR LOOKING TILES
+            sT = new SpriteType(BANDIT_TYPE_PREFIX + (i + 1));
+            addSpriteType(sT);
+
+            // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
+            //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), banditCarImage);
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), banditCarImage);
+            //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
+            //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
+            BanditCar newBandit = new BanditCar(sT, 0, 0, 0, 0, PathXCarState.VISIBLE_STATE.toString(), i + 1);
+
+            // AND ADD IT TO THE STACK
+            banditCarStack.add(newBandit);
+        }
+    }
+    
+    /**
+     * This method sets up and starts the animation shown after a game is won.
+     */
+    public void playPoliceAnimation()
+    {
+        // MAKE A NEW PATH
+        ArrayList<Integer> winPath = new ArrayList();
+
+        // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
+        // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
+        
+        //POINT1
+        winPath.add(20);
+        winPath.add(20);
+        //POINT2
+        winPath.add(30);
+        winPath.add(30);
+        //POINT3
+        winPath.add(40);
+        winPath.add(40);
+        //POINT4
+        winPath.add(50);
+        winPath.add(50);
+        //POINT5
+        winPath.add(40);
+        winPath.add(40);
+        //POINT6
+        winPath.add(30);
+        winPath.add(30);
+        //POINT7
+        winPath.add(20);
+        winPath.add(20);
+        //POINT8
+        winPath.add(10);
+        winPath.add(10);
+        //POINT9
+        winPath.add(5);
+        winPath.add(5);
+        //POINT10
+        winPath.add(20);
+        winPath.add(20);
+
+        //moveAllPoliceToStack();
+
+        // START THE ANIMATION FOR ALL THE TILES
+        for (int i = 0; i < policeCarStack.size(); i++)
+        {
+            // GET EACH TILE
+            PoliceCar car = policeCarStack.get(i);
+
+            // MAKE SURE IT'S MOVED EACH FRAME
+            movingPolice.add(car);
+            
+            car.setGridCell(60, 60);
+           
+            car.setX(60);
+            car.setY(60);
+            car.setState(PathXCarState.VISIBLE_STATE.toString());
+            car.setVx(5);
+            car.setVy(0);
+
+            // AND GET IT ON A PATH
+            car.initWinPath(winPath);
+        }
+    }
+    
+    /**
+     * This method sets up and starts the animation shown after a game is won.
+     */
+    public void playZombieAnimation()
+    {
+        // MAKE A NEW PATH
+        ArrayList<Integer> winPath = new ArrayList();
+
+        // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
+        // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
+        
+        //POINT1
+        winPath.add(637);
+        winPath.add(100);
+        //POINT2
+        winPath.add(437);
+        winPath.add(300);
+        //POINT3
+        winPath.add(174);
+        winPath.add(300);
+        //POINT4
+        winPath.add(337);
+        winPath.add(470);
+        //POINT5
+        winPath.add(300);
+        winPath.add(591);
+        //POINT6
+        winPath.add(637);
+        winPath.add(500);
+        //POINT7
+        winPath.add(874);
+        winPath.add(591);
+        //POINT8
+        winPath.add(837);
+        winPath.add(470);
+        //POINT9
+        winPath.add(1100);
+        winPath.add(300);
+        //POINT10
+        winPath.add(837);
+        winPath.add(300);
+
+       // moveAllTilesToStack();
+
+        // START THE ANIMATION FOR ALL THE TILES
+        for (int i = 0; i < zombieCarStack.size(); i++)
+        {
+            // GET EACH TILE
+            ZombieCar car = zombieCarStack.get(i);
+
+            // MAKE SURE IT'S MOVED EACH FRAME
+            movingZombies.add(car);
+
+            // AND GET IT ON A PATH
+            car.initWinPath(winPath);
+        }
+    }
+    
+    /**
+     * This method sets up and starts the animation shown after a game is won.
+     */
+    public void playBanditAnimation()
+    {
+        // MAKE A NEW PATH
+        ArrayList<Integer> winPath = new ArrayList();
+
+        // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
+        // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
+        
+        //POINT1
+        winPath.add(637);
+        winPath.add(100);
+        //POINT2
+        winPath.add(437);
+        winPath.add(300);
+        //POINT3
+        winPath.add(174);
+        winPath.add(300);
+        //POINT4
+        winPath.add(337);
+        winPath.add(470);
+        //POINT5
+        winPath.add(300);
+        winPath.add(591);
+        //POINT6
+        winPath.add(637);
+        winPath.add(500);
+        //POINT7
+        winPath.add(874);
+        winPath.add(591);
+        //POINT8
+        winPath.add(837);
+        winPath.add(470);
+        //POINT9
+        winPath.add(1100);
+        winPath.add(300);
+        //POINT10
+        winPath.add(837);
+        winPath.add(300);
+
+//        moveAllTilesToStack();
+
+        // START THE ANIMATION FOR ALL THE TILES
+        for (int i = 0; i < banditCarStack.size(); i++)
+        {
+            // GET EACH TILE
+            BanditCar car = banditCarStack.get(i);
+
+            // MAKE SURE IT'S MOVED EACH FRAME
+            movingBandits.add(car);
+
+            // AND GET IT ON A PATH
+            car.initWinPath(winPath);
+        }
+    }
+    
+     /**
+     * This method moves all the tiles not currently in the stack to the stack.
+     */
+    public void moveAllPoliceToStack()
+    {
+        moveTiles(movingPolice, policeCarStack);
+        //moveTiles(tilesToSort, stackTiles);
+    }
+
+    /**
+     * This method removes all the tiles in from argument and moves them to
+     * argument.
+     *
+     * @param from The source data structure of tiles.
+     *
+     * @param to The destination data structure of tiles.
+     */
+    private void moveTiles(ArrayList<PoliceCar> from, ArrayList<PoliceCar> to)
+    {
+        // GO THROUGH ALL THE TILES, TOP TO BOTTOM
+        for (int i = from.size() - 1; i >= 0; i--)
+        {
+            PoliceCar car = from.remove(i);
+
+            // ONLY ADD IT IF IT'S NOT THERE ALREADY
+            if (!to.contains(car))
+            {
+                to.add(car);
+            }
+        }
+    }
+    
     /**
      * This method loads the tiles, creating an individual sprite for each. Note
      * that tiles may be of various types, which is important during the tile
@@ -381,12 +707,12 @@ public class PathXDataModel extends MiniGameDataModel {
         // ADJUST FOR THE MARGIN
         //x -= 60;
 
-        // ADJUST FOR THE VIEWPORT
-        //x = (int) (x + PathXPanel.sourceX1);
+        // ADJUST FOR THE GAME SCREEN
+        x = (int) (x - PathXPanel.destinationX1 - PathXPanel.sourceX1 + 98);
 
-        if (x < 0)
+      //  if (x < 0)
         {
-            return -1;
+        //    return -1;
         }
 
         // AND NOW GET THE COLUMN
@@ -405,12 +731,12 @@ public class PathXDataModel extends MiniGameDataModel {
         // ADJUST FOR THE MARGIN
         //y -= viewport.getViewportMarginTop();
 
-        // ADJUST FOR THE VIEWPORT
-         //y = (int) (y + PathXPanel.sourceY1);
+        // ADJUST FOR THE GAME SCREEN
+         y = (int) (y - PathXPanel.destinationY1 - PathXPanel.sourceY1 - 10);
 
-        if (y < 0)
+        //if (y < 0)
         {
-            return -1;
+          //  return -1;
         }
 
         // AND NOW GET THE ROW
@@ -507,6 +833,47 @@ public class PathXDataModel extends MiniGameDataModel {
 
         // GO THROUGH ALL OF THEM 
         for (PathXCar car : stackCars)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+    }
+    
+     public void enableCars(boolean enable)
+    {
+        // PUT ALL THE TILES IN ONE PLACE WHERE WE CAN PROCESS THEM TOGETHER
+        //moveAllTilesToStack();
+
+        // GO THROUGH ALL OF THEM 
+        for (PoliceCar car : policeCarStack)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+        for (ZombieCar car : zombieCarStack)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+        for (BanditCar car : banditCarStack)
         {
             // AND SET THEM PROPERLY
             if (enable)
@@ -738,6 +1105,9 @@ public class PathXDataModel extends MiniGameDataModel {
         System.out.println("REACHED checkMousePressOnSprites: " +
                 "\nX: " + col + "\nY: " + row);
         
+        if(((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE)) {
+        ((PathXMiniGame)game).getEventHandler().intersectionClickerCheck(col, row);
+    }
         // DISABLE THE STATS DIALOG IF IT IS OPEN
       //  if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(PathXCarState.VISIBLE_STATE.toString()))
         {
@@ -898,10 +1268,10 @@ public class PathXDataModel extends MiniGameDataModel {
             game.beginUsingData();
 
             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
-            for (int i = 0; i < movingCars.size(); i++)
+            for (int i = 0; i < movingPolice.size(); i++)
             {
                 // GET THE NEXT TILE
-                PathXCar tile = movingCars.get(i);
+                PoliceCar tile = movingPolice.get(i);
 
                 // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
                 tile.update(game);
@@ -910,7 +1280,7 @@ public class PathXDataModel extends MiniGameDataModel {
                 // FROM THE LIST OF MOVING TILES
                 if (!tile.isMovingToTarget())
                 {
-                    movingCars.remove(tile);
+                    movingPolice.remove(tile);
                 }
             }
 

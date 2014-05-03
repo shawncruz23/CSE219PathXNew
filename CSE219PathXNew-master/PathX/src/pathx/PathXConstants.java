@@ -241,6 +241,12 @@ public class PathXConstants {
     public static final String TILE_SPRITE_TYPE_PREFIX = "TILE_";
     public static final int COLOR_INC = 10;
     
+    //FOR CAR RENDERING
+    public static final String POLICE_TYPE_PREFIX = "POLICE_";
+    public static final String ZOMBIE_TYPE_PREFIX = "ZOMBIE_";
+    public static final String BANDIT_TYPE_PREFIX = "BANDIT_";
+    
+    
     // FOR MOVING TILES AROUND
     public static final int MAX_TILE_VELOCITY = 20;
     

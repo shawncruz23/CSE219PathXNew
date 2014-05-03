@@ -20,7 +20,11 @@
        
      	<property name="IMAGE_BACKGROUND_MAP"              value="./pathx/ImageLevelSelectMap.gif"></property>
         
-        <property name="IMAGE_PLAYER_CAR"              value="./pathx/PlayerCarButton.png"></property>
+        <!--GAME CARS-->
+        <property name="IMAGE_PLAYER_CAR"              value="./pathx/CarPlayerButton.png"></property>
+        <property name="IMAGE_POLICE_CAR"              value="./pathx/CarPoliceButton.png"></property>
+        <property name="IMAGE_ZOMBIE_CAR"              value="./pathx/CarZombieButton.png"></property>
+        <property name="IMAGE_BANDIT_CAR"              value="./pathx/CarBanditButton.png"></property>
          
         
         <!-- X BUTTON -->

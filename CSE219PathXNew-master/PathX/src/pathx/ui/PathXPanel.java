@@ -215,6 +215,7 @@ public class PathXPanel extends JPanel {
                 
                 renderBackground(g);
 
+                ((PathXDataModel)data).playPoliceAnimation();
                 // RENDER THE INTERSECTIONS
                 //renderIntersections(g2);
             }
@@ -365,6 +366,8 @@ public class PathXPanel extends JPanel {
         recyclableLine.x2 = road.getNode2().x + sourceX1 + destinationX1 - 20;
         recyclableLine.y2 = road.getNode2().y + sourceY1 + destinationY1 - 0;
 
+       
+        
         // AND DRAW IT
         g2.draw(recyclableLine);
 
@@ -434,7 +437,10 @@ public class PathXPanel extends JPanel {
                 
                 recyclableCircle.x = intersection.x + sourceX1 - INTERSECTION_RADIUS + destinationX1 - 20;
                 recyclableCircle.y = intersection.y + sourceY1 - INTERSECTION_RADIUS + destinationY1;
-                
+
+              //  System.out.println("ROAD DIFFERENCE X: " + (sourceX1 - INTERSECTION_RADIUS + destinationX1 - 20));
+               // System.out.println("ROAD DIFFERENCE Y: " + (sourceY1 - INTERSECTION_RADIUS + destinationY1));
+
 //                if ((recyclableCircle.x > DESTINATION_X1 && recyclableCircle.x < DESTINATION_X2)
 //                        && (recyclableCircle.y > DESTINATION_Y1 && recyclableCircle.y < DESTINATION_Y2)) {
                 {
@@ -485,6 +491,7 @@ public class PathXPanel extends JPanel {
     }
 
     //public static int counter = 0;
+    public static int checker = 0;
     public static double playerX = 0;
     public static double playerY = 0;
     
@@ -492,11 +499,20 @@ public class PathXPanel extends JPanel {
         
         g2.setColor(Color.BLUE);
         
-        //if(counter == 0) {
-        playerCircle.x = currentLevel.getStartingLocation().x + sourceX1 - INTERSECTION_RADIUS + 50 + playerX + destinationX1 ;
-        playerCircle.y = currentLevel.getStartingLocation().y + sourceY1 - INTERSECTION_RADIUS + 0 + playerY + destinationY1 ;
+        Intersection secondIntersection = ((PathXMiniGame)game).getEventHandler().getGameGraph().getRoad(currentLevel.getStartingLocation().getRoadIDs().get(0)).getNode2();
+        
+        if(checker == 0) {
+        playerCircle.x = (currentLevel.getStartingLocation().x + secondIntersection.x)/2  + sourceX1 - INTERSECTION_RADIUS  + playerX + destinationX1;
+        playerCircle.y = (currentLevel.getStartingLocation().y + secondIntersection.y)/2 + sourceY1 - INTERSECTION_RADIUS  + playerY + destinationY1 ;
         //counter++;
-        //}
+        }
+        else {
+            playerCircle.x = playerX + sourceX1;
+            playerCircle.y = playerY + sourceY1;
+        }
+        
+       // System.out.println("Player Circle X: " + playerCircle.x);
+        //System.out.println("Player Circle Y: " + playerCircle.y);
         
         g2.fill(playerCircle);
 
