@@ -79,6 +79,9 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         return gameGraph;
     }
 
+    public static ArrayList<Integer> xCoordinates = new ArrayList<>();
+    public static ArrayList<Integer> yCoordinates = new ArrayList<>();
+    
     /**
      * Called when the user clicks on an unlocked/completed level button.
      */
@@ -96,6 +99,8 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
             ArrayList<Road> roadList = filetoLoad.getRoadList();
             for(int i = 0; i < intersectionList.size(); i++) {
                   gameGraph.addIntersections(intersectionList.get(i));
+                  xCoordinates.add(intersectionList.get(i).x);
+                  yCoordinates.add(intersectionList.get(i).y);
             }
              for(int i = 0; i < roadList.size(); i++) {
                   gameGraph.addRoad(roadList.get(i));
@@ -174,6 +179,9 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
             //}
             //else System.out.println("unsuccesful");
         game.switchToGameplayScreen(aLevel);
+        
+        
+
         }
     }
 
@@ -185,23 +193,13 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         game.switchToHomeScreen();
     }
     
-    public void adjustPlayerPosition(ArrayList<Connection> aPath) {
-        
-        int xDir, yDir;
-        Iterator i = aPath.iterator();
-        while (i.hasNext()) {
-            String iD = ((Connection) i).getIntersection1Id();
-            xDir = gameGraph.getIntersection(iD).x;
-            yDir = gameGraph.getIntersection(iD).y;
-            playerX += xDir;
-            playerY += yDir;
-        }
-    }
     
-    public void intersectionClickerCheck(int x, int y) {
+    public Intersection intersectionClickerCheck(int x, int y) {
+        
+        Intersection destinationIntersection;
         int error = 30;
-        int diffX = x - 80; //- (int)sourceX1;
-        int diffY = y + 10; //- (int)sourceY1;
+        int diffX = x; //- 80; //- (int)sourceX1;
+        int diffY = y;// + 10; //- (int)sourceY1;
         ArrayList<Intersection> node = ((PathXMiniGame) game).getCurrentLevel().getIntersections();
         for (int i = 0; i < node.size(); i++) {
 //            while(i < 1){
@@ -220,11 +218,15 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
                     && ((diffY - error) <= node.get(i).y)) {
                 System.out.println("Coordinates: " + node.get(i).toString());
                 System.out.println("Send to: X: " + x + " Y: " + y);
-                    checker++;
-                 playerX = x;
-                 playerY = y;
+                destinationIntersection = node.get(i);
+                checker++;
+                playerX = x;
+                playerY = y;
+                return destinationIntersection;
+
             }
         }
+        return null;
     }
 
      /**
@@ -245,6 +247,9 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                            + "SOURCE_Y1_MAX_COORD: " + (SOURCE_Y1_MAX_COORD-30));
 //                     System.out.println("sourceY2: " + sourceY2 +" > "
 //                            + "SOURCE_Y2_MAX_COORD: " + (SOURCE_Y2_MAX_COORD-30));
+                    for(int i = 0; i < 1; i++) {
+                   // model.getPlayerCar().get(0).increaseY();
+                    }
                 }
                 break;
             case DOWN_BUTTON_DIRECTION: //min(sy1,sy2)
@@ -256,6 +261,9 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                            + "SOURCE_Y1_MIN_COORD: " + -140);
 //                    System.out.println("sourceY2: " + sourceY2 + " > "
 //                            + "SOURCE_Y2_MIN_COORD: " + 266);
+                    for(int i = 0; i < 1; i++) {
+                   // model.getPlayerCar().get(0).decreaseY();
+                    }
                 }
                 break;
             case RIGHT_BUTTON_DIRECTION: //max(sx1,sx2)
@@ -267,6 +275,9 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                           + "SOURCE_X1_MAX_COORD: " + -560);
 //                   System.out.println("sourceX2: " + sourceX2 + " > "
 //                           + "SOURCE_X2_MAX_COORD: " + 252);
+                    for(int i = 0; i < 1; i++) {
+                    //model.getPlayerCar().get(0).decreaseX();
+                    }
                 }
                 break;
             case LEFT_BUTTON_DIRECTION: //min(sx1,sx2)
@@ -278,6 +289,11 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                            + "SOURCE_X1_MIN_COORD: " + 100);
 //                    System.out.println("sourceX2: " + sourceX2 + " < "
 //                            + "SOURCE_X2_MIN_COORD: " + 912);
+                       for(int i = 0; i < 1; i++) {
+                     // model.getPlayerCar().get(0).increaseX();
+//                           System.out.println("X: " +  model.getPlayerCar().get(0).getX());
+//                           System.out.println("Y: " +  model.getPlayerCar().get(0).getY());
+                    }
                 }
                 break;
         }

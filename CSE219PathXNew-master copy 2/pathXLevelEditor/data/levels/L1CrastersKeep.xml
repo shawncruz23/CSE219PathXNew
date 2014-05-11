@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<level image="L1CrastersKeep.png" name="L1CrastersKeep">
+     <intersections>
+          <intersection id="0" open="false" x="66" y="201"/>
+          <intersection id="0" open="true" x="997" y="229"/>
+          <intersection id="0" open="true" x="353" y="67"/>
+          <intersection id="0" open="true" x="345" y="397"/>
+          <intersection id="0" open="true" x="538" y="67"/>
+          <intersection id="0" open="true" x="542" y="260"/>
+          <intersection id="0" open="true" x="723" y="71"/>
+          <intersection id="0" open="true" x="721" y="392"/>
+          <intersection id="0" open="true" x="263" y="207"/>
+          <intersection id="0" open="true" x="839" y="227"/>
+     </intersections>
+     <roads>
+          <road int_id1="2" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="6" one_way="false" speed_limit="30"/>
+          <road int_id1="7" int_id2="5" one_way="false" speed_limit="30"/>
+          <road int_id1="5" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="2" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="3" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="3" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="8" int_id2="2" one_way="false" speed_limit="30"/>
+          <road int_id1="8" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="9" one_way="false" speed_limit="30"/>
+          <road int_id1="9" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="9" int_id2="1" one_way="true" speed_limit="30"/>
+          <road int_id1="0" int_id2="8" one_way="true" speed_limit="30"/>
+          <road int_id1="5" int_id2="4" one_way="false" speed_limit="30"/>
+     </roads>
+     <start_intersection id="0" image="LocationStart.png"/>
+     <destination_intersection id="1" image="LocationDestination.png"/>
+     <money amount="100"/>
+     <police num="1"/>
+     <bandits num="1"/>
+     <zombies num="0"/>
+</level>

@@ -16,15 +16,20 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
+import mini_game.Sprite;
 import mini_game.SpriteType;
 import pathx.PathX.PathXPropertyType;
 import static pathx.PathXConstants.*;
 import pathx.car.BanditCar;
 import pathx.car.Car;
+import pathx.car.PlayerCar;
 import pathx.car.PoliceCar;
 import pathx.car.ZombieCar;
+import pathx.game.PathXGameGraphManager;
 import pathx.ui.PathXCar;
 import pathx.ui.PathXCarState;
+import pathx.ui.PathXEventHandler;
+import static pathx.ui.PathXEventHandler.xCoordinates;
 import pathx.ui.PathXMiniGame;
 import pathx.ui.PathXPanel;
 import properties_manager.PropertiesManager;
@@ -85,6 +90,9 @@ public class PathXDataModel extends MiniGameDataModel {
     private ArrayList<PoliceCar> policeCarStack;
     private ArrayList<ZombieCar> zombieCarStack;
     private ArrayList<BanditCar> banditCarStack;
+    
+    private ArrayList<PlayerCar> playerCar;
+   
 
     // THE LEGAL TILES IN ORDER FROM LOW SORT INDEX TO HIGH
    // private ArrayList<SnakeCell> snake;
@@ -136,6 +144,8 @@ public class PathXDataModel extends MiniGameDataModel {
     // THESE ARE THE BANDITS THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
     private ArrayList<BanditCar> movingBandits;
     
+    private ArrayList<PlayerCar> movingPlayerCar;
+    
  
     /**
      * Constructor for initializing this data model, it will create the data
@@ -157,6 +167,11 @@ public class PathXDataModel extends MiniGameDataModel {
         // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
         banditCarStack = new ArrayList();
         movingBandits = new ArrayList();
+      
+        playerCar = new ArrayList();
+   
+       
+        movingPlayerCar = new ArrayList();
         
        TTT= new String();
 
@@ -181,9 +196,25 @@ public class PathXDataModel extends MiniGameDataModel {
     }
     
     public ArrayList<PoliceCar> getPoliceCarStack(){
-        return policeCarStack;
+        return movingPolice;
+    }
+    
+    public ArrayList<ZombieCar> getZombieCarStack(){
+        return movingZombies;
+    }
+    
+    public ArrayList<BanditCar> getBanditCarStack(){
+        return movingBandits;
     }
 
+    public ArrayList<PlayerCar> getPlayerCarStack(){
+        return movingPlayerCar;
+    }
+    
+    public ArrayList<PlayerCar> getPlayerCar(){
+        return playerCar;
+    }
+    
     public int getGameTileWidth() { 
         return gameTileWidth; 
     }
@@ -307,6 +338,44 @@ public class PathXDataModel extends MiniGameDataModel {
         
     }
     
+    public void initPlayerCar(/*int x , int y*/) {
+        //IMAGE_PLAYER_CAR
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        SpriteType sT;
+
+          Level levelBeingPlayed = ((PathXMiniGame) miniGame).getCurrentLevel();
+          Intersection startingLocation = levelBeingPlayed.getStartingLocation();
+        
+        // WE'LL RENDER ALL THE TILES ON TOP OF THE BLANK TILE
+        String playerCarFileName = props.getProperty(PathXPropertyType.IMAGE_PLAYER_CAR);
+        BufferedImage playerCarImage = miniGame.loadImageWithColorKey(imgPath + playerCarFileName, COLOR_KEY);
+        //((PathXPanelPanel) (miniGame.getCanvas())).setBlankTileImage(blankTileImage);
+
+        sT = new SpriteType(PLAYER_CAR_TYPE);
+        addSpriteType(sT);
+
+            // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
+        //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), playerCarImage);
+        //sT.addState(PathXCarState.VISIBLE_STATE.toString(), playerCarImage);
+            //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
+        //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
+        PlayerCar newPlayer = new PlayerCar(sT, (int)(startingLocation.x), (int)(startingLocation.y) , 0, 0, PathXCarState.INVISIBLE_STATE.toString(), 1);
+
+       // playerCar.clear();
+        //movingPlayerCar.clear();
+//        System.out.println("X INCREASE " + PathXPanel.sourceX1);
+//        System.out.println("Y INCREASE " + PathXPanel.sourceY1);
+        
+        // AND ADD IT TO THE STACK
+        playerCar.add(newPlayer);
+        
+        //movingPlayerCar.add(playerCar.get(0));
+        
+        playerCar.get(0).setLocation(levelBeingPlayed.getStartingLocation());
+    }
+
     public void initEnemyCars(int numPolice, int numZombies, int numBandits)
     {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -344,7 +413,7 @@ public class PathXDataModel extends MiniGameDataModel {
             // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
             //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
             sT.addState(PathXCarState.VISIBLE_STATE.toString(), policeCarImage);
-            sT.addState(PathXCarState.VISIBLE_STATE.toString(), policeCarImage);
+            //sT.addState(PathXCarState.VISIBLE_STATE.toString(), policeCarImage);
             //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
             //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
             PoliceCar newPolice = new PoliceCar(sT, 0, 0, 0, 0, PathXCarState.VISIBLE_STATE.toString(), i + 1);
@@ -364,7 +433,7 @@ public class PathXDataModel extends MiniGameDataModel {
             // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
             //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
             sT.addState(PathXCarState.VISIBLE_STATE.toString(), zombieCarImage);
-            sT.addState(PathXCarState.VISIBLE_STATE.toString(), zombieCarImage);
+            //sT.addState(PathXCarState.VISIBLE_STATE.toString(), zombieCarImage);
             //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
             //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
             ZombieCar newZombie = new ZombieCar(sT, 0, 0, 0, 0, PathXCarState.VISIBLE_STATE.toString(), i + 1);
@@ -384,13 +453,101 @@ public class PathXDataModel extends MiniGameDataModel {
             // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
             //sT.addState(PathXCarState.INVISIBLE_STATE.toString(), buildTileImage(img, img)); // DOESN'T MATTER
             sT.addState(PathXCarState.VISIBLE_STATE.toString(), banditCarImage);
-            sT.addState(PathXCarState.VISIBLE_STATE.toString(), banditCarImage);
+            //sT.addState(PathXCarState.VISIBLE_STATE.toString(), banditCarImage);
             //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
             //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
-            BanditCar newBandit = new BanditCar(sT, 0, 0, 0, 0, PathXCarState.VISIBLE_STATE.toString(), i + 1);
+            BanditCar newBandit = new BanditCar(sT, 0, 0, 0, 0, PathXCarState.INVISIBLE_STATE.toString(), i + 1);
 
             // AND ADD IT TO THE STACK
             banditCarStack.add(newBandit);
+        }
+    }
+    
+    /**
+     *
+     */
+    //public static Intersection playerPosition = ((PathXMiniGame) miniGame).getCurrentLevel().getStartingLocation();
+    
+      public void movePlayer(Intersection i1, Intersection i2)
+    {
+        // MAKE A NEW PATH
+        ArrayList<Integer> winPath = new ArrayList();
+
+        // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
+        // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
+        
+         Level levelBeingPlayed = ((PathXMiniGame) miniGame).getCurrentLevel();
+        
+        // NULL PathXPanel gamePanel = ((PathXMiniGame)miniGame).getPanel();
+        
+        ArrayList<Intersection> intersectionList = levelBeingPlayed.getIntersections();
+        
+        PathXGameGraphManager gameGraph = ((PathXMiniGame) miniGame).getEventHandler().getGameGraph();
+        
+        
+        
+        ArrayList<Integer> xPoints = PathXEventHandler.xCoordinates;
+        ArrayList<Integer> yPoints = PathXEventHandler.yCoordinates;
+
+        //moveAllPoliceToStack();
+
+        Intersection intersection1 = new Intersection(0,0);
+        Intersection intersection2 = new Intersection(0,0);
+        
+        int error = 30;
+       // int diffX = (int)(xPoints.get(randomIndex1) - 80);
+        //int diffY = (int)(yPoints.get(randomIndex1) + 10); //- (int)sourceY1;
+        
+//        for(Intersection anIntersection: intersectionList) {
+//            if (((diffX + error) >= anIntersection.x)
+//                    && ((diffX - error) <= anIntersection.x)
+//                    && ((diffY + error) >= anIntersection.y)
+//                    && ((diffY - error) <= anIntersection.y)) {
+//                System.out.println("Relative to Map X (1): " + xPoints.get(randomIndex1));
+//                System.out.println("Relative to Map Y (1): " + yPoints.get(randomIndex1));
+//                System.out.println("Map Coordinates(1) X: " + anIntersection.x);
+//                 System.out.println("Map Coordinates(1) Y: " + anIntersection.y);
+//                 System.out.println("Difference in X(1): " + (xPoints.get(randomIndex1) -  anIntersection.x));
+//                 System.out.println("Difference in Y(1): " + (yPoints.get(randomIndex1) -  anIntersection.y));
+//               intersection1 = anIntersection;
+//            }
+//        }
+        
+        ArrayList<Connection> path = gameGraph.findShortestPathToHome(i1, i2);
+//       ArrayList<Connection> path2 = gameGraph.findShortestPathToHome(intersection2, intersection1);
+//       
+//       for(Connection aPath: path2) {
+//           path.add(aPath);
+//       }
+//       
+        
+       for(Connection connection: path) {
+        Intersection inters2 = gameGraph.getIntersection(connection.getIntersection2Id());
+           System.out.println("REAL GAMEPATH X: " + (inters2.x));
+           System.out.println("REAL GAMEPATH Y: " + (inters2.y));
+        winPath.add(inters2.x);
+        winPath.add(inters2.y);
+       }
+        
+     
+        
+        // START THE ANIMATION FOR ALL THE TILES
+       for (int i = 0; i < playerCar.size(); i++)
+        {
+            // GET EACH TILE
+            PlayerCar car = playerCar.get(i);         
+            
+            // MAKE SURE IT'S MOVED EACH FRAME
+            movingPlayerCar.add(car);
+            
+            //car.setTarget(540, 68);
+            
+            car.setTarget(winPath.get(0), winPath.get(1));
+
+            winPath.remove(0);
+            winPath.remove(0);
+            // AND GET IT ON A PATH
+            car.initWinPath(winPath);
         }
     }
     
@@ -406,35 +563,35 @@ public class PathXDataModel extends MiniGameDataModel {
         // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
         
         //POINT1
-        winPath.add(20);
-        winPath.add(20);
+        winPath.add(263);
+        winPath.add(207);
         //POINT2
-        winPath.add(30);
-        winPath.add(30);
+        winPath.add(353);
+        winPath.add(67);
         //POINT3
-        winPath.add(40);
-        winPath.add(40);
+        winPath.add(538);
+        winPath.add(67);
         //POINT4
-        winPath.add(50);
-        winPath.add(50);
+        winPath.add(723);
+        winPath.add(71);
         //POINT5
-        winPath.add(40);
-        winPath.add(40);
+        winPath.add(839);
+        winPath.add(227);
         //POINT6
-        winPath.add(30);
-        winPath.add(30);
+        winPath.add(721);
+        winPath.add(392);
         //POINT7
-        winPath.add(20);
-        winPath.add(20);
+        winPath.add(345);
+        winPath.add(397);
         //POINT8
-        winPath.add(10);
-        winPath.add(10);
+        winPath.add(263);
+        winPath.add(207);
         //POINT9
-        winPath.add(5);
-        winPath.add(5);
+        winPath.add(353);
+        winPath.add(67);
         //POINT10
-        winPath.add(20);
-        winPath.add(20);
+        winPath.add(538);
+        winPath.add(67);
 
         //moveAllPoliceToStack();
 
@@ -447,13 +604,13 @@ public class PathXDataModel extends MiniGameDataModel {
             // MAKE SURE IT'S MOVED EACH FRAME
             movingPolice.add(car);
             
-            car.setGridCell(60, 60);
+            //car.setGridCell(60, 60);
            
-            car.setX(60);
-            car.setY(60);
-            car.setState(PathXCarState.VISIBLE_STATE.toString());
-            car.setVx(5);
-            car.setVy(0);
+//            car.setX(60);
+//            car.setY(60);
+//            car.setState(PathXCarState.VISIBLE_STATE.toString());
+//            car.setVx(5);
+//            car.setVy(0);
 
             // AND GET IT ON A PATH
             car.initWinPath(winPath);
@@ -472,35 +629,35 @@ public class PathXDataModel extends MiniGameDataModel {
         // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
         
         //POINT1
-        winPath.add(637);
-        winPath.add(100);
+        winPath.add(263);
+        winPath.add(207);
         //POINT2
-        winPath.add(437);
-        winPath.add(300);
+        winPath.add(353);
+        winPath.add(67);
         //POINT3
-        winPath.add(174);
-        winPath.add(300);
+        winPath.add(538);
+        winPath.add(67);
         //POINT4
-        winPath.add(337);
-        winPath.add(470);
+        winPath.add(723);
+        winPath.add(71);
         //POINT5
-        winPath.add(300);
-        winPath.add(591);
+        winPath.add(839);
+        winPath.add(227);
         //POINT6
-        winPath.add(637);
-        winPath.add(500);
+        winPath.add(721);
+        winPath.add(392);
         //POINT7
-        winPath.add(874);
-        winPath.add(591);
+        winPath.add(345);
+        winPath.add(397);
         //POINT8
-        winPath.add(837);
-        winPath.add(470);
+        winPath.add(263);
+        winPath.add(207);
         //POINT9
-        winPath.add(1100);
-        winPath.add(300);
+        winPath.add(353);
+        winPath.add(67);
         //POINT10
-        winPath.add(837);
-        winPath.add(300);
+        winPath.add(538);
+        winPath.add(67);
 
        // moveAllTilesToStack();
 
@@ -526,39 +683,84 @@ public class PathXDataModel extends MiniGameDataModel {
         // MAKE A NEW PATH
         ArrayList<Integer> winPath = new ArrayList();
 
+        Level levelBeingPlayed = ((PathXMiniGame) miniGame).getCurrentLevel();
+        
+        // NULL PathXPanel gamePanel = ((PathXMiniGame)miniGame).getPanel();
+        
+        ArrayList<Intersection> intersectionList = levelBeingPlayed.getIntersections();
+        
+        PathXGameGraphManager gameGraph = ((PathXMiniGame) miniGame).getEventHandler().getGameGraph();
+        
+        ArrayList<Integer> xPoints = PathXEventHandler.xCoordinates;
+        ArrayList<Integer> yPoints = PathXEventHandler.yCoordinates;
+        
         // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
         // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
+
+        int randomIndex1 = (int) (Math.random() * (xPoints.size()));
+        int randomIndex2 = (int) (Math.random() * (xPoints.size()));
+        while (randomIndex1 == randomIndex2) {
+            randomIndex1 = (int) (Math.random() * (xPoints.size()));
+            randomIndex2 = (int) (Math.random() * (xPoints.size()));
+        }
         
-        //POINT1
-        winPath.add(637);
-        winPath.add(100);
-        //POINT2
-        winPath.add(437);
-        winPath.add(300);
-        //POINT3
-        winPath.add(174);
-        winPath.add(300);
-        //POINT4
-        winPath.add(337);
-        winPath.add(470);
-        //POINT5
-        winPath.add(300);
-        winPath.add(591);
-        //POINT6
-        winPath.add(637);
-        winPath.add(500);
-        //POINT7
-        winPath.add(874);
-        winPath.add(591);
-        //POINT8
-        winPath.add(837);
-        winPath.add(470);
-        //POINT9
-        winPath.add(1100);
-        winPath.add(300);
-        //POINT10
-        winPath.add(837);
-        winPath.add(300);
+        Intersection intersection1 = new Intersection(0,0);
+        Intersection intersection2 = new Intersection(0,0);
+        
+        int error = 30;
+        int diffX = (int)(xPoints.get(randomIndex1) - 80);
+        int diffY = (int)(yPoints.get(randomIndex1) + 10); //- (int)sourceY1;
+        
+        for(Intersection anIntersection: intersectionList) {
+            if (((diffX + error) >= anIntersection.x)
+                    && ((diffX - error) <= anIntersection.x)
+                    && ((diffY + error) >= anIntersection.y)
+                    && ((diffY - error) <= anIntersection.y)) {
+                System.out.println("Relative to Map X (1): " + xPoints.get(randomIndex1));
+                System.out.println("Relative to Map Y (1): " + yPoints.get(randomIndex1));
+                System.out.println("Map Coordinates(1) X: " + anIntersection.x);
+                 System.out.println("Map Coordinates(1) Y: " + anIntersection.y);
+                 System.out.println("Difference in X(1): " + (xPoints.get(randomIndex1) -  anIntersection.x));
+                 System.out.println("Difference in Y(1): " + (yPoints.get(randomIndex1) -  anIntersection.y));
+               intersection1 = anIntersection;
+            }
+        }
+        
+        int diffX2 = (int)(xPoints.get(randomIndex2) - 80);
+        int diffY2 = (int)(yPoints.get(randomIndex2) + 10); //- (int)sourceY1;
+        
+        for(Intersection anIntersection: intersectionList) {
+            if (((diffX2 + error) >= anIntersection.x)
+                    && ((diffX2 - error) <= anIntersection.x)
+                    && ((diffY2 + error) >= anIntersection.y)
+                    && ((diffY2 - error) <= anIntersection.y)) {
+                 System.out.println("Relative to Map X (2): " + xPoints.get(randomIndex2));
+                System.out.println("Relative to Map Y (2): " + yPoints.get(randomIndex2));
+                System.out.println("Map Coordinates(2) X: " + anIntersection.x);
+                 System.out.println("Map Coordinates(2) Y: " + anIntersection.y);
+                 System.out.println("Difference in X(2): " + (xPoints.get(randomIndex2) -  anIntersection.x));
+                 System.out.println("Difference in Y(2): " + (yPoints.get(randomIndex2) -  anIntersection.y));
+               intersection2 = anIntersection;
+            }
+        }
+
+       
+       ArrayList<Connection> path = gameGraph.findShortestPathToHome(intersection1, intersection2);
+//       ArrayList<Connection> path2 = gameGraph.findShortestPathToHome(intersection2, intersection1);
+//       
+//       for(Connection aPath: path2) {
+//           path.add(aPath);
+//       }
+//       
+       for(Connection connection: path) {
+        Intersection i1 = gameGraph.getIntersection(connection.getIntersection1Id());
+           System.out.println("X: " + (i1.x + 67));
+           System.out.println("Y: " + (i1.y - 20));
+        winPath.add(i1.x + 67);
+        winPath.add(i1.y - 20);
+       }
+    
+        
 
 //        moveAllTilesToStack();
 
@@ -694,6 +896,9 @@ public class PathXDataModel extends MiniGameDataModel {
     public int calculateGridTileY(int row) {
         return viewport.getViewportMarginTop() + (row * TILE_HEIGHT) - viewport.getViewportY();
     }
+    
+    public static int XCoordinate;
+    public static int YCoordinate;
 
     /**
      * Used to calculate the grid column for the x-axis pixel location.
@@ -709,7 +914,7 @@ public class PathXDataModel extends MiniGameDataModel {
 
         // ADJUST FOR THE GAME SCREEN
         x = (int) (x - PathXPanel.destinationX1 - PathXPanel.sourceX1 + 98);
-
+        XCoordinate = x;
       //  if (x < 0)
         {
         //    return -1;
@@ -732,11 +937,11 @@ public class PathXDataModel extends MiniGameDataModel {
         //y -= viewport.getViewportMarginTop();
 
         // ADJUST FOR THE GAME SCREEN
-         y = (int) (y - PathXPanel.destinationY1 - PathXPanel.sourceY1 - 10);
-
+        y = (int) (y - PathXPanel.destinationY1 - PathXPanel.sourceY1 - 10);
+        YCoordinate = y;
         //if (y < 0)
         {
-          //  return -1;
+            //  return -1;
         }
 
         // AND NOW GET THE ROW
@@ -874,6 +1079,17 @@ public class PathXDataModel extends MiniGameDataModel {
             }
         }
         for (BanditCar car : banditCarStack)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+         for (PlayerCar car : playerCar)
         {
             // AND SET THEM PROPERLY
             if (enable)
@@ -1083,6 +1299,22 @@ public class PathXDataModel extends MiniGameDataModel {
     // - updateAll
     // - updateDebugText
 
+    public static int init = 0;
+    public static Intersection location;
+    
+    public boolean isAnIntersection(int x, int y) {
+        int error = 30;
+        for (Intersection i : ((PathXMiniGame) miniGame).getCurrentLevel().getIntersections()) {
+            if (((x + error) >= i.x)
+                    && ((x - error) <= i.x)
+                    && ((y + error) >= i.y)
+                    && ((y - error) <= i.y)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * This method provides a custom game response for handling mouse clicks on
      * the game screen. We'll use this to close game dialogs as well as to
@@ -1098,16 +1330,23 @@ public class PathXDataModel extends MiniGameDataModel {
     public void checkMousePressOnSprites(MiniGame game, int x, int y)
     {
  
+        if(init == 0) {
+//            location = level.getStartingLocation();
+        }
         // FIGURE OUT THE CELL IN THE GRID
         int col = calculateGridCellColumn(x);
         int row = calculateGridCellRow(y);
 
-        System.out.println("REACHED checkMousePressOnSprites: " +
-                "\nX: " + col + "\nY: " + row);
-        
-        if(((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE)) {
-        ((PathXMiniGame)game).getEventHandler().intersectionClickerCheck(col, row);
-    }
+        System.out.println("REACHED checkMousePressOnSprites: "
+                + "\nX: " + col + "\nY: " + row);
+
+        if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
+            Intersection destination =  ((PathXMiniGame) game).getEventHandler().intersectionClickerCheck(col, row);
+            if (isAnIntersection(col, row)) {
+                movePlayer(playerCar.get(0).getLocation(),destination);
+                playerCar.get(0).setLocation(destination);
+            }
+        }
         // DISABLE THE STATS DIALOG IF IT IS OPEN
       //  if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(PathXCarState.VISIBLE_STATE.toString()))
         {
@@ -1254,6 +1493,8 @@ public class PathXDataModel extends MiniGameDataModel {
        // miniGame.getGUIDialogs().get(STATS_DIALOG_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
     }
 
+    public static int numEntered = 0;
+    
     /**
      * Called each frame, this method updates all the game objects.
      *
@@ -1281,6 +1522,54 @@ public class PathXDataModel extends MiniGameDataModel {
                 if (!tile.isMovingToTarget())
                 {
                     movingPolice.remove(tile);
+                }
+            }
+             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
+            for (int i = 0; i < movingZombies.size(); i++)
+            {
+                // GET THE NEXT TILE
+                ZombieCar tile = movingZombies.get(i);
+
+                // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
+                tile.update(game);
+
+                // IF IT'S REACHED ITS DESTINATION, REMOVE IT
+                // FROM THE LIST OF MOVING TILES
+                if (!tile.isMovingToTarget())
+                {
+                    movingZombies.remove(tile);
+                }
+            }
+             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
+            for (int i = 0; i < movingBandits.size(); i++)
+            {
+                // GET THE NEXT TILE
+                BanditCar tile = movingBandits.get(i);
+
+                // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
+                tile.update(game);
+
+                // IF IT'S REACHED ITS DESTINATION, REMOVE IT
+                // FROM THE LIST OF MOVING TILES
+                if (!tile.isMovingToTarget())
+                {
+                    movingBandits.remove(tile);
+                }
+            }
+            
+               for (int i = 0; i < movingPlayerCar.size(); i++)
+            {
+                // GET THE NEXT TILE
+                PlayerCar tile = movingPlayerCar.get(i);
+
+                // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
+                tile.update(game);
+                
+                // IF IT'S REACHED ITS DESTINATION, REMOVE IT
+                // FROM THE LIST OF MOVING TILES
+                if (!tile.isMovingToTarget())
+                {
+                    movingPlayerCar.remove(tile);
                 }
             }
 
@@ -1421,7 +1710,7 @@ public class PathXDataModel extends MiniGameDataModel {
         return Math.sqrt(diffXSquared + diffYSquared);
     }
     
-     public boolean isNothingSelected()      { return editMode == PathXCarState.NOTHING_SELECTED; }
+    public boolean isNothingSelected()      { return editMode == PathXCarState.NOTHING_SELECTED; }
     public boolean isIntersectionSelected() { return editMode == PathXCarState.INTERSECTION_SELECTED; }
     public boolean isIntersectionDragged()  { return editMode == PathXCarState.PLAYER_DRAGGED; }
     public boolean isRoadSelected()         { return editMode == PathXCarState.ROAD_SELECTED; }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<level image="L4DeepwoodMotte.png" name="L4DeepwoodMotte">
+     <intersections>
+          <intersection id="0" open="false" x="44" y="232"/>
+          <intersection id="0" open="true" x="624" y="237"/>
+          <intersection id="0" open="true" x="172" y="92"/>
+          <intersection id="0" open="false" x="339" y="91"/>
+          <intersection id="0" open="true" x="503" y="90"/>
+          <intersection id="0" open="true" x="176" y="236"/>
+          <intersection id="0" open="true" x="333" y="239"/>
+          <intersection id="0" open="true" x="508" y="238"/>
+          <intersection id="0" open="true" x="164" y="418"/>
+          <intersection id="0" open="true" x="328" y="412"/>
+          <intersection id="0" open="false" x="511" y="408"/>
+     </intersections>
+     <roads>
+          <road int_id1="2" int_id2="5" one_way="false" speed_limit="30"/>
+          <road int_id1="0" int_id2="5" one_way="true" speed_limit="30"/>
+          <road int_id1="5" int_id2="8" one_way="false" speed_limit="30"/>
+          <road int_id1="8" int_id2="9" one_way="false" speed_limit="30"/>
+          <road int_id1="9" int_id2="6" one_way="false" speed_limit="30"/>
+          <road int_id1="9" int_id2="10" one_way="false" speed_limit="100"/>
+          <road int_id1="10" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="7" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="3" int_id2="6" one_way="false" speed_limit="30"/>
+          <road int_id1="3" int_id2="2" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="7" one_way="false" speed_limit="30"/>
+          <road int_id1="7" int_id2="1" one_way="true" speed_limit="30"/>
+          <road int_id1="6" int_id2="5" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="10" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="2" one_way="false" speed_limit="60"/>
+          <road int_id1="6" int_id2="8" one_way="false" speed_limit="60"/>
+     </roads>
+     <start_intersection id="0" image="LocationStart.png"/>
+     <destination_intersection id="1" image="LocationDestination.png"/>
+     <money amount="200"/>
+     <police num="2"/>
+     <bandits num="1"/>
+     <zombies num="1"/>
+</level>

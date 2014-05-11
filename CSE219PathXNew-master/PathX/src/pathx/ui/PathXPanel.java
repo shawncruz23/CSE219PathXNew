@@ -32,7 +32,12 @@ import mini_game.SpriteType;
 import mini_game.Viewport;
 import pathx.PathX;
 import pathx.PathX.PathXPropertyType;
+import static pathx.PathX.PathXPropertyType.IMAGE_PLAYER_CAR;
 import static pathx.PathXConstants.*;
+import pathx.car.BanditCar;
+import pathx.car.PlayerCar;
+import pathx.car.PoliceCar;
+import pathx.car.ZombieCar;
 import pathx.data.Intersection;
 import pathx.data.Level;
 import pathx.data.PathXDataModel;
@@ -89,6 +94,12 @@ public class PathXPanel extends JPanel {
     //CURRENT LEVEL
     Level currentLevel;
 
+    private ArrayList<Double> xCoord;
+    private ArrayList<Double> yCoord;
+    
+    public static int car_X;
+    public static int car_Y;
+
     //protected ArrayList<PathXLevelNode> levelList;
     /**
      * This constructor stores the game and data references, which we'll need
@@ -133,9 +144,14 @@ public class PathXPanel extends JPanel {
         
         viewport = new pathx.data.Viewport();
         
+        xCoord = new ArrayList();
+        yCoord = new ArrayList();
+        
+        
         //currentLevel = ((PathXMiniGame) game).getCurrentLevel();
     }
 
+    
     // MUTATOR METHODS
     // -setBlankTileImage
     // -setBlankTileSelectedImage
@@ -164,6 +180,8 @@ public class PathXPanel extends JPanel {
         blankTileMouseOverImage = initBlankTileMouseOverImage;
     }
 
+    private static int toggle = 0;
+   
     /**
      * This is where rendering starts. This method is called each frame, and the
      * entire game application is rendered here with the help of a number of
@@ -195,8 +213,9 @@ public class PathXPanel extends JPanel {
 
             if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
                 
-                currentLevel = ((PathXMiniGame) game).getCurrentLevel();    
-               
+              currentLevel = ((PathXMiniGame) game).getCurrentLevel();    
+//                car_X = currentLevel.getStartingLocation().x;
+//                car_Y = currentLevel.getStartingLocation().y;
 //                // RENDER THE BACKGROUND IMAGE
 //                renderLevelBackground(g);
                 
@@ -211,11 +230,28 @@ public class PathXPanel extends JPanel {
                 // RENDER THE INTERSECTIONS
                 renderIntersection(g2);
                 
-                renderPlayerCar(g2);
+                //renderPlayerCar(g2);
                 
-                renderBackground(g);
+                //((PathXDataModel)data).initPlayerCar(car_X, car_Y);
+                
+//                Iterator<PlayerCar> carSprites = data.getPlayerCarStack().iterator();
+//                while (carSprites.hasNext()) {
+//                    Sprite s = carSprites.next();
+//                    renderSprite(g, s);
+//                }
+                
+                //renderBackground(g);
+                
+              
 
-                ((PathXDataModel)data).playPoliceAnimation();
+//                ((PathXDataModel)data).playPoliceAnimation();
+//                ((PathXDataModel)data).playZombieAnimation();
+                
+              // if (toggle % 2 == 0) {
+                    //((PathXDataModel) data).playBanditAnimation();
+                  //  toggle = 1;
+                //}
+                
                 // RENDER THE INTERSECTIONS
                 //renderIntersections(g2);
             }
@@ -243,6 +279,8 @@ public class PathXPanel extends JPanel {
 
             // AND THE BUTTONS AND DECOR
             renderGUIControls(g);
+            
+            renderCars(g);
 
             if (!data.notStarted()) {
                 // AND THE TIME AND TILES STATS
@@ -361,10 +399,10 @@ public class PathXPanel extends JPanel {
         g2.setStroke(recyclableStrokes.get(strokeId));
 
         // LOAD ALL THE DATA INTO THE RECYCLABLE LINE
-        recyclableLine.x1 = road.getNode1().x + sourceX1 + destinationX1 - 20;
-        recyclableLine.y1 = road.getNode1().y + sourceY1 + destinationY1 - 0;
-        recyclableLine.x2 = road.getNode2().x + sourceX1 + destinationX1 - 20;
-        recyclableLine.y2 = road.getNode2().y + sourceY1 + destinationY1 - 0;
+        recyclableLine.x1 = road.getNode1().x + sourceX1 + destinationX1 - 20 - 80;
+        recyclableLine.y1 = road.getNode1().y + sourceY1 + destinationY1 + 10;
+        recyclableLine.x2 = road.getNode2().x + sourceX1 + destinationX1 - 20 - 80;
+        recyclableLine.y2 = road.getNode2().y + sourceY1 + destinationY1 + 10;
 
        
         
@@ -415,6 +453,11 @@ public class PathXPanel extends JPanel {
         g2.setTransform(oldAt);
     }
 
+    public static ArrayList<Double> coordX = new ArrayList<>();
+    public static ArrayList<Double> coordY = new ArrayList<>();
+    
+    public static boolean initialized = false;
+    
     public void renderIntersection(Graphics2D g) {
 
         Iterator<Intersection> it = currentLevel.intersectionsIterator();
@@ -435,9 +478,11 @@ public class PathXPanel extends JPanel {
                 }
                
                 
-                recyclableCircle.x = intersection.x + sourceX1 - INTERSECTION_RADIUS + destinationX1 - 20;
-                recyclableCircle.y = intersection.y + sourceY1 - INTERSECTION_RADIUS + destinationY1;
+                recyclableCircle.x = intersection.x + sourceX1 - INTERSECTION_RADIUS + destinationX1 - 20 - 80;
+                recyclableCircle.y = intersection.y + sourceY1 - INTERSECTION_RADIUS + destinationY1 + 10;
 
+                
+              
               //  System.out.println("ROAD DIFFERENCE X: " + (sourceX1 - INTERSECTION_RADIUS + destinationX1 - 20));
                // System.out.println("ROAD DIFFERENCE Y: " + (sourceY1 - INTERSECTION_RADIUS + destinationY1));
 
@@ -486,7 +531,7 @@ public class PathXPanel extends JPanel {
         // ONLY RENDER IF INSIDE THE VIEWPORT
 //        if (x1 > DESTINATION_X1  && y1 > DESTINATION_Y1  && x2 < DESTINATION_X2  && y2 < DESTINATION_Y2 /*change to check boundaries*/)
         {
-            g2.drawImage(img, (int)(x1 + sourceX1 + destinationX1 - 20), (int)(y1 + sourceY1 + destinationY1), null);
+            g2.drawImage(img, (int)(x1 + sourceX1 + destinationX1 - 20 - 80), (int)(y1 + sourceY1 + destinationY1 + 10), null);
         }
     }
 
@@ -495,41 +540,7 @@ public class PathXPanel extends JPanel {
     public static double playerX = 0;
     public static double playerY = 0;
     
-    public void renderPlayerCar(Graphics2D g2) {
-        
-        g2.setColor(Color.BLUE);
-        
-        Intersection secondIntersection = ((PathXMiniGame)game).getEventHandler().getGameGraph().getRoad(currentLevel.getStartingLocation().getRoadIDs().get(0)).getNode2();
-        
-        if(checker == 0) {
-        playerCircle.x = (currentLevel.getStartingLocation().x + secondIntersection.x)/2  + sourceX1 - INTERSECTION_RADIUS  + playerX + destinationX1;
-        playerCircle.y = (currentLevel.getStartingLocation().y + secondIntersection.y)/2 + sourceY1 - INTERSECTION_RADIUS  + playerY + destinationY1 ;
-        //counter++;
-        }
-        else {
-            playerCircle.x = playerX + sourceX1;
-            playerCircle.y = playerY + sourceY1;
-        }
-        
-       // System.out.println("Player Circle X: " + playerCircle.x);
-        //System.out.println("Player Circle Y: " + playerCircle.y);
-        
-        g2.fill(playerCircle);
-
-        // AND NOW THE OUTLINE
-       
-        g2.setColor(INT_OUTLINE_COLOR);
-        
-        Stroke s = recyclableStrokes.get(INT_STROKE);
-        g2.setStroke(s);
-        g2.draw(playerCircle);
-       
-    }
     
-    public void movePlayerCar(int x, int y) {
-        playerCircle.x += x; 
-        playerCircle.y += y;
-    }
     /**
      * Updates the background image.
      */
@@ -563,6 +574,16 @@ public class PathXPanel extends JPanel {
         renderSprite(g, bg);
     }
 
+        public ArrayList<Double> getXCoordinates() {
+            if(xCoord.size() == 0) System.out.println("EMPTY X LIST");
+        return xCoord;
+    }
+    
+    public ArrayList<Double> getYCoordinates() {
+        if(yCoord.size() == 0) System.out.println("EMPTY Y LIST");
+        return yCoord;
+    }
+    
     /**
      * Renders all the GUI decor and buttons.
      *
@@ -580,6 +601,16 @@ public class PathXPanel extends JPanel {
         // AND NOW RENDER THE BUTTONS
         Collection<Sprite> buttonSprites = game.getGUIButtons().values();
         for (Sprite s : buttonSprites) {
+            renderSprite(g, s);
+        }
+            
+    }
+    
+    public void renderCars(Graphics g) {
+        
+        Iterator<PlayerCar> carSprites1 = data.getPlayerCar().iterator();
+        while (carSprites1.hasNext()) {
+            Sprite s = carSprites1.next();
             renderSprite(g, s);
         }
     }
@@ -1040,11 +1071,24 @@ public class PathXPanel extends JPanel {
      */
     public void renderSprite(Graphics g, Sprite s) {
         // ONLY RENDER THE VISIBLE ONES
+        
         if (!s.getState().equals(PathXCarState.INVISIBLE_STATE.toString())) {
+         
+            if (s.getSpriteType().getSpriteTypeID() ==PLAYER_CAR_TYPE) {
+            SpriteType bgST = s.getSpriteType();
+            Image img = bgST.getStateImage(s.getState());
+            g.drawImage(img, (int) s.getX() + (int)sourceX1, (int) s.getY() + (int)sourceY1, bgST.getWidth(), bgST.getHeight(), null);
+                System.out.println("renderSprite: sourceX1: " + sourceX1);
+                System.out.println("renderSprite: sourceY1: " + sourceY1);
+            }
+            else {
+            
             SpriteType bgST = s.getSpriteType();
             Image img = bgST.getStateImage(s.getState());
             g.drawImage(img, (int) s.getX(), (int) s.getY(), bgST.getWidth(), bgST.getHeight(), null);
+            }
         }
+        
     }
 
     /**
