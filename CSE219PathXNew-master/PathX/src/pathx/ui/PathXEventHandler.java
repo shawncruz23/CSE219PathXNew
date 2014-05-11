@@ -94,6 +94,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
             File schemaFile = new File(PROPERTIES_SCHEMA_LEVEL_FILE_NAME);
             filetoLoad = new PathX_XML_Level_IO(schemaFile);
             Level aLevel = filetoLoad.loadLevel(level);
+            model.setCurrentLevel(aLevel);
             //if()
             ArrayList<Intersection> intersectionList = filetoLoad.getIntersectionList();
             ArrayList<Road> roadList = filetoLoad.getRoadList();
@@ -170,6 +171,8 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 //                         ", (X: " + gameGraph.getIntersection(neighbours.get(i).getIntersection2Id()).x
 //                 + " Y: " + gameGraph.getIntersection(neighbours.get(i).getIntersection2Id()).y +")\n");
                 
+            model.setLevelBounty(aLevel.getMoney());
+             
             System.out.println("MONEY: " + aLevel.getMoney());
             System.out.println("NUM POLICE: " + aLevel.getNumPolice());
             System.out.println("NUM BANDITS: " + aLevel.getNumBandits());

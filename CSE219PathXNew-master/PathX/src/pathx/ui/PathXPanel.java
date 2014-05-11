@@ -7,6 +7,7 @@ package pathx.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -213,11 +214,13 @@ public class PathXPanel extends JPanel {
 
             if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
                 
+           
+                
               currentLevel = ((PathXMiniGame) game).getCurrentLevel();    
 //                car_X = currentLevel.getStartingLocation().x;
 //                car_Y = currentLevel.getStartingLocation().y;
 //                // RENDER THE BACKGROUND IMAGE
-//                renderLevelBackground(g);
+             //   renderLevelBackground(g);
                 
                  
                 
@@ -230,6 +233,8 @@ public class PathXPanel extends JPanel {
                 // RENDER THE INTERSECTIONS
                 renderIntersection(g2);
                 
+                   renderLevelStats(g);
+                
                 //renderPlayerCar(g2);
                 
                 //((PathXDataModel)data).initPlayerCar(car_X, car_Y);
@@ -240,8 +245,7 @@ public class PathXPanel extends JPanel {
 //                    renderSprite(g, s);
 //                }
                 
-                //renderBackground(g);
-                
+             
               
 
 //                ((PathXDataModel)data).playPoliceAnimation();
@@ -278,9 +282,18 @@ public class PathXPanel extends JPanel {
             }
 
             // AND THE BUTTONS AND DECOR
-            renderGUIControls(g);
+           
             
             renderCars(g);
+            
+            if(((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
+               renderBackground(g);
+                
+                 renderLevelStats(g);
+                 
+            }
+            
+             renderGUIControls(g);
 
             if (!data.notStarted()) {
                 // AND THE TIME AND TILES STATS
@@ -293,6 +306,25 @@ public class PathXPanel extends JPanel {
             // RELEASE THE LOCK
             game.endUsingData();
         }
+    }
+    
+    public void renderLevelStats(Graphics g) {
+        
+            // RENDER THE LEVEL BOUNTY
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+            g.setColor(Color.WHITE);
+
+            // RENDER THE TIME
+            String levelBounty = "Level Bounty: $" + data.getLevelBounty();
+            int x = 110;
+            int y = 40;
+            g.drawString(levelBounty, x, y);
+            
+            // RENDER THE TIME
+            String playerBalance = "Player Balance: $" + data.getPlayerBalance();
+            //int x = 300;
+            //int y = 40;
+            g.drawString(playerBalance, x, y - 15);
     }
 
     public static double sourceX1 = 0;
@@ -608,9 +640,15 @@ public class PathXPanel extends JPanel {
     
     public void renderCars(Graphics g) {
         
-        Iterator<PlayerCar> carSprites1 = data.getPlayerCar().iterator();
-        while (carSprites1.hasNext()) {
-            Sprite s = carSprites1.next();
+        Iterator<PlayerCar> playerCarSprite = data.getPlayerCar().iterator();
+        while (playerCarSprite.hasNext()) {
+            Sprite s = playerCarSprite.next();
+            renderSprite(g, s);
+        }
+        
+        Iterator<BanditCar> banditCarSprite = data.getBanditCarStack().iterator();
+        while (banditCarSprite.hasNext()) {
+            Sprite s = banditCarSprite.next();
             renderSprite(g, s);
         }
     }
@@ -1074,12 +1112,13 @@ public class PathXPanel extends JPanel {
         
         if (!s.getState().equals(PathXCarState.INVISIBLE_STATE.toString())) {
          
-            if (s.getSpriteType().getSpriteTypeID() ==PLAYER_CAR_TYPE) {
+            if (s.getSpriteType().getSpriteTypeID() == PLAYER_CAR_TYPE
+                    || s.getSpriteType().getSpriteTypeID().contains(BANDIT_TYPE_PREFIX)
+                    || s.getSpriteType().getSpriteTypeID().contains(POLICE_TYPE_PREFIX)
+                    || s.getSpriteType().getSpriteTypeID().contains(ZOMBIE_TYPE_PREFIX)) {
             SpriteType bgST = s.getSpriteType();
             Image img = bgST.getStateImage(s.getState());
             g.drawImage(img, (int) s.getX() + (int)sourceX1, (int) s.getY() + (int)sourceY1, bgST.getWidth(), bgST.getHeight(), null);
-                System.out.println("renderSprite: sourceX1: " + sourceX1);
-                System.out.println("renderSprite: sourceY1: " + sourceY1);
             }
             else {
             

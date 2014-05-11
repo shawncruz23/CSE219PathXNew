@@ -394,13 +394,13 @@ public class PathXMiniGame extends MiniGame {
         //game.endGameAsWin();
         
          // THEN THE TILES STACKED TO THE TOP LEFT
-        //((PathXDataModel) data).initEnemyCars(currentLevel.getNumPolice(), currentLevel.getNumZombies(), currentLevel.getNumBandits());
+        ((PathXDataModel) data).initEnemyCars(currentLevel.getNumPolice(), currentLevel.getNumZombies(), currentLevel.getNumBandits());
  
         
         ((PathXDataModel) data).initPlayerCar();
      
         //((PathXDataModel) data).playPoliceAnimation();
-        //((PathXDataModel) data).playBanditAnimation();
+        ((PathXDataModel) data).playBanditAnimation();
         //((PathXDataModel) data).playPoliceAnimation();
          //DISABLE CHECKBOXES
         guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());

@@ -297,12 +297,12 @@ public class PlayerCar extends Sprite {
             // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
         if (calculateDistanceToTarget() < 20) {
             
-            System.out.println("NUMBER OF TIMES ENTERED: " + ++numTimesEntered);
+          //  System.out.println("NUMBER OF TIMES ENTERED: " + ++numTimesEntered);
             // PUT IT RIGHT ON THE NODE
             x = targetX;
             y = targetY;
-            System.out.println("updateWinPath X: " + x);
-            System.out.println("updateWinPath Y: " + y);
+           // System.out.println("updateWinPath X: " + x);
+           // System.out.println("updateWinPath Y: " + y);
             // AND TARGET THE NEXT NODE IN THE PATH
             if(winPath.size() > 1) {
             targetX = winPath.get(0);

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
+import pathx.data.Intersection;
 
 /**
  *
@@ -35,12 +36,8 @@ public class BanditCar extends Sprite {
 
     // WIN ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
     private ArrayList<Integer> winPath;
-    // POLICE ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
-    private ArrayList<Integer> policePath;
-    // ZOMBIE ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
-    private ArrayList<Integer> zombiePath;
-    // BANDIT ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
-    private ArrayList<Integer> banditPath;
+    
+    private Intersection currentLocation;
     
 
     // THIS INDEX KEEPS TRACK OF WHICH NODE ON THE WIN ANIMATION PATH
@@ -60,6 +57,18 @@ public class BanditCar extends Sprite {
         super(initSpriteType, initX, initY, initVx, initVy, initState);
 
         tileId = initTileId;
+    }
+
+    public void setLocation(Intersection newIntersection) {
+        currentLocation = newIntersection;
+    }
+    
+    public Intersection getLocation() {
+       if(currentLocation != null)
+           return currentLocation;
+       
+        System.out.println("NULL POINTER");
+       return null;
     }
 
     // ACCESSOR METHODS
@@ -117,6 +126,14 @@ public class BanditCar extends Sprite {
         return targetY;
     }
 
+    public float getY() {
+        return super.y;
+    }
+    
+    public float getX() {
+        return super.x;
+    }
+    
     /**
      * Accessor method for getting whether this tile is currently moving toward
      * target coordinates or not.
@@ -127,6 +144,8 @@ public class BanditCar extends Sprite {
     public boolean isMovingToTarget() {
         return movingToTarget;
     }
+    
+    
 
     // MUTATOR METHODS
     // -setGridCell
@@ -199,55 +218,13 @@ public class BanditCar extends Sprite {
             // AND FILL IT WITH FUZZY PATH NODES
             int toleranceX = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
             int toleranceY = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-            int x = winPathNodes.get(i) + toleranceX;
-            int y = winPathNodes.get(i + 1) + toleranceY;
+            int x = winPathNodes.get(i);// + toleranceX;
+            int y = winPathNodes.get(i + 1);// + toleranceY;
             winPath.add(x);
             winPath.add(y);
         }
     }
 
-//    public void initPolicePath(ArrayList<Integer> policePathNodes) {
-//        // CONSTRUCT THE PATH
-//        policePath = new ArrayList(policePathNodes.size());
-//        for (int i = 0; i < policePathNodes.size(); i += 2) {
-//            // AND FILL IT WITH FUZZY PATH NODES
-//            int toleranceX = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-//            int toleranceY = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-//            int x = policePathNodes.get(i) + toleranceX;
-//            int y = policePathNodes.get(i + 1) + toleranceY;
-//            policePath.add(x);
-//            policePath.add(y);
-//        }
-//    }
-//    
-//    public void initZombiePath(ArrayList<Integer> winPathNodes) {
-//        // CONSTRUCT THE PATH
-//        zombiePath = new ArrayList(winPathNodes.size());
-//        for (int i = 0; i < winPathNodes.size(); i += 2) {
-//            // AND FILL IT WITH FUZZY PATH NODES
-//            int toleranceX = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-//            int toleranceY = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-//            int x = winPathNodes.get(i) + toleranceX;
-//            int y = winPathNodes.get(i + 1) + toleranceY;
-//            zombiePath.add(x);
-//            zombiePath.add(y);
-//        }
-//    }
-//    
-//    public void initBanditPath(ArrayList<Integer> winPathNodes) {
-//        // CONSTRUCT THE PATH
-//        banditPath = new ArrayList(winPathNodes.size());
-//        for (int i = 0; i < winPathNodes.size(); i += 2) {
-//            // AND FILL IT WITH FUZZY PATH NODES
-//            int toleranceX = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-//            int toleranceY = 1;//(int)(WIN_PATH_TOLERANCE_STAR * Math.random()) - (WIN_PATH_TOLERANCE_STAR/2);
-//            int x = winPathNodes.get(i) + toleranceX;
-//            int y = winPathNodes.get(i + 1) + toleranceY;
-//            banditPath.add(x);
-//            banditPath.add(y);
-//        }
-//    }
-    
     /**
      * Allows the tile to start moving by initializing its properly scaled
      * velocity vector pointed towards it target coordinates.
@@ -289,6 +266,24 @@ public class BanditCar extends Sprite {
         }
     }
 
+    public void increaseX() {
+        super.x += 20;
+    }
+    
+    public void increaseY() {
+        super.y += 20;
+    }
+    
+    public void decreaseX() {
+        super.x -= 20;
+    }
+    
+    public void decreaseY() {
+        super.y -= 20;
+    }
+    
+    public static int numTimesEntered = 0;
+    
     /**
      * After a win, while the tiles are animating, this method is called each
      * frame to make sure that when the tile reaches the next node in the path,
@@ -297,22 +292,37 @@ public class BanditCar extends Sprite {
      * @param game The Sorting Hat game we are updating.
      */
     public void updateWinPath(MiniGame game) {
-        // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
-        if (calculateDistanceToTarget() < 100) {
+        
+            startMovingToTarget(1);
+            // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
+        if (calculateDistanceToTarget() < 20) {
+            
+           // System.out.println("NUMBER OF TIMES ENTERED: " + ++numTimesEntered);
             // PUT IT RIGHT ON THE NODE
             x = targetX;
             y = targetY;
-
+            //System.out.println("updateWinPath X: " + x);
+            //System.out.println("updateWinPath Y: " + y);
             // AND TARGET THE NEXT NODE IN THE PATH
+            if(winPath.size() > 1) {
             targetX = winPath.get(winPathIndex);
             targetY = winPath.get(winPathIndex + 1);
+            
+            //winPath.remove(1);
+            //winPath.remove(0);
+            }
 
+//            x = targetX;
+//            y = targetY;
+            
             // START THE TILE MOVING AGAIN AND RANDOMIZE IT'S SPEED
-            startMovingToTarget((int) 5);//(Math.random() * 100) + 1);
+           
+           /// (Math.random() * 100) + 1);
 
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
             winPathIndex += 2;
-            winPathIndex %= (winPath.size() - 1);
+           winPathIndex %= (winPath.size());
+           // System.out.println("winPath: " + winPath.size());
         } // JUST A NORMAL PATHING UPDATE
         else {
             // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
@@ -332,7 +342,7 @@ public class BanditCar extends Sprite {
     public void update(MiniGame game) {
         // IF WE ARE IN A POST-WIN STATE WE ARE PLAYING THE WIN
         // ANIMATION, SO MAKE SURE THIS TILE FOLLOWS THE PATH
-        if (/*game.getDataModel().won()*/ true) {
+        if (winPath != null) {
             updateWinPath(game);
         } // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
         // JUST GO TO THE TARGET AND THEN STOP MOVING
