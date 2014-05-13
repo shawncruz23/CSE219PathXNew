@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L14Highgarden.png" name="L14Highgarden">
      <intersections>
-          <intersection id="0" open="true" x="51" y="254"/>
+          <intersection id="0" open="true" x="335" y="253"/>
           <intersection id="0" open="true" x="979" y="267"/>
           <intersection id="0" open="true" x="82" y="32"/>
           <intersection id="0" open="true" x="305" y="26"/>

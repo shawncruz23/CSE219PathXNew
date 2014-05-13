@@ -44,10 +44,13 @@ import static pathx.PathXConstants.*;
 import pathx.car.PoliceCar;
 import pathx.data.Level;
 import pathx.data.PathXDataModel;
+import static pathx.data.PathXDataModel.banditStartingIndex;
+import static pathx.data.PathXDataModel.callerControl;
 import pathx.data.PathXLevelNode;
 import pathx.data.PathXRecord;
 import pathx.file.PathXFileManager;
 import pathx.file.PathX_XML_Level_IO;
+import static pathx.ui.PathXCarState.INVISIBLE_STATE;
 import properties_manager.PropertiesManager;
 
 /**
@@ -293,8 +296,36 @@ public class PathXMiniGame extends MiniGame {
         }
 
         if (isCurrentScreenState(GAME_SCREEN_STATE)) {
+            
+            isGameStarted = false;
+            isDialogClosed = false;
+            
+            guiButtons.get(ABUTTON_PAUSE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+            guiButtons.get(ABUTTON_PAUSE_TYPE).setEnabled(false);
+
+            guiButtons.get(BUTTON_START_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+            guiButtons.get(BUTTON_START_TYPE).setEnabled(false);
+            
+            ((PathXDataModel) data).resetCars();
+
+            ((PathXDataModel) data).enableCars(false);
+
+            PathXDataModel.n = 0;
+            PathXDataModel.m = 1;
+
+
+            if (!guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).getState().equals(INVISIBLE_STATE)) {
+
+                //DISABLE LEVEL INFO DIALOG
+                guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+                guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setEnabled(false);
+                
+                 guiButtons.get(BUTTON_CLOSE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+                guiButtons.get(BUTTON_CLOSE_TYPE).setEnabled(false);
+            }
+
             //disable/reset all game screen controls
-            ((PathXDataModel)data).enableCars(false);
+           
             PathXPanel.sourceX1 = 0;
             PathXPanel.sourceY1 = 0;
             PathXPanel.sourceX2 = 812;
@@ -348,38 +379,32 @@ public class PathXMiniGame extends MiniGame {
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setEnabled(true);
 
-        //PropertiesManager props = PropertiesManager.getPropertiesManager();
-        // ACTIVATE THE TOOLBAR AND ITS CONTROLS
-        //guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        // guiButtons.get(NEW_GAME_BUTTON_TYPE).setEnabled(true);
-        // guiButtons.get(BACK_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        // guiButtons.get(BACK_BUTTON_TYPE).setEnabled(true);
-        //guiButtons.get(UNDO_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        // guiButtons.get(UNDO_BUTTON_TYPE).setEnabled(true);
-        // guiDecor.get(MISCASTS_COUNT_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        //guiDecor.get(TIME_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        //guiButtons.get(STATS_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        // guiButtons.get(STATS_BUTTON_TYPE).setEnabled(true);
-        // guiDecor.get(ALGORITHM_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-        // DEACTIVATE THE LEVEL SELECT BUTTONS
-        // ArrayList<String> levels = props.getPropertyOptionsList(PathXPropertyType.LEVEL_OPTIONS);
-        // for (String level : levels)
-        //  {
-        //     guiButtons.get(level).setState(PathXCarState.INVISIBLE_STATE.toString());
-        //     guiButtons.get(level).setEnabled(false);
-        //  }
         // AND CHANGE THE SCREEN STATE
         currentScreenState = LEVEL_SELECT_SCREEN_STATE;
 
         // PLAY THE LEVEL SELECT SCREEN SONG
+        if(!checkedMusic) {
         audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
         audio.play(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString(), true);
+        }
     }
     
     private Level currentLevel;
     
     public Level getCurrentLevel() {
         return currentLevel;
+    }
+    
+    public void showLossScreenDialog() {
+        //ENABLE DIALOG TEMPLATE 
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setEnabled(true);
+    }
+    
+     public void showWinScreenDialog() {
+        //ENABLE DIALOG TEMPLATE
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setEnabled(true);
     }
 
     /**
@@ -392,15 +417,19 @@ public class PathXMiniGame extends MiniGame {
         currentLevel = aLevel;
         
         //game.endGameAsWin();
-        
+        PathXDataModel.callerControl = 0;
+        PathXDataModel.callController = 0;
+        banditStartingIndex.clear();
          // THEN THE TILES STACKED TO THE TOP LEFT
         ((PathXDataModel) data).initEnemyCars(currentLevel.getNumPolice(), currentLevel.getNumZombies(), currentLevel.getNumBandits());
  
-        
         ((PathXDataModel) data).initPlayerCar();
      
         //((PathXDataModel) data).playPoliceAnimation();
-        ((PathXDataModel) data).playBanditAnimation();
+        //((PathXDataModel) data).playBanditAnimation();
+        
+        //PathXEventHandler.xCoordinates.clear();
+        //PathXEventHandler.yCoordinates.clear();
         //((PathXDataModel) data).playPoliceAnimation();
          //DISABLE CHECKBOXES
         guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
@@ -409,6 +438,9 @@ public class PathXMiniGame extends MiniGame {
         //DISABLE CHECKBOXES
         guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(false);
+
+        guiButtons.get(BUTTON_START_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(BUTTON_START_TYPE).setEnabled(true);
 
 //        Iterator it = ((PathXDataModel)data).getPoliceCarStack().iterator();
 //        
@@ -445,15 +477,30 @@ public class PathXMiniGame extends MiniGame {
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(HOME_GAME_BUTTON_TYPE).setEnabled(true);
 
+        guiButtons.get(BUTTON_CLOSE_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(BUTTON_CLOSE_TYPE).setEnabled(true);
+
+        
+        //ENABLE LEVEL INFO DIALOG
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setEnabled(true);
+
+       
+       
+        guiButtons.get(ABUTTON_PAUSE_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(ABUTTON_PAUSE_TYPE).setEnabled(true);
+
         // CHANGE THE BACKGROUND STATE
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_SCREEN_STATE);
         currentScreenState = GAME_SCREEN_STATE;
 
         // PLAY THE GAMEPLAY SCREEN SONG
+        if(!checkedMusic) {
         audio.stop(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString());
         audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
+        }
 
-        JOptionPane.showMessageDialog(null, "Info About " + currentLevel.getLevelName());
+        //JOptionPane.showMessageDialog(null, "Info About " + currentLevel.getLevelName());
         //JOptionPane.showMessageDialog(null, "pathX Info Dialog", "<Info About Level 1>", JOptionPane.CLOSED_OPTION);
         //JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "pathX Info Dialog", JOptionPane.CLOSED_OPTION);
     }
@@ -464,17 +511,38 @@ public class PathXMiniGame extends MiniGame {
      */
     public void switchToHomeScreen() {
 
-        // WE'RE GOING TO USE IMAGES FOR ALL BUTTONS,
-        // SO WE'LL SET THIS AS THE MARGIN FOR ALL OF THEM
-        //marginlessInsets = new Insets(0, 0, 0, 0);
-        //DISABLE MAP
-//        if(isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
-//        guiDecor.get(MAP_GAME_IMAGE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
-//        guiDecor.get(MAP_GAME_IMAGE_TYPE).setEnabled(false);
-//        }
-         ((PathXDataModel)data).enableCars(false);
+        
+//        isGameStarted = false;
+//         ((PathXDataModel)data).enableCars(false);
         //DISABLE ARROWS
         if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) || isCurrentScreenState(GAME_SCREEN_STATE)) {
+            
+           guiButtons.get(ABUTTON_PAUSE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(ABUTTON_PAUSE_TYPE).setEnabled(false);
+           
+            isGameStarted = false;
+            isDialogClosed = false;
+            
+            ((PathXDataModel) data).resetCars();
+
+            ((PathXDataModel) data).enableCars(false);
+
+            PathXDataModel.n = 0;
+            PathXDataModel.m = 1;
+
+            guiButtons.get(BUTTON_START_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+            guiButtons.get(BUTTON_START_TYPE).setEnabled(false);
+
+            if (!guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).getState().equals(INVISIBLE_STATE)) {
+
+                //DISABLE LEVEL INFO DIALOG
+                guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+                guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setEnabled(false);
+
+                guiButtons.get(BUTTON_CLOSE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+                guiButtons.get(BUTTON_CLOSE_TYPE).setEnabled(false);
+
+            }
             ((PathXDataModel)data).enableCars(false);
             guiButtons.get(UP_ARROW_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
             guiButtons.get(UP_ARROW_BUTTON_TYPE).setEnabled(false);
@@ -536,9 +604,13 @@ public class PathXMiniGame extends MiniGame {
         // AND UPDATE THE DATA GAME STATE
         data.setGameState(MiniGameState.NOT_STARTED);
         // PLAY THE WELCOME SCREEN SONG
+        if(!checkedMusic) {
         audio.play(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString(), true);
         audio.stop(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString());
         audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+        audio.stop(PathXPropertyType.SONG_CUE_HELP_SCREEN.toString());
+        audio.stop(PathXPropertyType.SONG_CUE_SETTINGS_SCREEN.toString());
+        }
     }
 
     public void switchToHelpScreen() {
@@ -564,8 +636,10 @@ public class PathXMiniGame extends MiniGame {
         currentScreenState = HELP_SCREEN_STATE;
 
         // PLAY THE GAMEPLAY SCREEN SONG
+        if(!checkedMusic) {
         audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
-        audio.play(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString(), true);
+        audio.play(PathXPropertyType.SONG_CUE_HELP_SCREEN.toString(), true);
+        }
 
     }
 
@@ -606,8 +680,10 @@ public class PathXMiniGame extends MiniGame {
         currentScreenState = SETTINGS_SCREEN_STATE;
 
         // PLAY THE GAMEPLAY SCREEN SONG
+        if(!checkedMusic) {
         audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
-        audio.play(PathXPropertyType.SONG_CUE_LEVEL_SCREEN.toString(), true);
+        audio.play(PathXPropertyType.SONG_CUE_SETTINGS_SCREEN.toString(), true);
+        }
     }
 
     // METHODS OVERRIDDEN FROM MiniGame
@@ -634,9 +710,17 @@ public class PathXMiniGame extends MiniGame {
             loadAudioCue(PathXPropertyType.AUDIO_CUE_CHEAT);
             loadAudioCue(PathXPropertyType.AUDIO_CUE_UNDO);
             loadAudioCue(PathXPropertyType.AUDIO_CUE_WIN);
+            
+            loadAudioCue(PathXPropertyType.AUDIO_CUE_COLLISION);
+            
             loadAudioCue(PathXPropertyType.SONG_CUE_MENU_SCREEN);
             loadAudioCue(PathXPropertyType.SONG_CUE_LEVEL_SCREEN);
             loadAudioCue(PathXPropertyType.SONG_CUE_GAME_SCREEN);
+            
+            loadAudioCue(PathXPropertyType.SONG_CUE_SETTINGS_SCREEN);
+            loadAudioCue(PathXPropertyType.SONG_CUE_HELP_SCREEN);
+            
+            
 
             // PLAY THE WELCOME SCREEN SONG
             audio.play(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString(), true);
@@ -771,40 +855,6 @@ public class PathXMiniGame extends MiniGame {
             x += GAME_BUTTON_WIDTH + GAME_BUTTON_MARGIN; // edits space between buttons
         }
 
-        //VIEWPORT MAP INTIT
-//        String mapImage = props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_MAP);
-//        sT = new SpriteType(MAP_GAME_IMAGE_TYPE);
-//        img = loadImage(imgPath + mapImage);
-//        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
-//        s = new Sprite(sT, x, 0, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
-//        guiDecor.put(MAP_GAME_IMAGE_TYPE, s);
-//        viewport.setGameWorldSize(50, 50);
-//         viewport.setScreenSize(100, 100);
-//         //viewport.setViewportSize(50, 50);
-//        viewport.setViewportSize(100, 100);
-//        
-//         System.out.println("VWPRT MAX X: " + viewport.getScreenWidth());
-//         System.out.println("VWPRT MAX Y: " + viewport.getMaxViewportY());
-//         System.out.println("VWPRT MIN X: " + viewport.getMinViewportX());
-//         System.out.println("VWPRT MIN Y: " + viewport.getMinViewportY());
-        //Specials Menu Row 1
-//        ArrayList<String> specialsRow1 = props.getPropertyOptionsList(PathXPropertyType.SPECIALS_IMAGE_OPTIONS_R1);
-//        
-//        //ArrayList<String> specialsRow1MouseOverImage = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS);
-//        float totalWidth2 = specialsRow1.size() * (LEVEL_BUTTON_WIDTH + LEVEL_BUTTON_MARGIN + 30) - LEVEL_BUTTON_MARGIN - 35; //edit constants
-//        //Viewport viewport = data.getViewport();
-//        x = (viewport.getScreenWidth() - totalWidth2) / 2.0f;
-//        for (int i = 0; i < specialsRow1.size(); i++) {
-//            sT = new SpriteType(SPECIAL_SELECT_BUTTON_TYPE);
-//            img = loadImageWithColorKey(imgPath + specialsRow1.get(i), COLOR_KEY);
-//            sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
-//            //img = loadImageWithColorKey(imgPath + menuMouseOverImageNames.get(i), COLOR_KEY);
-//            //sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
-//            s = new Sprite(sT, x, LEVEL_BUTTON_Y + 10, 0, 0, PathXCarState.VISIBLE_STATE.toString());
-//            guiButtons.put(specialsRow1.get(i), s);
-//           // guiButtons.put(menuMouseOverImageNames.get(i), s);
-//            x += LEVEL_BUTTON_WIDTH + 30 + LEVEL_BUTTON_MARGIN - 5; // edit dimensions
-//        }
         // ADD THE CONTROLS ALONG THE NORTH OF THE GAME SCREEN
         //PUT THE X BUTTON
         String exitButton = props.getProperty(PathXPropertyType.IMAGE_EXIT_HOME_SCREEN);
@@ -899,6 +949,64 @@ public class PathXMiniGame extends MiniGame {
         s = new Sprite(sT, MUSIC_CHECK_BOX_X/*x coordinates*/, MUSIC_CHECK_BOX_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(MUSIC_CHECK_BOX_TYPE, s);
 
+          /*<------LEVEL INFO DIALOG------>*/
+        
+        //TRY AGAIN
+        String buttonTryAgain = props.getProperty(PathXPropertyType.BUTTON_TRY_AGAIN);
+        sT = new SpriteType(BUTTON_TRY_AGAIN_TYPE);
+        img = loadImage(imgPath + buttonTryAgain);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, 120/*x coordinates*/, 100/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(BUTTON_TRY_AGAIN_TYPE, s);
+        //LEAVE TOWN
+        String buttonLeaveTown = props.getProperty(PathXPropertyType.BUTTON_LEAVE_TOWN);
+        sT = new SpriteType(BUTTON_LEAVE_TOWN_TYPE);
+        img = loadImage(imgPath + buttonLeaveTown);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, 120/*x coordinates*/, 100/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(BUTTON_LEAVE_TOWN_TYPE, s);
+        //START
+        String buttonStart = props.getProperty(PathXPropertyType.BUTTON_START);
+        sT = new SpriteType(BUTTON_START_TYPE);
+        img = loadImage(imgPath + buttonStart);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, HOME_BUTTON_X - 90, HOME_BUTTON_Y/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(BUTTON_START_TYPE, s);
+        //CLOSE
+        String buttonClose = props.getProperty(PathXPropertyType.BUTTON_CLOSE);
+        sT = new SpriteType(BUTTON_CLOSE_TYPE);
+        img = loadImage(imgPath + buttonClose);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, 340/*x coordinates*/, 335/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(BUTTON_CLOSE_TYPE, s);
+        
+        //LEVEL INFO DIALOG TEMPLATE
+        String infoDialogBox = props.getProperty(PathXPropertyType.IMAGE_INFO_DIALOG);
+        sT = new SpriteType(INFO_DIALOG_IMAGE_TYPE);
+        img = loadImage(imgPath + infoDialogBox);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, 120/*x coordinates*/, 100/*y coordinates*/, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiDialogs.put(INFO_DIALOG_IMAGE_TYPE, s);
+          
+        //PAUSE/RESUME BUTTON
+        String buttonPause = props.getProperty(PathXPropertyType.BUTTON_PAUSE);
+        sT = new SpriteType(ABUTTON_PAUSE_TYPE);
+        img = loadImage(imgPath + buttonPause);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        String buttonResume = props.getProperty(PathXPropertyType.BUTTON_RESUME);
+        img = loadImage(imgPath + buttonResume);
+        sT.addState(PathXCarState.SELECTED_STATE.toString(), img);
+        s = new Sprite(sT, (LEFT_BUTTON_X + RIGHT_BUTTON_X)/2 - 3, (LEFT_BUTTON_Y + RIGHT_BUTTON_Y)/2 + 3, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(ABUTTON_PAUSE_TYPE, s);
+        
+        
+   
         // THEN THE TILES STACKED TO THE TOP LEFT
         //((PathXDataModel) data).initEnemyCars(currentLevel.getNumPolice(), currentLevel.getNumZombies(), currentLevel.getNumBandits());
     }
@@ -926,6 +1034,7 @@ public class PathXMiniGame extends MiniGame {
         String level1SelectButtonWhite = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_WHITE);
         img = loadImage(imgPath + level1SelectButtonWhite);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         //GREEN STATE
         String level1SelectButtonGreen = props.getProperty(PathXPropertyType.IMAGE_LEVEL_SELECT_GREEN);
         img = loadImage(imgPath + level1SelectButtonGreen);
@@ -1475,6 +1584,13 @@ public class PathXMiniGame extends MiniGame {
             }
         });
 
+        //PAUSE/RESUME EVENT HANDLER
+        guiButtons.get(ABUTTON_PAUSE_TYPE).setActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                eventHandler.respondToPauseRequest();
+            }
+        });
+        
         //<--SCROLLING EVENT HANDLERS-->
         //UP SCROLL BUTTON EVENT HANDLER
         guiButtons.get(UP_ARROW_BUTTON_TYPE).setActionListener(new ActionListener() {
@@ -1501,6 +1617,24 @@ public class PathXMiniGame extends MiniGame {
             }
         });
 
+        
+        
+        /*<----LEVEL DIALOG BUTTON HANDLERS----->*/
+        //LEFT SCROLL BUTTON EVENT HANDLER
+        guiButtons.get(BUTTON_CLOSE_TYPE).setActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                eventHandler.respondToCloseDialogRequest();
+            }
+        });
+        
+        //START BUTTON EVENT HANDLER
+         guiButtons.get(BUTTON_START_TYPE).setActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                eventHandler.respondToStartRequest();
+            }
+        });
+        
+        
 ////     //   
         // BACK EVENT HANDLER
         //   guiButtons.get(BACK_BUTTON_TYPE).setActionListener(new ActionListener(){
@@ -1592,43 +1726,33 @@ public class PathXMiniGame extends MiniGame {
                 }
             }
 
-            /*  
-             //     props.getPropertyOptionsList(PathXPropertyType.values()
-             ArrayList<SortingHatTile> tilesToSort;
-                    
-             tilesToSort =  ((PathXDataModel)data).getTilesToSort();
-            
-            
-                    
-             //  Iterator<Sprite> titlesIt = (SortingHatDateModel)data.ge
-             Iterator<SortingHatTile>  titlesIt = tilesToSort.iterator();
-                    
-             while (titlesIt.hasNext())
-             {
-             Sprite titles = titlesIt.next();
-          
-             // ARE WE ENTERING A BUTTON?
-             if (titles.getState().equals(PathXCarState.VISIBLE_STATE.toString()))
-             {
-             if (titles.containsPoint(data.getLastMouseX(), data.getLastMouseY()))
-             {
-             titles.setState(PathXCarState.MOUSE_OVER_STATE.toString());
-             // System.out.println(titles.getState()+" section 1");
-             }
-             }
-             // ARE WE EXITING A BUTTON?
-             else if (titles.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
-             {
-             if (!titles.containsPoint(data.getLastMouseX(), data.getLastMouseY()))
-             {
-             titles.setState(PathXCarState.VISIBLE_STATE.toString());
-             //   System.out.println(titles.getState()+" section ");
-             }
-             }
-             }*/
+            if (isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) && !levelList.isEmpty()) {
+                //  System.out.println("lastMouseX: " + (data.getLastMouseX() - 11 - sx1));
+                // System.out.println("lastMouseY: " + (data.getLastMouseY() - 13 - sy1));
+
+                double xAdj = (data.getLastMouseX() - 10);
+                double yAdj = (data.getLastMouseY() - 10);
+
+                for (int i = 0; i < levelList.size(); i++) {
+                    if ((xAdj + 5) >= levelList.get(i).getXCoordinate()
+                            && (xAdj - 5) <= levelList.get(i).getXCoordinate()
+                            && (yAdj + 5) >= levelList.get(i).getYCoordinate()
+                            && (yAdj - 5) <= levelList.get(i).getYCoordinate()) {
+                        //System.out.println("SET IT TRUE");
+                        PathXPanel.setLevel(i + 1);
+                        PathXPanel.setLevelButtonHover(true);
+                        return;
+                    } else {
+                        PathXPanel.setLevelButtonHover(false);
+                    }
+                }
+
+            }
+
         }
     }
 
+    
     public PathXEventHandler getEventHandler() {
         return eventHandler;
     }
@@ -1640,11 +1764,11 @@ public class PathXMiniGame extends MiniGame {
     public void scrollToTheNorth() {
        
         if(currentScreenState.equals(LEVEL_SELECT_SCREEN_STATE)) {
-        System.out.println("Scrolling Up");
+        //System.out.println("Scrolling Up");
         eventHandler.adjustScrollScreen(UP_BUTTON_DIRECTION);
         }
         else if(currentScreenState.equals(GAME_SCREEN_STATE)) {
-             System.out.println("MADE IT");
+          //   System.out.println("MADE IT");
             eventHandler.adjustGameScrollScreen(UP_BUTTON_DIRECTION);
         }
     }
@@ -1652,39 +1776,67 @@ public class PathXMiniGame extends MiniGame {
     public void scrollToTheSouth() {
         
         if(currentScreenState.equals(LEVEL_SELECT_SCREEN_STATE)) {
-        System.out.println("Scrolling Down");
+       // System.out.println("Scrolling Down");
         eventHandler.adjustScrollScreen(DOWN_BUTTON_DIRECTION);
         }
         else  if(currentScreenState.equals(GAME_SCREEN_STATE)) {
-             System.out.println("MADE IT");
+           //  System.out.println("MADE IT");
              eventHandler.adjustGameScrollScreen(DOWN_BUTTON_DIRECTION);
         }
     }
 
     public void scrollToTheEast() {
           if(currentScreenState.equals(LEVEL_SELECT_SCREEN_STATE)) {
-        System.out.println("Scrolling Right");
+       // System.out.println("Scrolling Right");
         eventHandler.adjustScrollScreen(RIGHT_BUTTON_DIRECTION);
           }
           else if(currentScreenState.equals(GAME_SCREEN_STATE)) {
-               System.out.println("MADE IT");
+             //  System.out.println("MADE IT");
               eventHandler.adjustGameScrollScreen(RIGHT_BUTTON_DIRECTION);
           }
     }
 
     public void scrollToTheWest() {
         if(currentScreenState.equals(LEVEL_SELECT_SCREEN_STATE)) {
-        System.out.println("Scrolling Left");
+       // System.out.println("Scrolling Left");
         eventHandler.adjustScrollScreen(LEFT_BUTTON_DIRECTION);
         }
         else if(currentScreenState.equals(GAME_SCREEN_STATE)) {
-            System.out.println("MADE IT");
+          //  System.out.println("MADE IT");
             eventHandler.adjustGameScrollScreen(LEFT_BUTTON_DIRECTION);
         }
     }
 
-//    public static boolean checkedMusic = false;
-//    public static boolean checkedSound = false;
+    public static boolean isGameStarted = false;
+    
+    public void setGameToStart() {
+        isGameStarted = true;
+        ((PathXDataModel) data).playBanditAnimation();
+        PathXEventHandler.xCoordinates.clear();
+        PathXEventHandler.yCoordinates.clear();
+        guiButtons.get(BUTTON_START_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(BUTTON_START_TYPE).setEnabled(false);
+    }
+    
+    public static boolean isPaused = false;
+    
+    public void togglePause() {
+        //IF THE PAUSE HAS BEEN HIT THEN SET TO PLAY IMAGE
+        System.out.println("MADE IT TO togglePause");
+
+        if (isPaused) {
+            System.out.println("SHOW PAUSE BUTTON");
+            guiButtons.get(ABUTTON_PAUSE_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+            guiButtons.get(ABUTTON_PAUSE_TYPE).setEnabled(true);
+            isPaused = false;
+        } else {
+            System.out.println("SHOW PLAY BUTTON");
+            guiButtons.get(ABUTTON_PAUSE_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+            guiButtons.get(ABUTTON_PAUSE_TYPE).setEnabled(true);
+            isPaused = true;
+        }
+    }
+    
     public void toggleCheckBox(String boxType) {
         //IF THE BOX HAS NOT BEEN CHECK
         System.out.println("MADE IT TO CHECK BOX");
@@ -1699,18 +1851,34 @@ public class PathXMiniGame extends MiniGame {
                 guiButtons.get(SOUND_CHECK_BOX_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
                 guiButtons.get(SOUND_CHECK_BOX_TYPE).setEnabled(true);
                 checkedSound = true;
+               
             }
         } else {
             if (checkedMusic) {
                 guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
                 guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(true);
                 checkedMusic = false;
+                audio.play(PathXPropertyType.SONG_CUE_SETTINGS_SCREEN.toString(), true);
             } else {
                 guiButtons.get(MUSIC_CHECK_BOX_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
                 guiButtons.get(MUSIC_CHECK_BOX_TYPE).setEnabled(true);
                 checkedMusic = true;
+                audio.stop(PathXPropertyType.SONG_CUE_SETTINGS_SCREEN.toString());
             }
         }
+    }
+
+    public static boolean isDialogClosed = false;
+    
+    public void setDialogInvisible() {
+        //DISABLE LEVEL INFO DIALOG
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiDialogs.get(INFO_DIALOG_IMAGE_TYPE).setEnabled(false);
+
+        guiButtons.get(BUTTON_CLOSE_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(BUTTON_CLOSE_TYPE).setEnabled(false);
+        
+        isDialogClosed = true;
     }
 
 }

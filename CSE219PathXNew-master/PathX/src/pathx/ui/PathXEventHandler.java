@@ -324,35 +324,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
                       double incrementY = levelNodeList.get(i).getYCoordinate() + LEVEL_BUTTONS_Y_SCROLL_UP;
                       levelNodeList.get(i).setYCoordinate(incrementY);  
                     }
-                    //System.out.println("levelList size: " + levelNodeList.size());
-                    //levels y up
-//                    yButtonLevel1 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel2 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel3 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel4 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel5 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel6 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel7 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel8 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel9 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel10 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel11 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel12 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel13 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel14 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel15 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel16 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel17 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel18 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel19 += LEVEL_BUTTONS_Y_SCROLL_UP;
-//                    yButtonLevel20 += LEVEL_BUTTONS_Y_SCROLL_UP;
-                  //   for (int i = 0; i < levelNodeList.size(); i++) {
-                   //     System.out.println("Level Node List Y coordinate for "+i+": "+levelNodeList.get(i).getYCoordinate());
-                      //double incrementY = levelNodeList.get(i).getYCoordinate()+LEVEL_BUTTONS_Y_SCROLL_UP;
-                      //levelNodeList.get(i).setYCoordinate(incrementY - 1000);  
-                    //  System.out.println("Coordinate " + i + "has been modified by" +
-                      //        incrementY + " to now be " + levelNodeList.get(i).getYCoordinate());
-                  //  }
+                 
                 }
                 break;
             case DOWN_BUTTON_DIRECTION: //min(sy1,sy2)
@@ -364,29 +336,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
                     for(int i = 0; i < levelNodeList.size(); i++) {
                       double incrementY = levelNodeList.get(i).getYCoordinate()-20;
                       levelNodeList.get(i).setYCoordinate(incrementY);  
-                    }
-
-                    //level y down
-//                    yButtonLevel1 -= 20;
-//                    yButtonLevel2 -= 20;
-//                    yButtonLevel3 -= 20;
-//                    yButtonLevel4 -= 20;
-//                    yButtonLevel5 -= 20;
-//                    yButtonLevel6 -= 20;
-//                    yButtonLevel7 -= 20;
-//                    yButtonLevel8 -= 20;
-//                    yButtonLevel9 -= 20;
-//                    yButtonLevel10 -= 20;
-//                    yButtonLevel11 -= 20;
-//                    yButtonLevel12 -= 20;
-//                    yButtonLevel13 -= 20;
-//                    yButtonLevel14 -= 20;
-//                    yButtonLevel15 -= 20;
-//                    yButtonLevel16 -= 20;
-//                    yButtonLevel17 -= 20;
-//                    yButtonLevel18 -= 20;
-//                    yButtonLevel19 -= 20;
-//                    yButtonLevel20 -= 20;
+                    }          
                 }
                 break;
             case RIGHT_BUTTON_DIRECTION: //max(sx1,sx2)
@@ -399,28 +349,6 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
                       double decrementX = levelNodeList.get(i).getXCoordinate()-20;
                       levelNodeList.get(i).setXCoordinate(decrementX);  
                     }
-
-                    //level x right
-//                    xButtonLevel1 -= 20;
-//                    xButtonLevel2 -= 20;
-//                    xButtonLevel3 -= 20;
-//                    xButtonLevel4 -= 20;
-//                    xButtonLevel5 -= 20;
-//                    xButtonLevel6 -= 20;
-//                    xButtonLevel7 -= 20;
-//                    xButtonLevel8 -= 20;
-//                    xButtonLevel9 -= 20;
-//                    xButtonLevel10 -= 20;
-//                    xButtonLevel11 -= 20;
-//                    xButtonLevel12 -= 20;
-//                    xButtonLevel13 -= 20;
-//                    xButtonLevel14 -= 20;
-//                    xButtonLevel15 -= 20;
-//                    xButtonLevel16 -= 20;
-//                    xButtonLevel17 -= 20;
-//                    xButtonLevel18 -= 20;
-//                    xButtonLevel19 -= 20;
-//                    xButtonLevel20 -= 20;
                 }
                 break;
             case LEFT_BUTTON_DIRECTION: //min(sx1,sx2)
@@ -433,33 +361,10 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
                       double incrementX = levelNodeList.get(i).getXCoordinate()+20;
                       levelNodeList.get(i).setXCoordinate(incrementX);  
                     }
-
-                    //level x left
-//                    xButtonLevel1 += 20;
-//                    xButtonLevel2 += 20;
-//                    xButtonLevel3 += 20;
-//                    xButtonLevel4 += 20;
-//                    xButtonLevel5 += 20;
-//                    xButtonLevel6 += 20;
-//                    xButtonLevel7 += 20;
-//                    xButtonLevel8 += 20;
-//                    xButtonLevel9 += 20;
-//                    xButtonLevel10 += 20;
-//                    xButtonLevel11 += 20;
-//                    xButtonLevel12 += 20;
-//                    xButtonLevel13 += 20;
-//                    xButtonLevel14 += 20;
-//                    xButtonLevel15 += 20;
-//                    xButtonLevel16 += 20;
-//                    xButtonLevel17 += 20;
-//                    xButtonLevel18 += 20;
-//                    xButtonLevel19 += 20;
-//                    xButtonLevel20 += 20;
                 }
                 break;
         }
-        //game.updateButtons();
-        //((PathXMiniGame)game).getPanel().renderMapScreen();
+
     }
 
     public void respondToScrollRequest(String arrowType) {
@@ -499,6 +404,10 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         game.reset();
     }
 
+    public void respondToStartRequest() {
+        game.setGameToStart();
+    }
+    
     public void respondToBackRequest() {
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
         //  if (game.getDataModel().inProgress())
@@ -575,6 +484,10 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         // game.displayStats();        
     }
 
+    public void respondToCloseDialogRequest() {
+        game.setDialogInvisible();
+    }
+    
     /**
      * Called when the user presses a key on the keyboard.
      * @param keyCode
@@ -623,7 +536,14 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
                 playerX++;
             } 
         }
-   
+
+    }
+
+    /**
+     * Called when the user presses the pause/resume button
+     */
+    public void respondToPauseRequest() {
+        game.togglePause();
     }
 
     /**

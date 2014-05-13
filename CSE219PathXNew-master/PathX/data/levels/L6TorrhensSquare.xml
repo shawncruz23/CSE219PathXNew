@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L6TorrhensSquare.png" name="L6TorrhensSquare">
      <intersections>
-          <intersection id="0" open="true" x="41" y="234"/>
-          <intersection id="0" open="true" x="728" y="236"/>
-          <intersection id="0" open="true" x="234" y="71"/>
-          <intersection id="0" open="true" x="183" y="238"/>
-          <intersection id="0" open="false" x="214" y="385"/>
-          <intersection id="0" open="false" x="382" y="27"/>
-          <intersection id="0" open="true" x="390" y="228"/>
-          <intersection id="0" open="true" x="381" y="453"/>
-          <intersection id="0" open="true" x="546" y="71"/>
-          <intersection id="0" open="true" x="598" y="236"/>
-          <intersection id="0" open="true" x="555" y="393"/>
+          <intersection id="0" open="true" x="168" y="254"/>
+          <intersection id="0" open="true" x="1111" y="257"/>
+          <intersection id="0" open="true" x="432" y="88"/>
+          <intersection id="0" open="true" x="335" y="259"/>
+          <intersection id="0" open="false" x="394" y="459"/>
+          <intersection id="0" open="false" x="615" y="20"/>
+          <intersection id="0" open="true" x="612" y="260"/>
+          <intersection id="0" open="true" x="619" y="529"/>
+          <intersection id="0" open="true" x="843" y="93"/>
+          <intersection id="0" open="true" x="921" y="259"/>
+          <intersection id="0" open="true" x="839" y="466"/>
      </intersections>
      <roads>
           <road int_id1="2" int_id2="3" one_way="false" speed_limit="100"/>
@@ -38,8 +38,8 @@
      </roads>
      <start_intersection id="0" image="LocationStart.png"/>
      <destination_intersection id="1" image="LocationDestination.png"/>
-     <money amount="0"/>
-     <police num="0"/>
-     <bandits num="0"/>
-     <zombies num="0"/>
+     <money amount="200"/>
+     <police num="2"/>
+     <bandits num="2"/>
+     <zombies num="2"/>
 </level>

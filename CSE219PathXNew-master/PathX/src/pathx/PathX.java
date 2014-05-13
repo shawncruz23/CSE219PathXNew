@@ -87,6 +87,8 @@ public class PathX {
         IMAGE_BACKGROUND_HELP,
         IMAGE_BACKGROUND_MAP,
         
+        IMAGE_INFO_DIALOG,
+        
         IMAGE_BACKGROUND_HELP_DESCRIPTION,
        
         IMAGE_UNCHECKED_BOX,
@@ -135,6 +137,8 @@ public class PathX {
         AUDIO_CUE_UNDO,
         AUDIO_CUE_WIN,
         
+        AUDIO_CUE_COLLISION,
+        
         SONG_CUE_GAME_SCREEN,
         SONG_CUE_MENU_SCREEN,
         SONG_CUE_LEVEL_SCREEN,
@@ -176,6 +180,14 @@ public class PathX {
        IMAGE_POLICE_CAR,
        IMAGE_ZOMBIE_CAR,
        IMAGE_BANDIT_CAR,
+       
+       BUTTON_TRY_AGAIN,
+       BUTTON_LEAVE_TOWN,
+       BUTTON_START,
+       BUTTON_CLOSE,
+       
+       BUTTON_PAUSE,
+       BUTTON_RESUME
        
     }
 }

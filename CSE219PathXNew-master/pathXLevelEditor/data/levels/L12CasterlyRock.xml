@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L12CasterlyRock.png" name="L12CasterlyRock">
      <intersections>
-          <intersection id="0" open="true" x="56" y="233"/>
+          <intersection id="0" open="true" x="475" y="164"/>
           <intersection id="0" open="true" x="943" y="234"/>
           <intersection id="0" open="true" x="190" y="235"/>
           <intersection id="0" open="true" x="106" y="401"/>
@@ -20,7 +20,6 @@
           <intersection id="0" open="false" x="650" y="531"/>
      </intersections>
      <roads>
-          <road int_id1="0" int_id2="2" one_way="true" speed_limit="30"/>
           <road int_id1="2" int_id2="4" one_way="false" speed_limit="30"/>
           <road int_id1="4" int_id2="3" one_way="false" speed_limit="10"/>
           <road int_id1="3" int_id2="9" one_way="false" speed_limit="30"/>
@@ -33,7 +32,6 @@
           <road int_id1="2" int_id2="13" one_way="false" speed_limit="30"/>
           <road int_id1="13" int_id2="15" one_way="false" speed_limit="30"/>
           <road int_id1="15" int_id2="12" one_way="true" speed_limit="30"/>
-          <road int_id1="12" int_id2="14" one_way="false" speed_limit="30"/>
           <road int_id1="10" int_id2="6" one_way="false" speed_limit="30"/>
           <road int_id1="6" int_id2="11" one_way="false" speed_limit="30"/>
           <road int_id1="11" int_id2="12" one_way="false" speed_limit="30"/>
@@ -44,6 +42,7 @@
           <road int_id1="14" int_id2="2" one_way="false" speed_limit="100"/>
           <road int_id1="14" int_id2="5" one_way="true" speed_limit="30"/>
           <road int_id1="10" int_id2="1" one_way="true" speed_limit="30"/>
+          <road int_id1="0" int_id2="12" one_way="true" speed_limit="30"/>
      </roads>
      <start_intersection id="0" image="LocationStart.png"/>
      <destination_intersection id="1" image="LocationDestination.png"/>

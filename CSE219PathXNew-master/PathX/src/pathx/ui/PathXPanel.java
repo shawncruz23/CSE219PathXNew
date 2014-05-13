@@ -183,6 +183,16 @@ public class PathXPanel extends JPanel {
 
     private static int toggle = 0;
    
+    public static boolean levelButtonHover = false;
+       
+    public static boolean getLevelButtonHover() {
+        return levelButtonHover;
+    }
+    
+    public static void setLevelButtonHover(boolean value) {
+        levelButtonHover = value;
+    }
+    
     /**
      * This is where rendering starts. This method is called each frame, and the
      * entire game application is rendered here with the help of a number of
@@ -209,7 +219,13 @@ public class PathXPanel extends JPanel {
             renderBackground(g);
 
             if (((PathXMiniGame) game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+              
                 renderMapScreen(g);
+                
+                //FIX UP FOR REACH LEVEL, ETC. GOOD LUCK
+                  if(levelButtonHover) {
+                    renderLevelInfo(g);
+                }
             }
 
             if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
@@ -294,6 +310,12 @@ public class PathXPanel extends JPanel {
             }
             
              renderGUIControls(g);
+             
+             if(((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)
+                     && !PathXMiniGame.isDialogClosed) {
+                 renderLevelInfoDialog(g);
+             }
+             
 
             if (!data.notStarted()) {
                 // AND THE TIME AND TILES STATS
@@ -307,6 +329,103 @@ public class PathXPanel extends JPanel {
             game.endUsingData();
         }
     }
+   
+    public static int levelNumber;
+    
+    public static void setLevel(int levelNum) {
+        //APPROPRIATE LEVEL TO RENDER
+        levelNumber = levelNum;
+    }
+
+    /**
+     * sifts through XML filename and returns
+     * the proper level name
+     * @param xmlFileName
+     * @return 
+     */
+    private String convertLevelName(String xmlFileName) {
+        if(xmlFileName.contains("CrastersKeep")) {
+            return "Craster's Keep";
+        }
+        else if(xmlFileName.contains("CastleBlack")) {
+            return "Castle Black";
+        }
+        else if(xmlFileName.contains("LastHearth")) {
+            return "Last Hearth";
+        }
+        else if(xmlFileName.contains("DeepwoodMotte")) {
+            return "Deepwood Motte";
+        }
+        else if(xmlFileName.contains("Winterfell")) {
+            return "Winterfell";
+        }
+        else if(xmlFileName.contains("TorrhensSquare")) {
+            return "Torrhens Square";
+        }
+        else if(xmlFileName.contains("WhiteHarbor")) {
+            return "White Harbor";
+        }
+        else if(xmlFileName.contains("GreywaterWatch")) {
+            return "Greywater Watch";
+        }
+        else if(xmlFileName.contains("TheTwins")) {
+            return "The Twins";
+        }
+        else if(xmlFileName.contains("TheEyrie")) {
+            return "The Eyrie";
+        }
+        else if(xmlFileName.contains("Riverrun")) {
+            return "Riverrun";
+        }
+        else if(xmlFileName.contains("CasterlyRock")) {
+            return "Casterly Rock";
+        }
+        else if(xmlFileName.contains("OldOak")) {
+            return "Old Oak";
+        }
+        else if(xmlFileName.contains("Highgarden")) {
+            return "Highgarden";
+        }
+        else if(xmlFileName.contains("OldOak")) {
+            return "Old Oak";
+        }
+        else if(xmlFileName.contains("OldTown")) {
+            return "Old Town";
+        }
+        else if(xmlFileName.contains("RedMountains")) {
+            return "Red Mountains";
+        }
+        else if(xmlFileName.contains("GhostHill")) {
+            return "Ghost Hill";
+        }
+        else if(xmlFileName.contains("Tarth")) {
+            return "Tarth";
+        }
+        else if(xmlFileName.contains("StormsEnd")) {
+            return "Storm's End";
+        }
+        else if(xmlFileName.contains("KingsLanding")) {
+            return "King's Landing";
+        }
+        return "Not a Valid Name";
+    }
+    
+     public void renderLevelInfoDialog(Graphics g) {
+         
+           // RENDER THE LEVEL BOUNTY
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+            g.setColor(Color.BLACK);
+
+            // RENDER LEVEL INFO
+            String levelBounty1 = "Succesfully loot " + convertLevelName(currentLevel.getLevelName()) + ".";
+            int x = 185;
+            int y = 220;
+            g.drawString(levelBounty1, x, y);
+          
+            String levelBounty2 = "Make your getaway to earn $" + currentLevel.getMoney();
+           
+            g.drawString(levelBounty2, x, y + 20);
+     }
     
     public void renderLevelStats(Graphics g) {
         
@@ -629,10 +748,16 @@ public class PathXPanel extends JPanel {
                 renderSprite(g, s);
             }
         }
+        
+         Collection<Sprite> dialogSprites = game.getGUIDialogs().values();
+        for (Sprite s : dialogSprites) {
+            renderSprite(g, s);
+        }
         //System.out.println("renderGUIControls was called");
         // AND NOW RENDER THE BUTTONS
         Collection<Sprite> buttonSprites = game.getGUIButtons().values();
         for (Sprite s : buttonSprites) {
+           
             renderSprite(g, s);
         }
             
@@ -658,97 +783,6 @@ public class PathXPanel extends JPanel {
 
     }
 
-    /*COORDINATES FOR MAP AND LEVEL SELECT BUTTONS*/
-//    //DESTINATION COORDINATES
-//    public static int dx1 = 10;
-//    public static int dy1 = 45;
-//    public static int dx2 = 630;
-//    public static int dy2 = 450;
-//    //SOURCE COORDINATES FOR MAP
-//    public static double sx1 = 0;
-//    public static double sy1 = 0;
-//    public static double sx2 = 620;
-//    public static double sy2 = 440;
-//    //Level 1: Craster's Keep
-//    //SOURCE COORDINATES LEVEL 1 BUTTON ON MAP
-//    public static int xButtonLevel1 = 326;
-//    public static int yButtonLevel1 = 75;
-//    //Level 2: Craster's Keep
-//    //SOURCE COORDINATES LEVEL 2 BUTTON ON MAP
-//    public static int xButtonLevel2 = 395;
-//    public static int yButtonLevel2 = 110;
-//    //Level 3: Last Hearth
-//    //SOURCE COORDINATES LEVEL 3 BUTTON ON MAP
-//    public static int xButtonLevel3 = 430;
-//    public static int yButtonLevel3 = 210;
-//    //Level 4: Deepwood Motte
-//    //SOURCE COORDINATES LEVEL 4 BUTTON ON MAP
-//    public static int xButtonLevel4 = 162;
-//    public static int yButtonLevel4 = 270;
-//    //Level 5: Winterfell
-//    //SOURCE COORDINATES LEVEL 5 BUTTON ON MAP
-//    public static int xButtonLevel5 = 280;
-//    public static int yButtonLevel5 = 348;
-//    //Level 6: Torrhen's Square
-//    //SOURCE COORDINATES LEVEL 6 BUTTON ON MAP
-//    public static int xButtonLevel6 = 201;
-//    public static int yButtonLevel6 = 398;
-//    //Level 7: White Harbor
-//    //SOURCE COORDINATES LEVEL 7 BUTTON ON MAP
-//    public static int xButtonLevel7 = 360;
-//    public static int yButtonLevel7 = 495;
-//    //Level 8: Grey Watch
-//    //SOURCE COORDINATES LEVEL 8 BUTTON ON MAP
-//    public static int xButtonLevel8 = 271;
-//    public static int yButtonLevel8 = 618;
-//    //Level 9: The Twins
-//    //SOURCE COORDINATES LEVEL 9 BUTTON ON MAP
-//    public static int xButtonLevel9 = 258;
-//    public static int yButtonLevel9 = 697;
-//    //Level 10: The Eyrie
-//    //SOURCE COORDINATES LEVEL 10 BUTTON ON MAP
-//    public static int xButtonLevel10 = 483;
-//    public static int yButtonLevel10 = 725;
-//    //Level 11: Riverrun
-//    //SOURCE COORDINATES LEVEL 11 BUTTON ON MAP
-//    public static int xButtonLevel11 = 256;
-//    public static int yButtonLevel11 = 824;
-//    //Level 12: Casterly Rock
-//    //SOURCE COORDINATES LEVEL 12 BUTTON ON MAP
-//    public static int xButtonLevel12 = 75;
-//    public static int yButtonLevel12 = 945;
-//    //Level 13: Old Oak
-//    //SOURCE COORDINATES LEVEL 13 BUTTON ON MAP
-//    public static int xButtonLevel13 = 80;
-//    public static int yButtonLevel13 = 1100;
-//    //Level 14: Highgarden
-//    //SOURCE COORDINATES LEVEL 14 BUTTON ON MAP
-//    public static int xButtonLevel14 = 180;
-//    public static int yButtonLevel14 = 1160;
-//    //Level 15: Old Town
-//    //SOURCE COORDINATES LEVEL 15 BUTTON ON MAP
-//    public static int xButtonLevel15 = 93;
-//    public static int yButtonLevel15 = 1270;
-//    //Level 16: Red Mountains
-//    //SOURCE COORDINATES LEVEL 16 BUTTON ON MAP
-//    public static int xButtonLevel16 = 320;
-//    public static int yButtonLevel16 = 1300;
-//    //Level 17: Ghost Hill
-//    //SOURCE COORDINATES LEVEL 17 BUTTON ON MAP
-//    public static int xButtonLevel17 = 580;
-//    public static int yButtonLevel17 = 1300;
-//    //Level 18: Tarth
-//    //SOURCE COORDINATES LEVEL 18 BUTTON ON MAP
-//    public static int xButtonLevel18 = 610;
-//    public static int yButtonLevel18 = 1075;
-//    //Level 19: Storm's End
-//    //SOURCE COORDINATES LEVEL 19 BUTTON ON MAP
-//    public static int xButtonLevel19 = 550;
-//    public static int yButtonLevel19 = 1109;
-//    //Level 20: King's Landing
-//    //SOURCE COORDINATES LEVEL 20 BUTTON ON MAP
-//    public static int xButtonLevel20 = 436;
-//    public static int yButtonLevel20 = 975;
     public static int control = 0;
     public static int counter = 0;
 
@@ -791,9 +825,7 @@ public class PathXPanel extends JPanel {
 
         // if(((PathXMiniGame)game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
         for (int i = 0; i < levelList.size(); i++) {
-//         System.out.println( "node(" + i + "): " + "(" 
-//                 + levelList.get(i).getXCoordinate() +  "," + levelList.get(i).getYCoordinate() + ")");
-//                
+//       
             if (levelList.get(i).getLevelKey() == 0) {
                 levelList.get(i).setLevelState(PathXCarState.WHITE_STATE.toString());
             } else if (levelList.get(i).getLevelKey() == 1) {
@@ -811,6 +843,7 @@ public class PathXPanel extends JPanel {
             buttonImg = game.getGUIButtons().get(levelList.get(i).getLeveliD()).getSpriteType().getStateImage(levelList.get(i).getLevelState());
             if ((levelList.get(i).getXCoordinate() > 10) && (levelList.get(i).getXCoordinate() < 630)
                     && (levelList.get(i).getYCoordinate() > 45) && (levelList.get(i).getYCoordinate() < 435)) {
+                
                 game.getGUIButtons().get(levelList.get(i).getLeveliD()).setX((float) levelList.get(i).getXCoordinate());
                 game.getGUIButtons().get(levelList.get(i).getLeveliD()).setY((float) levelList.get(i).getYCoordinate());
                 g.drawImage(buttonImg, (int) levelList.get(i).getXCoordinate(), (int) levelList.get(i).getYCoordinate(), null);
@@ -1121,7 +1154,7 @@ public class PathXPanel extends JPanel {
             g.drawImage(img, (int) s.getX() + (int)sourceX1, (int) s.getY() + (int)sourceY1, bgST.getWidth(), bgST.getHeight(), null);
             }
             else {
-            
+                
             SpriteType bgST = s.getSpriteType();
             Image img = bgST.getStateImage(s.getState());
             g.drawImage(img, (int) s.getX(), (int) s.getY(), bgST.getWidth(), bgST.getHeight(), null);
@@ -1130,6 +1163,111 @@ public class PathXPanel extends JPanel {
         
     }
 
+    public void renderLevelInfo(Graphics g) {
+        
+            // RENDER THE LEVEL BOUNTY
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+            //g.setColor(Color.CYAN);
+            g.setColor(LEVEL_DESCRIPTION_HEADER);
+
+            // RENDER LEVEL NAME/NUMBER
+            String messageTop = "Level #"+levelNumber+": " + getLevelNameByNumber(levelNumber);
+            int x = 85;
+            int y = 20;
+            g.drawString(messageTop, x, y);
+            
+            String messageBottom = "Bounty: $" + bountyAmount(levelNumber);
+            g.drawString(messageBottom, x, y + 20);
+    }
+    
+    public int bountyAmount(int i) {
+        if(i == 1) return 100;
+        else
+        if(i == 2) return 100;
+        else
+        if(i == 3) return 100;
+        else
+        if(i == 4) return 200;
+        else
+        if(i == 5) return 200;
+        else
+        if(i == 6) return 200;
+        else
+        if(i == 7) return 300;
+        else
+        if(i == 8) return 300;
+        else
+        if(i == 9) return 300;
+        else
+        if(i == 10) return 400;
+        else
+        if(i == 11) return 400;
+        else
+        if(i == 12) return 400;
+        else
+        if(i == 13) return 500;
+        else
+        if(i == 14) return 500;
+        else
+        if(i == 15) return 500;
+        else
+        if(i == 16) return 600;
+        else
+        if(i == 17) return 600;
+        else
+        if(i == 18) return 600;
+        else
+        if(i == 19) return 700;
+        else
+        if(i == 20) return 800;
+        
+        return 666;
+    }
+    
+    private String getLevelNameByNumber(int i) {
+        if(i == 1) return "Craster's Keep";
+        else
+        if(i == 2) return "Castle Black";
+        else
+        if(i == 3) return "Last Hearth";
+        else
+        if(i == 4) return "Deepwood Motte";
+        else
+        if(i == 5) return "Winterfell";
+        else
+        if(i == 6) return "Torrhen's Square";
+        else
+        if(i == 7) return "White Harbor";
+        else
+        if(i == 8) return "Greywater Watch";
+        else
+        if(i == 9) return "The Twins";
+        else
+        if(i == 10) return "The Eyrie";
+        else
+        if(i == 11) return "Riverrun";
+        else
+        if(i == 12) return "Casterly Rock";
+        else
+        if(i == 13) return "Old Oak";
+        else
+        if(i == 14) return "Highgarden";
+        else
+        if(i == 15) return "Old Town";
+        else
+        if(i == 16) return "Red Mountains";
+        else
+        if(i == 17) return "Ghost Hill";
+        else
+        if(i == 18) return "Tarth";
+        else
+        if(i == 19) return "Storm's End";
+        else
+        if(i == 20) return "King's Landing";
+        
+        return "Invalid input";
+    }
+    
     /**
      * This method renders grid lines in the game tile grid to help during
      * debugging.

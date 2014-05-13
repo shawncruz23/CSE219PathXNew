@@ -68,6 +68,7 @@ public class PathXConstants {
     public static final Color   HIGHLIGHTED_COLOR = Color.YELLOW;
     public static final Color   OPEN_INT_COLOR      = Color.GREEN;
     public static final Color   CLOSED_INT_COLOR    = Color.RED;
+     public static final Color  LEVEL_DESCRIPTION_HEADER    = new Color(0,220,255,255);
     
         // RENDERING SETTINGS
     public static final int INTERSECTION_RADIUS = 20;
@@ -165,7 +166,18 @@ public class PathXConstants {
     public static final String RIGHT_ARROW_BUTTON_TYPE = "RIGHT_ARROW_BUTTON_TYPE";
     public static final String LEFT_ARROW_BUTTON_TYPE = "LEFT_ARROW_BUTTON_TYPE";
     
+    //LEVEL DIALOG TYPES
+    public static final String BUTTON_TRY_AGAIN_TYPE = "BUTTON_TRY_AGAIN_TYPE";
+    public static final String BUTTON_LEAVE_TOWN_TYPE = "BUTTON_LEAVE_TOWN_TYPE";
+    public static final String BUTTON_START_TYPE = "BUTTON_START_TYPE";
+    public static final String BUTTON_CLOSE_TYPE = "BUTTON_CLOSE_TYPE";
+    
+    public static final String ZBUTTON_RESUME_TYPE = "ZBUTTON_RESUME_TYPE";
+    public static final String ABUTTON_PAUSE_TYPE = "ABUTTON_PAUSE_TYPE";
+    
     public static final String MAP_GAME_IMAGE_TYPE = "MAP_GAME_IMAGE_TYPE";
+    
+    public static final String INFO_DIALOG_IMAGE_TYPE = "INFO_DIALOG_IMAGE_TYPE";
     
     
     // WE'LL USE THESE STATES TO CONTROL SWITCHING BETWEEN THE FOUR

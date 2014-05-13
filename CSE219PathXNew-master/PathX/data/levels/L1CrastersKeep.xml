@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L1CrastersKeep.png" name="L1CrastersKeep">
      <intersections>
-          <intersection id="0" open="false" x="66" y="201"/>
-          <intersection id="0" open="true" x="997" y="229"/>
-          <intersection id="0" open="true" x="353" y="67"/>
-          <intersection id="0" open="true" x="345" y="397"/>
-          <intersection id="0" open="true" x="538" y="67"/>
-          <intersection id="0" open="true" x="542" y="260"/>
-          <intersection id="0" open="true" x="723" y="71"/>
-          <intersection id="0" open="true" x="721" y="392"/>
-          <intersection id="0" open="true" x="263" y="207"/>
-          <intersection id="0" open="true" x="839" y="227"/>
+          <intersection id="0" open="false" x="151" y="208"/>
+          <intersection id="0" open="true" x="1028" y="227"/>
+          <intersection id="0" open="true" x="389" y="55"/>
+          <intersection id="0" open="true" x="384" y="397"/>
+          <intersection id="0" open="true" x="576" y="53"/>
+          <intersection id="0" open="true" x="580" y="264"/>
+          <intersection id="0" open="true" x="769" y="53"/>
+          <intersection id="0" open="true" x="777" y="398"/>
+          <intersection id="0" open="true" x="299" y="206"/>
+          <intersection id="0" open="true" x="877" y="228"/>
      </intersections>
      <roads>
           <road int_id1="2" int_id2="4" one_way="false" speed_limit="30"/>

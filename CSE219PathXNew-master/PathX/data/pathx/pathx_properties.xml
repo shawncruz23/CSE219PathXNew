@@ -20,12 +20,17 @@
        
      	<property name="IMAGE_BACKGROUND_MAP"              value="./pathx/ImageLevelSelectMap.gif"></property>
         
+        <property name="IMAGE_INFO_DIALOG"              value="./pathx/InfoDialogTemplate.png"></property>
+        
         <!--GAME CARS-->
         <property name="IMAGE_PLAYER_CAR"              value="./pathx/CarPlayerButton.png"></property>
         <property name="IMAGE_POLICE_CAR"              value="./pathx/CarPoliceButton.png"></property>
         <property name="IMAGE_ZOMBIE_CAR"              value="./pathx/CarZombieButton.png"></property>
         <property name="IMAGE_BANDIT_CAR"              value="./pathx/CarBanditButton.png"></property>
-         
+        
+         <!--PAUSE/RESUME-->
+        <property name="BUTTON_PAUSE"              value="./pathx/BtnPause.png"></property>
+        <property name="BUTTON_RESUME"              value="./pathx/BtnPlay.png"></property>
         
         <!-- X BUTTON -->
         <property name="IMAGE_EXIT_HOME_SCREEN"             value="./pathx/ButtonX.png"></property>
@@ -51,6 +56,13 @@
         <property name="IMAGE_SCROLL_BOX"             value="./pathx/"></property>
         <property name="IMAGE_CHECKED_BAR"             value="./pathx/"></property>
         -->
+        
+        <!--DIALOG BUTTONS-->
+        <property name="BUTTON_TRY_AGAIN"              value="./pathx/DialogTryAgainButton.png"></property>
+        <property name="BUTTON_LEAVE_TOWN"             value="./pathx/DialogLeaveTownButton.png"></property>
+        <property name="BUTTON_START"                  value="./pathx/DialogStartButton.png"></property>
+        <property name="BUTTON_CLOSE"                  value="./pathx/DialogCloseButton.png"></property>
+          
         
          <!--WINDOW ICON-->
         <property name="IMAGE_WINDOW_ICON"                  value="./pathx/WindowIcon.png"></property>
@@ -102,10 +114,17 @@
         <property name="AUDIO_CUE_SELECT_TILE"              value="./pathx/SelectTile.wav"></property>
         <property name="AUDIO_CUE_UNDO"                     value="./pathx/Undo.wav"></property>
         <property name="AUDIO_CUE_WIN"                      value="./pathx/Win.mid"></property>
+        
+        <property name="AUDIO_CUE_COLLISION"                value="./pathx/GLASSBREAK.mid"></property>
+        
+        
         <property name="SONG_CUE_LEVEL_SCREEN"              value="./pathx/CCLevelSelectSong.mid"></property>        
         <property name="SONG_CUE_MENU_SCREEN"               value="./pathx/GoTMenuSong.mid"></property>
         <property name="SONG_CUE_GAME_SCREEN"               value="./pathx/KornGameplay.mid"></property>
-     
+        
+        <property name="SONG_CUE_SETTINGS_SCREEN"           value="./pathx/HelpScreenSong.mid"></property>        
+        <property name="SONG_CUE_HELP_SCREEN"               value="./pathx/HelpScreenSong.mid"></property>
+       
     </property_list>
     
     <!-- PLAYABLE LEVELS CREATED WITH THE LEVEL EDITOR 

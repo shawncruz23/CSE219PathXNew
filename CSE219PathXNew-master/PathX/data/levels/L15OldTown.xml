@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L16RedMountains.png" name="L15OldTown">
      <intersections>
-          <intersection id="0" open="true" x="44" y="257"/>
+          <intersection id="0" open="true" x="273" y="258"/>
           <intersection id="0" open="true" x="536" y="292"/>
           <intersection id="0" open="true" x="144" y="260"/>
           <intersection id="0" open="true" x="338" y="266"/>
@@ -14,13 +14,12 @@
           <intersection id="0" open="true" x="533" y="39"/>
           <intersection id="0" open="false" x="403" y="147"/>
           <intersection id="0" open="true" x="236" y="29"/>
-          <intersection id="0" open="true" x="105" y="63"/>
+          <intersection id="0" open="true" x="96" y="79"/>
           <intersection id="0" open="true" x="55" y="463"/>
           <intersection id="0" open="true" x="179" y="555"/>
           <intersection id="0" open="true" x="534" y="540"/>
      </intersections>
      <roads>
-          <road int_id1="0" int_id2="2" one_way="true" speed_limit="30"/>
           <road int_id1="2" int_id2="2" one_way="false" speed_limit="30"/>
           <road int_id1="2" int_id2="13" one_way="false" speed_limit="30"/>
           <road int_id1="2" int_id2="14" one_way="false" speed_limit="30"/>
@@ -30,7 +29,6 @@
           <road int_id1="2" int_id2="7" one_way="false" speed_limit="30"/>
           <road int_id1="7" int_id2="12" one_way="false" speed_limit="30"/>
           <road int_id1="12" int_id2="13" one_way="false" speed_limit="30"/>
-          <road int_id1="2" int_id2="3" one_way="false" speed_limit="100"/>
           <road int_id1="3" int_id2="11" one_way="false" speed_limit="30"/>
           <road int_id1="11" int_id2="10" one_way="false" speed_limit="30"/>
           <road int_id1="10" int_id2="9" one_way="false" speed_limit="30"/>
@@ -49,6 +47,7 @@
           <road int_id1="16" int_id2="16" one_way="false" speed_limit="30"/>
           <road int_id1="6" int_id2="15" one_way="false" speed_limit="30"/>
           <road int_id1="11" int_id2="12" one_way="false" speed_limit="30"/>
+          <road int_id1="0" int_id2="2" one_way="true" speed_limit="30"/>
      </roads>
      <start_intersection id="0" image="LocationStart.png"/>
      <destination_intersection id="1" image="LocationDestination.png"/>

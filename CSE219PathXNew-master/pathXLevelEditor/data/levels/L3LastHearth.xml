@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L3LastHearth.png" name="L3LastHearth">
      <intersections>
-          <intersection id="0" open="true" x="50" y="300"/>
-          <intersection id="0" open="false" x="750" y="282"/>
-          <intersection id="0" open="true" x="221" y="142"/>
-          <intersection id="0" open="false" x="282" y="298"/>
-          <intersection id="0" open="true" x="224" y="455"/>
-          <intersection id="0" open="true" x="519" y="139"/>
-          <intersection id="0" open="true" x="459" y="297"/>
-          <intersection id="0" open="true" x="528" y="468"/>
-          <intersection id="0" open="true" x="171" y="296"/>
-          <intersection id="0" open="true" x="581" y="288"/>
+          <intersection id="0" open="true" x="157" y="283"/>
+          <intersection id="0" open="false" x="962" y="283"/>
+          <intersection id="0" open="true" x="309" y="87"/>
+          <intersection id="0" open="false" x="442" y="190"/>
+          <intersection id="0" open="true" x="300" y="507"/>
+          <intersection id="0" open="true" x="812" y="82"/>
+          <intersection id="0" open="true" x="681" y="404"/>
+          <intersection id="0" open="true" x="818" y="505"/>
+          <intersection id="0" open="true" x="298" y="283"/>
+          <intersection id="0" open="true" x="815" y="283"/>
      </intersections>
      <roads>
           <road int_id1="4" int_id2="3" one_way="false" speed_limit="30"/>

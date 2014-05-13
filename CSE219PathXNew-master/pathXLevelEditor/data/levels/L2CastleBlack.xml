@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L2CastleBlack.png" name="L2CastleBlack">
      <intersections>
-          <intersection id="0" open="true" x="46" y="264"/>
-          <intersection id="0" open="false" x="669" y="260"/>
-          <intersection id="0" open="true" x="194" y="97"/>
-          <intersection id="0" open="true" x="482" y="91"/>
-          <intersection id="0" open="true" x="191" y="450"/>
-          <intersection id="0" open="true" x="484" y="266"/>
-          <intersection id="0" open="true" x="490" y="449"/>
-          <intersection id="0" open="true" x="197" y="267"/>
-          <intersection id="0" open="true" x="344" y="185"/>
-          <intersection id="0" open="true" x="354" y="354"/>
+          <intersection id="0" open="true" x="149" y="251"/>
+          <intersection id="0" open="false" x="894" y="257"/>
+          <intersection id="0" open="true" x="282" y="79"/>
+          <intersection id="0" open="true" x="918" y="103"/>
+          <intersection id="0" open="true" x="279" y="458"/>
+          <intersection id="0" open="true" x="648" y="263"/>
+          <intersection id="0" open="true" x="942" y="406"/>
+          <intersection id="0" open="true" x="282" y="253"/>
+          <intersection id="0" open="true" x="489" y="172"/>
+          <intersection id="0" open="true" x="507" y="346"/>
      </intersections>
      <roads>
           <road int_id1="2" int_id2="3" one_way="false" speed_limit="30"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L17GhostHill.png" name="L17GhostHill">
      <intersections>
-          <intersection id="0" open="true" x="69" y="280"/>
+          <intersection id="0" open="true" x="263" y="277"/>
           <intersection id="0" open="true" x="433" y="274"/>
           <intersection id="0" open="true" x="282" y="164"/>
           <intersection id="0" open="true" x="279" y="387"/>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L4DeepwoodMotte.png" name="L4DeepwoodMotte">
      <intersections>
-          <intersection id="0" open="false" x="44" y="232"/>
-          <intersection id="0" open="true" x="624" y="237"/>
-          <intersection id="0" open="true" x="172" y="92"/>
-          <intersection id="0" open="false" x="339" y="91"/>
-          <intersection id="0" open="true" x="503" y="90"/>
-          <intersection id="0" open="true" x="176" y="236"/>
-          <intersection id="0" open="true" x="333" y="239"/>
-          <intersection id="0" open="true" x="508" y="238"/>
-          <intersection id="0" open="true" x="164" y="418"/>
-          <intersection id="0" open="true" x="328" y="412"/>
-          <intersection id="0" open="false" x="511" y="408"/>
+          <intersection id="0" open="false" x="174" y="246"/>
+          <intersection id="0" open="true" x="987" y="237"/>
+          <intersection id="0" open="true" x="250" y="85"/>
+          <intersection id="0" open="false" x="536" y="31"/>
+          <intersection id="0" open="true" x="817" y="83"/>
+          <intersection id="0" open="true" x="386" y="243"/>
+          <intersection id="0" open="true" x="541" y="243"/>
+          <intersection id="0" open="true" x="705" y="242"/>
+          <intersection id="0" open="true" x="258" y="424"/>
+          <intersection id="0" open="true" x="547" y="562"/>
+          <intersection id="0" open="false" x="825" y="412"/>
      </intersections>
      <roads>
           <road int_id1="2" int_id2="5" one_way="false" speed_limit="30"/>

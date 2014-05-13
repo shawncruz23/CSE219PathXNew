@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L10TheEyrie.png" name="L10TheEyrie">
      <intersections>
-          <intersection id="0" open="true" x="44" y="241"/>
-          <intersection id="0" open="true" x="948" y="253"/>
-          <intersection id="0" open="true" x="159" y="33"/>
-          <intersection id="0" open="true" x="276" y="133"/>
-          <intersection id="0" open="true" x="174" y="242"/>
-          <intersection id="0" open="true" x="238" y="340"/>
-          <intersection id="0" open="true" x="160" y="485"/>
-          <intersection id="0" open="false" x="401" y="487"/>
-          <intersection id="0" open="true" x="479" y="340"/>
-          <intersection id="0" open="true" x="392" y="248"/>
-          <intersection id="0" open="false" x="414" y="36"/>
-          <intersection id="0" open="true" x="672" y="39"/>
-          <intersection id="0" open="true" x="794" y="139"/>
-          <intersection id="0" open="false" x="777" y="336"/>
-          <intersection id="0" open="true" x="688" y="481"/>
-          <intersection id="0" open="true" x="526" y="135"/>
-          <intersection id="0" open="true" x="690" y="245"/>
+          <intersection id="0" open="true" x="279" y="267"/>
+          <intersection id="0" open="true" x="1109" y="259"/>
+          <intersection id="0" open="true" x="262" y="32"/>
+          <intersection id="0" open="true" x="268" y="162"/>
+          <intersection id="0" open="true" x="541" y="263"/>
+          <intersection id="0" open="true" x="282" y="362"/>
+          <intersection id="0" open="true" x="283" y="496"/>
+          <intersection id="0" open="false" x="653" y="501"/>
+          <intersection id="0" open="true" x="643" y="392"/>
+          <intersection id="0" open="true" x="634" y="260"/>
+          <intersection id="0" open="false" x="624" y="34"/>
+          <intersection id="0" open="true" x="910" y="31"/>
+          <intersection id="0" open="true" x="915" y="141"/>
+          <intersection id="0" open="false" x="936" y="394"/>
+          <intersection id="0" open="true" x="946" y="505"/>
+          <intersection id="0" open="true" x="627" y="145"/>
+          <intersection id="0" open="true" x="926" y="256"/>
      </intersections>
      <roads>
           <road int_id1="0" int_id2="4" one_way="true" speed_limit="30"/>

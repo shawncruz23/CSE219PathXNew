@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L7WhiteHarbor.png" name="L7WhiteHarbor">
      <intersections>
-          <intersection id="0" open="false" x="36" y="261"/>
-          <intersection id="0" open="false" x="728" y="191"/>
-          <intersection id="0" open="true" x="361" y="86"/>
-          <intersection id="0" open="true" x="262" y="185"/>
-          <intersection id="0" open="true" x="518" y="90"/>
-          <intersection id="0" open="true" x="411" y="184"/>
-          <intersection id="0" open="false" x="200" y="427"/>
-          <intersection id="0" open="true" x="172" y="266"/>
-          <intersection id="0" open="true" x="353" y="429"/>
-          <intersection id="0" open="false" x="553" y="420"/>
-          <intersection id="0" open="true" x="571" y="192"/>
-          <intersection id="0" open="true" x="150" y="80"/>
-          <intersection id="0" open="true" x="632" y="75"/>
-          <intersection id="0" open="true" x="639" y="412"/>
+          <intersection id="0" open="false" x="159" y="267"/>
+          <intersection id="0" open="false" x="1151" y="282"/>
+          <intersection id="0" open="true" x="581" y="61"/>
+          <intersection id="0" open="true" x="517" y="274"/>
+          <intersection id="0" open="true" x="861" y="63"/>
+          <intersection id="0" open="true" x="702" y="272"/>
+          <intersection id="0" open="false" x="39" y="525"/>
+          <intersection id="0" open="true" x="376" y="270"/>
+          <intersection id="0" open="true" x="531" y="526"/>
+          <intersection id="0" open="false" x="874" y="534"/>
+          <intersection id="0" open="true" x="873" y="268"/>
+          <intersection id="0" open="true" x="62" y="68"/>
+          <intersection id="0" open="true" x="1121" y="56"/>
+          <intersection id="0" open="true" x="1135" y="533"/>
      </intersections>
      <roads>
           <road int_id1="0" int_id2="0" one_way="false" speed_limit="30"/>
@@ -31,7 +31,6 @@
           <road int_id1="8" int_id2="3" one_way="false" speed_limit="30"/>
           <road int_id1="6" int_id2="7" one_way="false" speed_limit="30"/>
           <road int_id1="6" int_id2="6" one_way="false" speed_limit="30"/>
-          <road int_id1="6" int_id2="3" one_way="false" speed_limit="30"/>
           <road int_id1="6" int_id2="8" one_way="true" speed_limit="30"/>
           <road int_id1="8" int_id2="9" one_way="false" speed_limit="30"/>
           <road int_id1="9" int_id2="9" one_way="false" speed_limit="30"/>

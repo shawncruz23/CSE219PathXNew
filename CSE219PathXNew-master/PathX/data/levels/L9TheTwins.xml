@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <level image="L9TheTwins.png" name="L9TheTwins">
      <intersections>
-          <intersection id="0" open="true" x="42" y="249"/>
+          <intersection id="0" open="true" x="240" y="251"/>
           <intersection id="0" open="false" x="869" y="50"/>
           <intersection id="0" open="true" x="76" y="49"/>
           <intersection id="0" open="true" x="202" y="125"/>

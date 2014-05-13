@@ -68,18 +68,18 @@ public class AudioManager
     
     public void play(String audioName, boolean loop)
     {
-//        Sequencer sequencer = midiAudio.get(audioName);
-//        if (sequencer != null)
-//        {
-//            sequencer.setTickPosition(0);
-//            sequencer.start();
-//        }
-//        else
-//        {
-//            Clip clip = wavAudio.get(audioName);
-//            clip.setFramePosition(0);
-//            clip.start();
-//        }   
+        Sequencer sequencer = midiAudio.get(audioName);
+        if (sequencer != null)
+        {
+            sequencer.setTickPosition(0);
+            sequencer.start();
+        }
+        else
+        {
+            Clip clip = wavAudio.get(audioName);
+            clip.setFramePosition(0);
+            clip.start();
+        }   
     }
     
     public boolean isPlaying(String audioName)

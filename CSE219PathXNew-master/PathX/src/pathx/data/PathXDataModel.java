@@ -31,6 +31,7 @@ import pathx.ui.PathXCarState;
 import pathx.ui.PathXEventHandler;
 import static pathx.ui.PathXEventHandler.xCoordinates;
 import pathx.ui.PathXMiniGame;
+import static pathx.ui.PathXMiniGame.isGameStarted;
 import pathx.ui.PathXPanel;
 import properties_manager.PropertiesManager;
 
@@ -396,6 +397,7 @@ public class PathXDataModel extends MiniGameDataModel {
         playerCar.add(newPlayer);
         
         //movingPlayerCar.add(playerCar.get(0));
+        playerCar.get(0).setDestinationLocation(levelBeingPlayed.getDestination());
         
         playerCar.get(0).setLocation(levelBeingPlayed.getStartingLocation());
     }
@@ -474,14 +476,22 @@ public class PathXDataModel extends MiniGameDataModel {
             sT = new SpriteType(BANDIT_TYPE_PREFIX + (i + 1));
             addSpriteType(sT);
 
+            int indexOfRandomNumber = 0;
+            
             Level levelBeingPlayed = ((PathXMiniGame) miniGame).getCurrentLevel();
             ArrayList<Intersection> intersectionList = levelBeingPlayed.getIntersections();
+            
             int randomInteger = (int)(Math.random()*intersectionList.size());
+            banditStartingIndex.add(randomInteger);
+            indexOfRandomNumber = banditStartingIndex.indexOf(randomInteger);
             
             while(intersectionList.get(randomInteger) == levelBeingPlayed.getStartingLocation()
                     || intersectionList.get(randomInteger) == levelBeingPlayed.getDestination()) {
                 
+                banditStartingIndex.remove(banditStartingIndex.indexOf(randomInteger));
                 randomInteger = (int)(Math.random()*intersectionList.size());
+                banditStartingIndex.add(randomInteger);
+               indexOfRandomNumber = banditStartingIndex.indexOf(randomInteger);
             }
 
             // LET'S GENERATE AN IMAGE FOR EACH STATE FOR EACH SPRITE
@@ -490,14 +500,19 @@ public class PathXDataModel extends MiniGameDataModel {
             //sT.addState(PathXCarState.VISIBLE_STATE.toString(), banditCarImage);
             //sT.addState(SortingHatTileState.SELECTED_STATE.toString(), buildTileImage(blankTileSelectedImage, img));
             //sT.addState(SortingHatTileState.MOUSE_OVER_STATE.toString(), buildTileImage(blankTileMouseOverImage, img));
-            BanditCar newBandit = new BanditCar(sT, intersectionList.get(randomInteger).x,
-                    intersectionList.get(randomInteger).y, 0, 0,PathXCarState.INVISIBLE_STATE.toString(), i + 1);
-
-            // AND ADD IT TO THE STACK
+            BanditCar newBandit = new BanditCar(sT,
+                    intersectionList.get(banditStartingIndex.get(indexOfRandomNumber)).x,
+                    intersectionList.get(banditStartingIndex.get(indexOfRandomNumber)).y, 0, 0,
+                    PathXCarState.VISIBLE_STATE.toString(), i + 1);
+            System.out.println("banditStartingIndex " + banditStartingIndex);
+            System.out.println("Bandit #" + i + " starting coordinates: ("
+                    + intersectionList.get(banditStartingIndex.get(indexOfRandomNumber)).x + 
+                    ", " + intersectionList.get(banditStartingIndex.get(indexOfRandomNumber)).y + ")");
+            // AND ADD IT TO THE banditStartingIndex
             banditCarStack.add(newBandit);
         }
     }
-    
+    public static ArrayList<Integer> banditStartingIndex = new ArrayList<>();
     /**
      *
      */
@@ -565,7 +580,7 @@ public class PathXDataModel extends MiniGameDataModel {
        }
         
      
-        
+         movingPlayerCar.clear();
         // START THE ANIMATION FOR ALL THE TILES
        for (int i = 0; i < playerCar.size(); i++)
         {
@@ -575,14 +590,18 @@ public class PathXDataModel extends MiniGameDataModel {
             // MAKE SURE IT'S MOVED EACH FRAME
             movingPlayerCar.add(car);
             
+            System.out.println("movingPlayerCar size: " + movingPlayerCar.size());
+            
             //car.setTarget(540, 68);
             
-            car.setTarget(winPath.get(0), winPath.get(1));
+            car.setTarget(winPath.get(i), winPath.get(i+1));
 
-            winPath.remove(0);
-            winPath.remove(0);
+            //winPath.remove(0);
+            //winPath.remove(0);
             // AND GET IT ON A PATH
             car.initWinPath(winPath);
+            winPath.clear();
+           
         }
     }
     
@@ -726,92 +745,78 @@ public class PathXDataModel extends MiniGameDataModel {
         
         PathXGameGraphManager gameGraph = ((PathXMiniGame) miniGame).getEventHandler().getGameGraph();
         
-        ArrayList<Integer> xPoints = PathXEventHandler.xCoordinates;
-        ArrayList<Integer> yPoints = PathXEventHandler.yCoordinates;
-        
+
         // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
         // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
-
-        int randomIndex1 = (int) (Math.random() * (xPoints.size()));
-        int randomIndex2 = (int) (Math.random() * (xPoints.size()));
-        while (randomIndex1 == randomIndex2) {
-            randomIndex1 = (int) (Math.random() * (xPoints.size()));
-            randomIndex2 = (int) (Math.random() * (xPoints.size()));
+   
+       // int randomIndex1 = (int) (Math.random() * (xPoints.size()));
+         for (int k = 0; k < banditCarStack.size(); k++)
+        {
+        int randomIndex2 = (int) (Math.random() * (intersectionList.size()));
+            System.out.println("banditStartingIndex "+k+ ": " + banditStartingIndex.get(k));
+        while (banditStartingIndex.get(k) == randomIndex2) {
+            //randomIndex1 = (int) (Math.random() * (xPoints.size()));
+            randomIndex2 = (int) (Math.random() * (intersectionList.size()));
         }
 
-        Intersection intersection1 = new Intersection(0, 0);
-        Intersection intersection2 = new Intersection(0, 0);
+        Intersection intersection1;
+        Intersection intersection2;
+      
 
-        int error = 30;
-        int diffX = (int) (xPoints.get(randomIndex1));
-        int diffY = (int) (yPoints.get(randomIndex1)); //- (int)sourceY1;
+                intersection1 = intersectionList.get(banditStartingIndex.get(k));
 
-        for (Intersection anIntersection : intersectionList) {
-            if (((diffX + error) >= anIntersection.x)
-                    && ((diffX - error) <= anIntersection.x)
-                    && ((diffY + error) >= anIntersection.y)
-                    && ((diffY - error) <= anIntersection.y)) {
+        System.out.println("Starting position: X: " + intersection1.x
+                + "Y: " + intersection1.y);
 
-                intersection1 = anIntersection;
-            }
-        }
-
-        int diffX2 = (int) (xPoints.get(randomIndex2));
-        int diffY2 = (int) (yPoints.get(randomIndex2)); //- (int)sourceY1;
-
-        for (Intersection anIntersection : intersectionList) {
-            if (((diffX2 + error) >= anIntersection.x)
-                    && ((diffX2 - error) <= anIntersection.x)
-                    && ((diffY2 + error) >= anIntersection.y)
-                    && ((diffY2 - error) <= anIntersection.y)) {
-
-                intersection2 = anIntersection;
-            }
-        }
+                intersection2 = intersectionList.get(randomIndex2);
 
         ArrayList<Connection> path = gameGraph.findShortestPathToHome(intersection1, intersection2);
        ArrayList<Connection> path2 = gameGraph.findShortestPathToHome(intersection2, intersection1);
-//       
-//       for(Connection aPath: path2) {
-//           path.add(aPath);
-//       }
-//       
+
+        System.out.println("Path 1: ");
        for (Connection connection : path) {
-            Intersection i1 = gameGraph.getIntersection(connection.getIntersection2Id());
+            Intersection i1 = gameGraph.getIntersection(connection.getIntersection1Id());
             System.out.println("X: " + (i1.x));
             System.out.println("Y: " + (i1.y));
             winPath.add(i1.x);
             winPath.add(i1.y);
         }
+       System.out.println("Path 2: ");
         for (Connection connection : path2) {
-            Intersection i2 = gameGraph.getIntersection(connection.getIntersection2Id());
+            Intersection i2 = gameGraph.getIntersection(connection.getIntersection1Id());
             System.out.println("X: " + (i2.x));
             System.out.println("Y: " + (i2.y));
             winPath.add(i2.x);
             winPath.add(i2.y);
         }
-        
-
+    
 //        moveAllTilesToStack();
 
         // START THE ANIMATION FOR ALL THE TILES
-        for (int i = 0; i < banditCarStack.size(); i++)
-        {
+//       for (int k = 0; k < banditCarStack.size(); k++)
+//        {
             // GET EACH TILE
-            BanditCar car = banditCarStack.get(i);
+            BanditCar car = banditCarStack.get(k);
 
             // MAKE SURE IT'S MOVED EACH FRAME
             movingBandits.add(car);
+            System.out.println("BLAH BLAH");
+            car.setTarget(winPath.get(winPath.indexOf(intersection1.x)),
+                   winPath.get(winPath.indexOf(intersection1.y)));
+            //car.setTarget(winPath.get(n++), winPath.get(m++));
 
-            car.setTarget(winPath.get(n++), winPath.get(m++));
-
+            System.out.println("Target for " + k + " (" +
+                    winPath.get(winPath.indexOf(intersection1.x))
+                    + ", " + winPath.get(winPath.indexOf(intersection1.y)) + ")");
 //            winPath.remove(0);
 //            winPath.remove(0);
             
             // AND GET IT ON A PATH
             car.initWinPath(winPath);
+        winPath.clear();
         }
-    }
+    
+}
     public static int n = 0;
     public static int m = 1;
      /**
@@ -906,6 +911,16 @@ public class PathXDataModel extends MiniGameDataModel {
         g.drawImage(backgroundImage, 0, 0, null);
         g.drawImage(spriteImage, TILE_IMAGE_OFFSET_X, TILE_IMAGE_OFFSET_Y, null);
         return bi;
+    }
+    
+    public void resetCars() {
+        movingBandits = new ArrayList<>();
+        movingPlayerCar = new ArrayList<>();
+        movingPolice = new ArrayList<>();
+        movingZombies = new ArrayList<>();
+        banditCarStack = new ArrayList<>();
+        playerCar = new ArrayList<>();
+   
     }
 
     
@@ -1276,7 +1291,7 @@ public class PathXDataModel extends MiniGameDataModel {
         if (transactionCounter == this.properTransactionOrder.size())
         {
             // YUP UPDATE EVERYTHING ACCORDINGLY
-            endGameAsWin();
+            //endGameAsWin();
         }
     }
 
@@ -1376,8 +1391,10 @@ public class PathXDataModel extends MiniGameDataModel {
         System.out.println("REACHED checkMousePressOnSprites: "
                 + "\nX: " + col + "\nY: " + row);
 
-        if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
+        if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE) && PathXMiniGame.isGameStarted
+                && !playerCar.get(0).isMovingToTarget()) {
 
+            
             Intersection destination = ((PathXMiniGame) game).getEventHandler().intersectionClickerCheck(col, row);
 
             if (isAnIntersection(col, row) && playerCar.get(0).getLocation() != destination
@@ -1385,7 +1402,9 @@ public class PathXDataModel extends MiniGameDataModel {
 
                 movePlayer(playerCar.get(0).getLocation(), destination);
                 playerCar.get(0).setLocation(destination);
-                if(playerCar.get(0).getLocation() == getLevel().getDestination()) {
+                
+                if(playerCar.get(0).getX() == getLevel().getDestination().x
+                        && playerCar.get(0).getY() == getLevel().getDestination().y) {
                     System.out.println("YOU WON THE LEVEL!!");
                 }
             }
@@ -1439,46 +1458,21 @@ public class PathXDataModel extends MiniGameDataModel {
     @Override
     public void endGameAsWin()
     {
-        /*
-        // UPDATE THE GAME STATE USING THE INHERITED FUNCTIONALITY
-        super.endGameAsWin();
-
-        // RECORD THE TIME IT TOOK TO COMPLETE THE GAME
-        long gameTime = endTime.getTimeInMillis() - startTime.getTimeInMillis();
-
-        // RECORD IT AS A WIN
-        ((SortingHatMiniGame) miniGame).getPlayerRecord().addWin(currentLevel);
-
-        if(badSpellsCounter==0)
-            ((SortingHatMiniGame) miniGame).getPlayerRecord().addPerfectWin(currentLevel, this.gameTimeToText());
-           
-        // SAVE PLAYER DATA
-        ((SortingHatMiniGame) miniGame).savePlayerRecord();
-
-        // DISPLAY THE WIN DIALOG
-        miniGame.getGUIDialogs().get(WIN_DIALOG_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
-
-        // AND PLAY THE WIN ANIMATION
-        playWinAnimation();
+       ((PathXMiniGame)miniGame).showWinScreenDialog();
 
         // AND PLAY THE WIN AUDIO
-        miniGame.getAudio().stop(SortingHatPropertyType.SONG_CUE_MENU_SCREEN.toString());
-        miniGame.getAudio().stop(SortingHatPropertyType.SONG_CUE_GAME_SCREEN.toString());
-      
-        miniGame.getAudio().play(SortingHatPropertyType.AUDIO_CUE_WIN.toString(), false);
-        */
+//        miniGame.getAudio().stop(SortingHatPropertyType.SONG_CUE_MENU_SCREEN.toString());
+//        miniGame.getAudio().stop(SortingHatPropertyType.SONG_CUE_GAME_SCREEN.toString());
+//      
+//        miniGame.getAudio().play(SortingHatPropertyType.AUDIO_CUE_WIN.toString(), false);
+        
     }
     
     /**
-     * Updates the player record, adding a game without a win.
+     * Updates the game to reflect the player has lost the level
      */
-    public void endGameAsLoss()
-    {
-        // ADD A LOSS
-      //  ((SortingHatMiniGame) miniGame).getPlayerRecord().addLoss(currentLevel);
- 
-        // SAVE PLAYER DATA
-    //    ((SortingHatMiniGame) miniGame).savePlayerRecord();        
+    public void endGameAsLoss() {
+        ((PathXMiniGame)miniGame).showLossScreenDialog();
     }
 
     /**
@@ -1537,6 +1531,27 @@ public class PathXDataModel extends MiniGameDataModel {
     }
 
     public static int numEntered = 0;
+    public static int callController = 0;
+    public static int callerControl = 0;
+    
+    public void checkPlayerPosition() {
+        if (!playerCar.isEmpty()) {
+
+            if (playerCar.get(0).isAtEndLocation) {
+                System.out.println("YOU REALLY WIN!! " + ++numEntered);
+                endGameAsWin();
+                callController = 1;
+            }
+        }
+    }
+    
+    public void checkPlayerBounty() {
+        if(levelBounty == 0) {
+            System.out.println("YOU LOSE!! ");
+            endGameAsLoss();
+            callerControl = 1;
+        }
+    }
     
     /**
      * Called each frame, this method updates all the game objects.
@@ -1548,9 +1563,18 @@ public class PathXDataModel extends MiniGameDataModel {
     {
         try
         {
+
+            
             // MAKE SURE THIS THREAD HAS EXCLUSIVE ACCESS TO THE DATA
             game.beginUsingData();
 
+            if(callController == 0 && ((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE))
+            checkPlayerPosition();
+            
+            if(callerControl == 0 && ((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE))
+            checkPlayerBounty();
+            
+            
             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
             for (int i = 0; i < movingPolice.size(); i++)
             {
@@ -1590,21 +1614,18 @@ public class PathXDataModel extends MiniGameDataModel {
                 BanditCar tile = movingBandits.get(i);
                
                 if(movingPlayerCar.size() != 0) {
-                    
-                    System.out.println("movingBanditsCa X: " + tile.getX());
-                    System.out.println("movingPlayerCar X: " +  movingPlayerCar.get(0).getX());
-                    System.out.println("movingBanditsCa Y: " + tile.getY());
-                    System.out.println("movingPlayerCar Y: " + movingPlayerCar.get(0).getY());
-                    System.out.println("");
 
                     if ((tile.getX() + 1.15 >= movingPlayerCar.get(0).getX() && tile.getX() - 1.15 <= movingPlayerCar.get(0).getX())
                             && (tile.getY() + 1.15 >= movingPlayerCar.get(0).getY() && tile.getY() - 1.15 <= movingPlayerCar.get(0).getY())) {
-                        levelBounty -= (levelBounty*(.1)); 
-                        for (int k = 0; k < 100; k++) {
-                            System.out.println("BOJIE TIME " + numTimesEntered);
+                        levelBounty -= (levelBounty * (.1));
+                        //CHECK IF BOUNTY IS LOST
+                        //IF SO END GAME
+                        if (levelBounty == 0) {
+                      //      System.out.println("YOU LOSE");
+                        //    endGameAsLoss();
                         }
-                        
-                        numTimesEntered++;
+                        miniGame.getAudio().play(PathXPropertyType.AUDIO_CUE_CHEAT.toString(), false);
+                     
                     }
                 }
 
@@ -1646,6 +1667,7 @@ public class PathXDataModel extends MiniGameDataModel {
             // MAKE SURE WE RELEASE THE LOCK WHETHER THERE IS
             // AN EXCEPTION THROWN OR NOT
             game.endUsingData();
+            
         }
     }
     

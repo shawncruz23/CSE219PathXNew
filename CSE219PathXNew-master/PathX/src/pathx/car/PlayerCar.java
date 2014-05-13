@@ -11,6 +11,7 @@ import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import pathx.data.Intersection;
+import pathx.ui.PathXMiniGame;
 import pathx.ui.PathXPanel;
 
 /**
@@ -43,7 +44,10 @@ public class PlayerCar extends Sprite {
     private int winPathIndex;
     
     private Intersection currentLocation;
+    
+    public boolean isAtEndLocation;
 
+    private Intersection destinationIntersection;
     /**
      * This constructor initializes this tile for use, including all the
      * sprite-related data from its ancestor class, Sprite.
@@ -57,10 +61,15 @@ public class PlayerCar extends Sprite {
         super(initSpriteType, initX, initY, initVx, initVy, initState);
 
         tileId = initTileId;
+        isAtEndLocation = false;
     }
     
     public void setLocation(Intersection newIntersection) {
         currentLocation = newIntersection;
+    }
+    
+    public void setDestinationLocation(Intersection destination) {
+        destinationIntersection = destination;
     }
     
     public Intersection getLocation() {
@@ -269,21 +278,29 @@ public class PlayerCar extends Sprite {
     public void increaseX() {
         super.x += 20;
     }
-    
+
     public void increaseY() {
         super.y += 20;
     }
-    
+
     public void decreaseX() {
         super.x -= 20;
     }
-    
+
     public void decreaseY() {
         super.y -= 20;
     }
-    
+
     public static int numTimesEntered = 0;
+    public static int velocity = 0;
     
+    public void setVelocity(int roadSpeed) {
+        velocity = roadSpeed;
+    }
+
+    public static int finalX;
+    public static int finalY;
+    public static boolean initialized = false;
     /**
      * After a win, while the tiles are animating, this method is called each
      * frame to make sure that when the tile reaches the next node in the path,
@@ -292,40 +309,47 @@ public class PlayerCar extends Sprite {
      * @param game The Sorting Hat game we are updating.
      */
     public void updateWinPath(MiniGame game) {
-        
+
+        //System.out.println("updateWinPath");
+        if(!initialized) {
+        finalX = winPath.get(winPath.size() - 2);
+        finalY = winPath.get(winPath.size() - 1);
+        initialized = true;
+        }
+       
+        if (!PathXMiniGame.isPaused ) {
             startMovingToTarget(1);
+            //startMovingToTarget(1);
             // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
-        if (calculateDistanceToTarget() < 20) {
-            
+            if (calculateDistanceToTarget() < 1) {
+
           //  System.out.println("NUMBER OF TIMES ENTERED: " + ++numTimesEntered);
-            // PUT IT RIGHT ON THE NODE
-            x = targetX;
-            y = targetY;
+                // PUT IT RIGHT ON THE NODE
+                x = targetX;
+                y = targetY;
            // System.out.println("updateWinPath X: " + x);
-           // System.out.println("updateWinPath Y: " + y);
-            // AND TARGET THE NEXT NODE IN THE PATH
-            if(winPath.size() > 1) {
-            targetX = winPath.get(0);
-            targetY = winPath.get(1);
-            
-            winPath.remove(1);
-            winPath.remove(0);
-            }
+                // System.out.println("updateWinPath Y: " + y);
+                // AND TARGET THE NEXT NODE IN THE PATH
+                if (winPath.size() > 1) {
+                    targetX = winPath.get(0);
+                    targetY = winPath.get(1);
+
+                    winPath.remove(1);
+                    winPath.remove(0);
+                }
 
 //            x = targetX;
 //            y = targetY;
-            
             // START THE TILE MOVING AGAIN AND RANDOMIZE IT'S SPEED
-           
            /// (Math.random() * 100) + 1);
-
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
-            //winPathIndex += 2;
-           // winPathIndex %= (winPath.size());
-        } // JUST A NORMAL PATHING UPDATE
-        else {
-            // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
-            super.update(game);
+                //winPathIndex += 2;
+                // winPathIndex %= (winPath.size());
+            } // JUST A NORMAL PATHING UPDATE
+            else {
+                // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
+                super.update(game);
+            }
         }
     }
 
@@ -339,21 +363,35 @@ public class PlayerCar extends Sprite {
      */
     @Override
     public void update(MiniGame game) {
+        
         // IF WE ARE IN A POST-WIN STATE WE ARE PLAYING THE WIN
         // ANIMATION, SO MAKE SURE THIS TILE FOLLOWS THE PATH
-        if (winPath != null) {
+        //if (winPath != null) {
+        if(finalX != x && finalY != y || calculateDistanceToTarget() > 1) {
+//            System.out.println("STOP ME");
+//            System.out.println("DISTANCE: " + calculateDistanceToTarget());
             updateWinPath(game);
+            System.out.println("X: " + x);
+            System.out.println("Y: " + y);
         } // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
         // JUST GO TO THE TARGET AND THEN STOP MOVING
-        else if (calculateDistanceToTarget() < 100) {
+        else if (calculateDistanceToTarget() <= 1) {
+           // System.out.println("STOPPED");
+            if(destinationIntersection.x == x && destinationIntersection.y == y) {
+                isAtEndLocation = true;
+            }
             vX = 0;
             vY = 0;
             x = targetX;
             y = targetY;
             movingToTarget = false;
+            initialized = false;
+            finalX = 0;
+            finalY = 0;
         } // OTHERWISE, JUST DO A NORMAL UPDATE, WHICH WILL CHANGE ITS POSITION
         // USING ITS CURRENT VELOCITY.
         else {
+          
             super.update(game);
         }
     }

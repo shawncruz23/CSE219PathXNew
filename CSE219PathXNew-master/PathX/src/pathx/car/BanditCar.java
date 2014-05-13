@@ -11,6 +11,7 @@ import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import pathx.data.Intersection;
+import pathx.ui.PathXMiniGame;
 
 /**
  *
@@ -293,9 +294,10 @@ public class BanditCar extends Sprite {
      */
     public void updateWinPath(MiniGame game) {
         
-            startMovingToTarget(1);
+        if(!PathXMiniGame.isPaused) {  
+        startMovingToTarget(1);
             // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
-        if (calculateDistanceToTarget() < 20) {
+        if (calculateDistanceToTarget() < 1) {
             
            // System.out.println("NUMBER OF TIMES ENTERED: " + ++numTimesEntered);
             // PUT IT RIGHT ON THE NODE
@@ -328,6 +330,17 @@ public class BanditCar extends Sprite {
             // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
             super.update(game);
         }
+        }
+    }
+    
+    public void resetCar() {
+        vX = 0;
+        vY = 0;
+        x = targetX;
+        y = targetY;
+        movingToTarget = false;
+        winPathIndex = 0;
+        winPath = new ArrayList<>();
     }
 
     // METHODS OVERRIDDEN FROM Sprite
