@@ -303,8 +303,6 @@ public class BanditCar extends Sprite {
             // PUT IT RIGHT ON THE NODE
             x = targetX;
             y = targetY;
-            //System.out.println("updateWinPath X: " + x);
-            //System.out.println("updateWinPath Y: " + y);
             // AND TARGET THE NEXT NODE IN THE PATH
             if(winPath.size() > 1) {
             targetX = winPath.get(winPathIndex);

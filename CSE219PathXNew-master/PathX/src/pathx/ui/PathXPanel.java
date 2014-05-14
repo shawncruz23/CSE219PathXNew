@@ -226,6 +226,8 @@ public class PathXPanel extends JPanel {
                   if(levelButtonHover) {
                     renderLevelInfo(g);
                 }
+                  
+                  renderPlayerBalance(g);
             }
 
             if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)) {
@@ -316,6 +318,15 @@ public class PathXPanel extends JPanel {
                  renderLevelInfoDialog(g);
              }
              
+             if(((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)
+                     && PathXMiniGame.isDialogWin) {
+                 renderWinDialog(g);
+             }
+             
+             if(((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE)
+                     && PathXMiniGame.isDialogLose) {
+                 renderLossDialog(g);
+             }
 
             if (!data.notStarted()) {
                 // AND THE TIME AND TILES STATS
@@ -427,23 +438,66 @@ public class PathXPanel extends JPanel {
             g.drawString(levelBounty2, x, y + 20);
      }
     
+      public void renderWinDialog(Graphics g) {
+          
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+            g.setColor(Color.BLACK);
+            
+             // RENDER LEVEL INFO
+            String winString1 = "You have succesfully looted " + convertLevelName(currentLevel.getLevelName()) + ".";
+            int x = 130;
+            int y = 220;
+            g.drawString(winString1, x, y);
+            
+            String winString2 = "You've gotten away with $" + data.getLevelBounty();
+             g.drawString(winString2, x, y + 20);
+          
+            String winString3 = "Decide what you'd like to do next.";
+           
+            g.drawString(winString3, x, y + 40);
+      }
+      
+      public void renderLossDialog(Graphics g) {
+          
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+            g.setColor(Color.BLACK);
+            
+             // RENDER LEVEL INFO
+            String winString1 = "You have been caught!";
+            int x = 170;
+            int y = 220;
+            g.drawString(winString1, x, y);
+            
+            String winString2 = "Better luck next time.";
+             g.drawString(winString2, x, y + 20);
+          
+            String winString3 = "Decide what you'd like to do next.";
+           
+            g.drawString(winString3, x, y + 40);
+      }
+     
     public void renderLevelStats(Graphics g) {
         
             // RENDER THE LEVEL BOUNTY
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
             g.setColor(Color.WHITE);
 
-            // RENDER THE TIME
+            // RENDER LEVEL BOUNTY
             String levelBounty = "Level Bounty: $" + data.getLevelBounty();
             int x = 110;
             int y = 40;
             g.drawString(levelBounty, x, y);
             
-            // RENDER THE TIME
+            // RENDER PLAYER BALANCE
             String playerBalance = "Player Balance: $" + data.getPlayerBalance();
-            //int x = 300;
-            //int y = 40;
             g.drawString(playerBalance, x, y - 15);
+            
+            g.setFont(new Font(Font.SERIF, Font.PLAIN, 30));
+             g.setColor(Color.WHITE);
+            //RENDER LEVEL NAME BEING PLAYED
+            String levelBeingPlayed =
+                    convertLevelName(data.getCurrentLevel().getLevelName());
+            g.drawString(levelBeingPlayed, x + 200, y);
     }
 
     public static double sourceX1 = 0;
@@ -776,6 +830,18 @@ public class PathXPanel extends JPanel {
             Sprite s = banditCarSprite.next();
             renderSprite(g, s);
         }
+        
+        Iterator<ZombieCar> zombieCarSprite = data.getZombieCarStack().iterator();
+        while (zombieCarSprite.hasNext()) {
+            Sprite s = zombieCarSprite.next();
+            renderSprite(g, s);
+        }
+        
+        Iterator<PoliceCar> policeCarSprite = data.getPoliceCarStack().iterator();
+        while (policeCarSprite.hasNext()) {
+            Sprite s = policeCarSprite.next();
+            renderSprite(g, s);
+        }
     }
 
     public void renderHeader(Graphics g) {
@@ -835,6 +901,7 @@ public class PathXPanel extends JPanel {
             }
             
             //TEMPORARY!!! GET RID OF AFTER HW6 FOR REAL GAMEPLAY
+            if(PathXEventHandler.cheatIsEnabled)
             levelList.get(i).setLevelState(PathXCarState.RED_STATE.toString());
             
             
@@ -848,7 +915,8 @@ public class PathXPanel extends JPanel {
                 game.getGUIButtons().get(levelList.get(i).getLeveliD()).setY((float) levelList.get(i).getYCoordinate());
                 g.drawImage(buttonImg, (int) levelList.get(i).getXCoordinate(), (int) levelList.get(i).getYCoordinate(), null);
 
-                if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())) {
+                if (levelList.get(i).getLevelState().equals(PathXCarState.RED_STATE.toString())
+                        || levelList.get(i).getLevelState().equals(PathXCarState.GREEN_STATE.toString())) {
                     game.getGUIButtons().get(levelList.get(i).getLeveliD()).setX((float) levelList.get(i).getXCoordinate());
                     game.getGUIButtons().get(levelList.get(i).getLeveliD()).setY((float) levelList.get(i).getYCoordinate());
                     //System.out.println("PANEL");
@@ -1163,6 +1231,19 @@ public class PathXPanel extends JPanel {
         
     }
 
+    public void renderPlayerBalance(Graphics g) {
+        
+         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+            //g.setColor(Color.CYAN);
+            g.setColor(Color.WHITE);
+
+            // RENDER LEVEL NAME/NUMBER
+            String playerBalance = "Current Balance: $" + data.getPlayerBalance();
+            int x = 318;
+            int y = 40;
+            g.drawString(playerBalance, x, y);
+    }
+    
     public void renderLevelInfo(Graphics g) {
         
             // RENDER THE LEVEL BOUNTY

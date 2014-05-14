@@ -48,6 +48,8 @@ public class PlayerCar extends Sprite {
     public boolean isAtEndLocation;
 
     private Intersection destinationIntersection;
+    
+    private int carVelocity;
     /**
      * This constructor initializes this tile for use, including all the
      * sprite-related data from its ancestor class, Sprite.
@@ -62,6 +64,7 @@ public class PlayerCar extends Sprite {
 
         tileId = initTileId;
         isAtEndLocation = false;
+        carVelocity = 5;
     }
     
     public void setLocation(Intersection newIntersection) {
@@ -141,6 +144,18 @@ public class PlayerCar extends Sprite {
     
     public float getX() {
         return super.x;
+    }
+    
+    public int getCarVelocity() {
+        return carVelocity;
+    }
+    
+    public void setCarVelocity(int newCarVelocity){
+        carVelocity = newCarVelocity;
+    }
+    
+    public void resetCarVelocity() {
+        carVelocity = 5;
     }
     
     /**
@@ -292,15 +307,16 @@ public class PlayerCar extends Sprite {
     }
 
     public static int numTimesEntered = 0;
-    public static int velocity = 0;
+    public ArrayList<Integer> velocity = new ArrayList<>();
     
-    public void setVelocity(int roadSpeed) {
-        velocity = roadSpeed;
+    public void setVelocity(ArrayList<Integer> roadSpeeds) {
+        velocity = roadSpeeds;
     }
 
     public static int finalX;
     public static int finalY;
     public static boolean initialized = false;
+    public static int tester = 0;
     /**
      * After a win, while the tiles are animating, this method is called each
      * frame to make sure that when the tile reaches the next node in the path,
@@ -318,10 +334,11 @@ public class PlayerCar extends Sprite {
         }
        
         if (!PathXMiniGame.isPaused ) {
-            startMovingToTarget(1);
+            
+            startMovingToTarget(carVelocity);
             //startMovingToTarget(1);
             // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
-            if (calculateDistanceToTarget() < 1) {
+            if (calculateDistanceToTarget() < 5) {
 
           //  System.out.println("NUMBER OF TIMES ENTERED: " + ++numTimesEntered);
                 // PUT IT RIGHT ON THE NODE
@@ -343,8 +360,9 @@ public class PlayerCar extends Sprite {
             // START THE TILE MOVING AGAIN AND RANDOMIZE IT'S SPEED
            /// (Math.random() * 100) + 1);
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
-                //winPathIndex += 2;
-                // winPathIndex %= (winPath.size());
+                winPathIndex++;
+         
+               // winPathIndex %= (winPath.size());
             } // JUST A NORMAL PATHING UPDATE
             else {
                 // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
@@ -367,19 +385,30 @@ public class PlayerCar extends Sprite {
         // IF WE ARE IN A POST-WIN STATE WE ARE PLAYING THE WIN
         // ANIMATION, SO MAKE SURE THIS TILE FOLLOWS THE PATH
         //if (winPath != null) {
-        if(finalX != x && finalY != y || calculateDistanceToTarget() > 1) {
+        if(finalX != x && finalY != y || calculateDistanceToTarget() > 5) {
 //            System.out.println("STOP ME");
 //            System.out.println("DISTANCE: " + calculateDistanceToTarget());
             updateWinPath(game);
-            System.out.println("X: " + x);
-            System.out.println("Y: " + y);
+//            System.out.println("NEVER MADE IT");
+//            System.out.println("calculateDistanceToTarget(): " + calculateDistanceToTarget());
+//            System.out.println("finalX: " + finalX);
+//            System.out.println("finalY: " + finalY);
+//            System.out.println("x: " + x);
+//            System.out.println("y: " + y);
+
         } // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
         // JUST GO TO THE TARGET AND THEN STOP MOVING
-        else if (calculateDistanceToTarget() <= 1) {
+        else if (calculateDistanceToTarget() <= 5) {
            // System.out.println("STOPPED");
-            if(destinationIntersection.x == x && destinationIntersection.y == y) {
+            System.out.println("destinationIntersectionX: " + destinationIntersection.x);
+            System.out.println("x: " + x);
+            System.out.println("destinationIntersectionY: " + destinationIntersection.y);
+            System.out.println("y: " + y);
+            if(destinationIntersection.x - 5 <= x && destinationIntersection.y - 5 <= y &&
+               destinationIntersection.x + 5 >= x && destinationIntersection.y + 5 >= y) {
                 isAtEndLocation = true;
             }
+            //System.out.println("MADE IT");
             vX = 0;
             vY = 0;
             x = targetX;

@@ -46,6 +46,8 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
     //PATHX XML LEVEL IO
     private PathX_XML_Level_IO filetoLoad;
     
+    private Level eventHandlerCurrentLevel;
+    
     private PathXGameGraphManager gameGraph;
     
     private PathXDataModel model;
@@ -82,95 +84,52 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
     public static ArrayList<Integer> xCoordinates = new ArrayList<>();
     public static ArrayList<Integer> yCoordinates = new ArrayList<>();
     
+    public static String levelString = new String();
+    public static boolean enteredGameLoss = false;
+    
     /**
      * Called when the user clicks on an unlocked/completed level button.
      */
     public void respondToGameplayScreen(String level) {
-        System.out.println("level name: " + level );
-         if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
-             
+        levelString = level;
+        System.out.println("level name: " + level);
+        if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) || enteredGameLoss) {
+
+            Level aLevel = new Level();
             model.beginGame();
-             
-            File schemaFile = new File(PROPERTIES_SCHEMA_LEVEL_FILE_NAME);
-            filetoLoad = new PathX_XML_Level_IO(schemaFile);
-            Level aLevel = filetoLoad.loadLevel(level);
-            model.setCurrentLevel(aLevel);
-            //if()
-            ArrayList<Intersection> intersectionList = filetoLoad.getIntersectionList();
-            ArrayList<Road> roadList = filetoLoad.getRoadList();
-            for(int i = 0; i < intersectionList.size(); i++) {
-                  gameGraph.addIntersections(intersectionList.get(i));
-                  xCoordinates.add(intersectionList.get(i).x);
-                  yCoordinates.add(intersectionList.get(i).y);
-            }
-             for(int i = 0; i < roadList.size(); i++) {
-                  gameGraph.addRoad(roadList.get(i));
-            }
-             
-            
-             
-//             System.out.println("LOCATION (1): " + "(x: " + aLevel.getIntersections().get(0).x
-//                     + ", y: " + aLevel.getIntersections().get(0).y + ")\n");
-//             System.out.println("LOCATION (2): " + "(x: " + aLevel.getIntersections().get(1).x
-//                     + ", y: " + aLevel.getIntersections().get(1).y + ")\n");
-//             System.out.println("LOCATION (3): " + "(x: " + aLevel.getIntersections().get(2).x
-//                     + ", y: " + aLevel.getIntersections().get(2).y + ")\n");
-//             System.out.println("LOCATION (4): " + "(x: " + aLevel.getIntersections().get(3).x
-//                     + ", y: " + aLevel.getIntersections().get(3).y + ")\n");
-//             System.out.println("LOCATION (5): " + "(x: " + aLevel.getIntersections().get(4).x
-//                     + ", y: " + aLevel.getIntersections().get(4).y + ")\n");
-//             System.out.println("LOCATION (6): " + "(x: " + aLevel.getIntersections().get(5).x
-//                     + ", y: " + aLevel.getIntersections().get(5).y + ")\n");
-//             System.out.println("LOCATION (7): " + "(x: " + aLevel.getIntersections().get(6).x
-//                     + ", y: " + aLevel.getIntersections().get(6).y + ")\n");
-//             System.out.println("LOCATION (8): " + "(x: " + aLevel.getIntersections().get(7).x
-//                     + ", y: " + aLevel.getIntersections().get(7).y + ")\n");
-//             System.out.println("LOCATION (9): " + "(x: " + aLevel.getIntersections().get(8).x
-//                     + ", y: " + aLevel.getIntersections().get(8).y + ")\n");
-//             System.out.println("LOCATION (10): " + "(x: " + aLevel.getIntersections().get(9).x
-//                     + ", y: " + aLevel.getIntersections().get(9).y + ")\n");
-//                        
-//             
-//             for(int i = 0; i < aLevel.getRoads().size(); i++) 
-//             System.out.println("WEIGHT: " + aLevel.getRoads().get(i).getRoadweight() +
-//                      " Between: intersection1: " + aLevel.getRoads().get(i).getNode1().toString() + " and intersection2: " + aLevel.getRoads().get(i).getNode2().toString() );
-//                 
+          //  if (!enteredGameLoss) {
+                File schemaFile = new File(PROPERTIES_SCHEMA_LEVEL_FILE_NAME);
+                filetoLoad = new PathX_XML_Level_IO(schemaFile);
+                aLevel = filetoLoad.loadLevel(level);
+                eventHandlerCurrentLevel = aLevel;
+                model.setCurrentLevel(aLevel);
+                //if()
+                ArrayList<Intersection> intersectionList = filetoLoad.getIntersectionList();
+                ArrayList<Road> roadList = filetoLoad.getRoadList();
+                for (int i = 0; i < intersectionList.size(); i++) {
+                    gameGraph.addIntersections(intersectionList.get(i));
+                    xCoordinates.add(intersectionList.get(i).x);
+                    yCoordinates.add(intersectionList.get(i).y);
+                }
+                for (int i = 0; i < roadList.size(); i++) {
+                    gameGraph.addRoad(roadList.get(i));
+                }
+
+         //   }     
           
-            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
-//         
-//             //ArrayList<Connection> pathToHome = gameGraph.someMethod(aLevel.getStartingLocation(), aLevel.getDestination());
-//             
-            System.out.println("PATH TO HOME:\n START: ");
-             for (int i = 0; i < pathToHome.size(); i++) {
-                 //System.out.println(pathToHome.get(i).toString() + "\n");
-                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
-                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
-                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
-                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
-                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
-             }
+//            ArrayList<Connection> pathToHome = gameGraph.findShortestPathToHome(aLevel.getStartingLocation(), aLevel.getDestination());
+//   
+//            System.out.println("PATH TO HOME:\n START: ");
+//             for (int i = 0; i < pathToHome.size(); i++) {
+//                 //System.out.println(pathToHome.get(i).toString() + "\n");
+//                 System.out.println("(X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).x
+//                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection1Id()).y + ")"
+//                         + ", (X: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).x
+//                         + " Y: " + gameGraph.getIntersection(pathToHome.get(i).getIntersection2Id()).y + ")");
+//                 //System.out.println("\nROAD WEIGHT: " + gameGraph.getRoad(pathToHome.get(i).getRoadId()).getRoadweight());
+//             }
              
-//             System.out.println("END");
-//             
-//             System.out.println("\n printArrayListGamePaths: ALL POSSIBLE PATHS START");
-//              gameGraph.printArrayListGamePaths();
-//              System.out.println("ALL POSSIBLE PATHS END\n");
-//              
-//              System.out.println("\n printAllGamePaths : ALL POSSIBLE PATHS START");
-//             gameGraph.printAllGamePaths();
-//              System.out.println("ALL POSSIBLE PATHS END\n");
-              
-            // System.out.println("TEST LOCATION: " + "(x: " + aLevel.getIntersections().get(9).x +
-              //       ", y: " + aLevel.getIntersections().get(9).y + ")");
-             
-//            ArrayList<Connection> neighbours = gameGraph.getAllNeighbors(aLevel.getIntersections().get(9).getiD());
-//            System.out.println("Neighbors: ");
-//            for(int i = 0; i < neighbours.size(); i++)
-//                 System.out.println("(X: " + gameGraph.getIntersection(neighbours.get(i).getIntersection1Id()).x
-//                 + " Y: " + gameGraph.getIntersection(neighbours.get(i).getIntersection1Id()).y + ")"+
-//                         ", (X: " + gameGraph.getIntersection(neighbours.get(i).getIntersection2Id()).x
-//                 + " Y: " + gameGraph.getIntersection(neighbours.get(i).getIntersection2Id()).y +")\n");
-                
+    
             model.setLevelBounty(aLevel.getMoney());
              
             System.out.println("MONEY: " + aLevel.getMoney());
@@ -184,7 +143,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         game.switchToGameplayScreen(aLevel);
         
         
-
+        enteredGameLoss = false;
         }
     }
 
@@ -312,7 +271,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
         ArrayList<PathXLevelNode> levelNodeList = game.getLevelList();
         
-        System.out.println("Direction String Value: " + direction);
+        //System.out.println("Direction String Value: " + direction);
         switch (direction) {
             case UP_BUTTON_DIRECTION: //max(sy1,sy2) bounds
                 if ((sy1 > SOURCE_Y1_MAX_COORD) && (sy2 > SOURCE_Y2_MAX_COORD)) {
@@ -367,23 +326,52 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
     }
 
+    /**
+     * In the situation where the user loses and chooses
+     * the TRY AGAIN button, restart level
+     */
+    public void respondToTryAgainRequest() {
+        //game.switchToLevelSelectScreen();
+        //game.switchToGameplayScreen(model.getLevel());
+        //System.out.println("LEVEL NAME: " + model.getLevel().getLevelName());
+//        ((PathXMiniGame)game).getGUIButtons().get(BUTTON_LEAVE_TOWN_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+//        ((PathXMiniGame)game).getGUIButtons().get(BUTTON_LEAVE_TOWN_TYPE).setEnabled(false);
+//        ((PathXMiniGame)game).getGUIButtons().get(BUTTON_TRY_AGAIN_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+//        ((PathXMiniGame)game).getGUIButtons().get(BUTTON_TRY_AGAIN_TYPE).setEnabled(false);
+        PathXMiniGame.isDialogClosed = false;
+        PathXMiniGame.isDialogWin = false;
+         PathXMiniGame.isDialogLose = false;
+        enteredGameLoss = true;
+        respondToGameplayScreen(levelString);
+    } 
+    /**
+     * In the situation where the user loses and chooses
+     * the LEAVE TOWN button, switch to LEVEL SELECT SCREEN
+     */
+    public void respondToLeaveTownRequest() {
+        PathXMiniGame.isDialogClosed = false;
+        PathXMiniGame.isDialogWin = false;
+         PathXMiniGame.isDialogLose = false;
+        game.switchToLevelSelectScreen();
+    }
+    
     public void respondToScrollRequest(String arrowType) {
         System.out.println(arrowType);
         switch (arrowType) {
             case UP_ARROW_BUTTON_TYPE:
-                System.out.println("Up arrow was pressed");
+               // System.out.println("Up arrow was pressed");
                 game.scrollToTheNorth();
                 break;
             case DOWN_ARROW_BUTTON_TYPE:
-                System.out.println("Down arrow was pressed");
+               // System.out.println("Down arrow was pressed");
                 game.scrollToTheSouth();
                 break;
             case RIGHT_ARROW_BUTTON_TYPE:
-                System.out.println("Right arrow was pressed");
+               // System.out.println("Right arrow was pressed");
                 game.scrollToTheEast();
                 break;
             case LEFT_ARROW_BUTTON_TYPE:
-                System.out.println("Left arrow was pressed");
+               // System.out.println("Left arrow was pressed");
                 game.scrollToTheWest();
                 break;
             default:
@@ -398,7 +386,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
     public void respondToNewGameRequest() {
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
         if (game.getDataModel().inProgress()) {
-            game.getDataModel().endGameAsLoss();
+            //game.getDataModel().endGameAsLoss();
         }
         // RESET THE GAME AND ITS DATA
         game.reset();
@@ -415,7 +403,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
         //if( game.isCurrentScreenState(GAME_SCREEN))
 
         //  if(game.
-        game.getDataModel().endGameAsLoss();
+        //game.getDataModel().endGameAsLoss();
 
         //game.switchToSplashScreen();
         //  }
@@ -500,7 +488,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
             if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) ||
                    game.isCurrentScreenState(GAME_SCREEN_STATE)) {
-                System.out.println("Up button key pressed");
+              //  System.out.println("Up button key pressed");
                 game.scrollToTheNorth();
             }
         } else //SCROLL DOWN
@@ -508,7 +496,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
             if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE) ||
                     game.isCurrentScreenState(GAME_SCREEN_STATE)) {
-                System.out.println("Down button key pressed");
+                //System.out.println("Down button key pressed");
                 game.scrollToTheSouth();
             }
         } else //SCROLL LEFT
@@ -516,7 +504,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
             if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)||
                     game.isCurrentScreenState(GAME_SCREEN_STATE)) {
-                System.out.println("Left button key pressed");
+                //System.out.println("Left button key pressed");
                 game.scrollToTheWest();
             }
         } else //SCROLL RIGHT
@@ -524,20 +512,40 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener {
 
             if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)||
                     game.isCurrentScreenState(GAME_SCREEN_STATE)) {
-                System.out.println("Right button key pressed");
+                //System.out.println("Right button key pressed");
                 game.scrollToTheEast();
             }
-        } else //SCROLL CAR
-        if (keyCode == KeyEvent.VK_R) {
+        } else //SETS MONEY TO $0 FOR TESTING
+        if (keyCode == KeyEvent.VK_L) {
 
             if (game.isCurrentScreenState(GAME_SCREEN_STATE)) {
-                System.out.println("CAR MOVING!!");
-                //PathXPanel temp = (PathXPanel)game.getPanel();
-                playerX++;
+                System.out.println("MONEY CHUTE");
+                model.setLevelBounty(0);
+            } 
+        }
+        else //INCREASES PLAYER BALANCE FOR TESTING
+        if (keyCode == KeyEvent.VK_9) {
+
+            if (game.isCurrentScreenState(GAME_SCREEN_STATE) ||
+                    game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+                System.out.println("MONEY GETTER");
+                model.setPlayerBalance(moneyCheat);
+            } 
+        }
+         else //UNLOCKS ALL LEVELS FOR PLAYER
+        if (keyCode == KeyEvent.VK_1) {
+
+            if (game.isCurrentScreenState(GAME_SCREEN_STATE) ||
+                    game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
+                System.out.println("LEVEL BEATER");
+                cheatIsEnabled = !cheatIsEnabled;
             } 
         }
 
     }
+    
+    public int moneyCheat = 100;
+    public static boolean cheatIsEnabled = false;
 
     /**
      * Called when the user presses the pause/resume button
